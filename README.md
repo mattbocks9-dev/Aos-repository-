@@ -1,5 +1,8 @@
 # AoS Pairing Trainer
 
+> **Unofficial, free, open-source fan project made for fun.** Not affiliated with or endorsed by Games
+> Workshop. See [NOTICE.md](NOTICE.md) for trademarks, data sources and disclaimers.
+
 Practise Age of Sigmar team pairings against an NPC captain who reads both teams' lists and the round's battleplans.
 
 - **Format:** Old Town Throwdown Teams 2026 (5-player Guardian/Invader pairing). Packs are pluggable.
@@ -16,3 +19,17 @@ npm run dev
 ```
 
 See `CLAUDE.md` for architecture and the hook-driven development workflow.
+
+## Contributing
+
+Issues and pull requests are welcome. The development workflow (Claude Code hooks, tests, data pipelines)
+is described in `CLAUDE.md`.
+
+## License
+
+The original source code is released under the [MIT License](LICENSE). That license does **not** cover Games
+Workshop intellectual property or the third-party data used by the app (BSData, Wahapedia); see
+[NOTICE.md](NOTICE.md).
+
+Warhammer Age of Sigmar and all associated names, marks and rules are © Games Workshop Limited, used without
+permission in this non-commercial fan project. No challenge to their status is intended.
