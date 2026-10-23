@@ -40,6 +40,8 @@ export interface FactionRules {
   spellLores: RuleOption[];
   prayerLores: RuleOption[];
   manifestationLores: RuleOption[];
+  /** Faction-specific enhancement tables (e.g. Monstrous Traits, Boons of Shadow). */
+  enhancementTables: { name: string; options: RuleOption[] }[];
 }
 
 export interface UnitData {

@@ -21,6 +21,31 @@
   <sharedSelectionEntryGroups>
     <selectionEntryGroup name="Battle Formations: Test Faction" id="g1">
       <selectionEntries>
+        <selectionEntry name="Anvil Host" id="f2" type="upgrade">
+          <costs><cost name="pts" typeId="points" value="20"/></costs>
+        </selectionEntry>
+        <selectionEntry name="Season Host" id="f3" hidden="true" type="upgrade">
+          <costs><cost name="pts" typeId="points" value="40"/></costs>
+          <modifiers>
+            <modifier field="hidden" type="set" value="false">
+              <conditionGroups><conditionGroup type="or"><conditions>
+                <condition childId="ptg" field="selections" scope="ancestor" type="instanceOf" value="1"/>
+                <condition childId="ghb26" field="selections" scope="ancestor" type="instanceOf" value="1"/>
+              </conditions></conditionGroup></conditionGroups>
+            </modifier>
+          </modifiers>
+        </selectionEntry>
+        <selectionEntry name="Last Season Host" id="f5" hidden="true" type="upgrade">
+          <modifiers>
+            <modifier field="hidden" type="set" value="false">
+              <conditions><condition childId="ghb25" field="selections" scope="ancestor" type="instanceOf" value="1"/></conditions>
+            </modifier>
+          </modifiers>
+        </selectionEntry>
+        <selectionEntry name="Old Host" id="f4" hidden="true" type="upgrade"/>
+        <selectionEntry name="Legendary Host" id="f6" type="upgrade">
+          <categoryLinks><categoryLink name="Legends" id="lg" targetId="acaf-8bb6-d6f-3e2a"/></categoryLinks>
+        </selectionEntry>
         <selectionEntry name="Hammer Host" id="f1" type="upgrade">
           <profiles>
             <profile name="Hammerfall" id="t2" typeName="Ability (Activated)">
@@ -79,6 +104,21 @@
           </profiles>
         </selectionEntry>
       </selectionEntries>
+    </selectionEntryGroup>
+    <selectionEntryGroup name="Monstrous Traits" id="g5">
+      <selectionEntries>
+        <selectionEntry name="Thick Hide" id="m1" type="upgrade">
+          <costs><cost name="pts" typeId="points" value="10"/></costs>
+          <profiles>
+            <profile name="Thick Hide" id="mt1" typeName="Ability (Passive)">
+              <characteristics><characteristic name="Effect">Add 1 to save rolls.</characteristic></characteristics>
+            </profile>
+          </profiles>
+        </selectionEntry>
+      </selectionEntries>
+    </selectionEntryGroup>
+    <selectionEntryGroup name="Battle Wounds + Scars" id="g6" hidden="true">
+      <selectionEntries><selectionEntry name="Limp" id="w1" type="upgrade"/></selectionEntries>
     </selectionEntryGroup>
   </sharedSelectionEntryGroups>
 </catalogue>

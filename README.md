@@ -20,6 +20,14 @@ npm run dev
 
 See `CLAUDE.md` for architecture and the hook-driven development workflow.
 
+## Shared team library
+
+Teams in `src/data/team-library.json` appear in every user's **Load a saved team** dropdown. To add one,
+use **Team Setup → Submit this team to the shared library** in the app: it validates the team and opens a
+pre-filled GitHub issue. A maintainer approves it by commenting `/approve` on the issue (or adding the
+`approved-team` label); the **Add approved team** workflow then re-validates it against the BSData
+catalogue, adds it to the library and redeploys the site.
+
 ## Contributing
 
 Issues and pull requests are welcome. The development workflow (Claude Code hooks, tests, data pipelines)

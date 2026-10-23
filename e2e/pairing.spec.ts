@@ -13,6 +13,32 @@ test('falls back to the drawn map when the original picture cannot load', async 
   await expect(page.locator('img[alt="Warped Ruins battleplan map"]')).toHaveCount(0);
 });
 
+test('parses a pasted GW app list', async ({ page }) => {
+  const { readFileSync } = await import('node:fs');
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Set up teams & lists' }).click();
+  const box = page.locator('#list-0');
+  await box.fill(readFileSync('e2e/fixtures/lists/gw-app-ogors.txt', 'utf8'));
+  await box.blur();
+  await expect(page.getByText(/Ogor Mawtribes · 2000 pts · 7 units/)).toBeVisible();
+  await expect(page.getByText(/Maw-Cult Fanatics \(10 pts\)/)).toBeVisible();
+  await expect(page.getByText('Not found in the', { exact: false })).toHaveCount(0);
+  await expect(
+    page.getByText('Points differ from the BSData catalogue', { exact: false }),
+  ).toHaveCount(0);
+});
+
+test('loads a team from the shared library', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Set up teams & lists' }).click();
+  await page
+    .getByLabel('Load a saved team (shared library)')
+    .selectOption({ label: 'The Rot Pact' });
+  await expect(page.getByRole('status')).toHaveText('Loaded "The Rot Pact".');
+  await expect(page.getByLabel('Team name')).toHaveValue('The Rot Pact');
+  await expect(page.getByText('Grak', { exact: true })).toBeVisible();
+});
+
 test('plays a full pairing against the NPC with sample teams', async ({ page }, info) => {
   await page.route(WAHAPEDIA_IMAGES, (route) => route.fulfill({ path: MAP_FIXTURE }));
   const shot = (name: string) =>

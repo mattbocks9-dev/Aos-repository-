@@ -1,0 +1,68 @@
+{
+  "teams": [
+    {
+      "id": "hammers-of-lake-forest",
+      "notes": "Sample team (Order mix).",
+      "name": "Hammers of Lake Forest",
+      "players": [
+        {
+          "name": "Alex",
+          "factionId": "stormcast-eternals",
+          "listText": "Stormcast Eternals | Thunderhead Host\nManifestation Lore - Morbid Conjuration\n\nGeneral's Regiment\nLord-Celestant on Dracoth (170)\n• General\n• Envoy of the Heavens\n• Mirrorshield\nLiberators (180)\n• Reinforced\nVindictors (90)\nRegiment 1\nKnight-Arcanum (110)\nProsecutors (150)\nAnnihilators (260)\n• Reinforced\nRegiment 2\nLord-Relictor (120)\nAnnihilators with Meteoric Grandhammers (180)\nPraetors (120)\nRegiment 3\nKnight-Draconis (200)\nDracothian Guard Concussors (200)\nLiberators (90)"
+        },
+        {
+          "name": "Bea",
+          "factionId": "kharadron-overlords",
+          "listText": "Kharadron Overlords | Veteran Ground Troops\nManifestation Lore - Primal Energy\n\nGeneral's Regiment\nArkanaut Admiral (130)\nArkanaut Company (80)\nGrundstok Thunderers (260)\n• Reinforced\nArkanaut Ironclad (430)\nRegiment 1\nAether-Khemist (100)\nArkanaut Company (80)\nSkywardens (130)\nRegiment 2\nEndrinmaster with Dirigible Suit (140)\nArkanaut Frigate (280)\n2x Grundstok Gunhauler (280)"
+        },
+        {
+          "name": "Cal",
+          "factionId": "lumineth-realm-lords",
+          "listText": "Lumineth Realm-lords | Warhost of Duality\nManifestation Lore - Forbidden Power\n\nGeneral's Regiment\nScinari Cathallar (130)\nVanari Auralan Wardens (240)\n• Reinforced\nVanari Auralan Sentinels (150)\nVanari Starshard Ballista (100)\nRegiment 1\nVanari Lord Regent (120)\nVanari Dawnriders (200)\nVanari Bladelords (140)\nHurakan Windchargers (180)\nRegiment 2\nAlarith Stonemage (110)\nAlarith Stoneguard (120)\nAlarith Spirit of the Mountain (300)\nVanari Starshard Ballista (100)"
+        },
+        {
+          "name": "Dee",
+          "factionId": "seraphon",
+          "listText": "Seraphon | Thunderquake Starhost\nManifestation Lore - Twilit Sorceries\n\nGeneral's Regiment\nSaurus Oldblood on Carnosaur (230)\n• Coatl Familiar\nSaurus Warriors (280)\n• Reinforced\nKroxigor (200)\nAggradon Lancers (200)\nRegiment 1\nSlann Starmaster (260)\nSaurus Guard (110)\nBastiladon with Solar Engine (200)\nSkinks (70)\nRegiment 2\nSkink Starpriest (90)\nStegadon (160)\n• Monstrous Trait: Armour Cruncher\nRaptadon Hunters (120)\nSkinks (70)"
+        },
+        {
+          "name": "Eli",
+          "factionId": "daughters-of-khaine",
+          "listText": "Daughters of Khaine | Coven of Blood\nManifestation Lore - Krondspine Incarnate\n\nGeneral's Regiment\nSlaughter Queen on Cauldron of Blood (300)\nWitch Aelves (240)\n• Reinforced\nSisters of Slaughter (110)\nBlood Sisters (170)\nRegiment 1\nHag Queen (120)\nSisters of Slaughter (110)\nBlood Stalkers (150)\nKhinerai Heartrenders (100)\nRegiment 2\nMelusai Ironscale (100)\nDoomfire Warlocks (150)\nKhainite Shadowstalkers (100)\nBloodwrack Shrine (270)"
+        }
+      ]
+    },
+    {
+      "id": "the-rot-pact",
+      "notes": "Sample team (Chaos, Death and Destruction mix).",
+      "name": "The Rot Pact",
+      "players": [
+        {
+          "name": "Grak",
+          "factionId": "skaven",
+          "listText": "Skaven | Warpcog Convocation\nManifestation Lore - Morbid Conjuration\n\nGeneral's Regiment\nGrey Seer (110)\nClanrats (300)\n• Reinforced\nStormvermin (110)\nHell Pit Abomination (200)\nRegiment 1\nWarlock Engineer (100)\nStormfiends (230)\nWarp Lightning Cannon (120)\nRatling Guns (160)\nWarplock Jezzails (120)\nRegiment 2\nClawlord (70)\nStormvermin (110)\nGutter Runners (150)\nDoom-flayers (100)"
+        },
+        {
+          "name": "Hesk",
+          "factionId": "slaves-to-darkness",
+          "listText": "Slaves to Darkness | Godswrath Warband\nManifestation Lore - Primal Energy\n\nGeneral's Regiment\nChaos Lord on Karkadrak (180)\nChaos Warriors (360)\n• Reinforced\nChaos Knights (240)\nChaos Legionnaires (80)\nRegiment 1\nChaos Sorcerer Lord (120)\nChaos Chosen (250)\nChaos Legionnaires (80)\nChaos Spawn (60)\nRegiment 2\nExalted Hero of Chaos (90)\nVaranguard (290)\nSlaughterbrute (170)"
+        },
+        {
+          "name": "Isolde",
+          "factionId": "soulblight-gravelords",
+          "listText": "Soulblight Gravelords | Deathmarch\nManifestation Lore - Forbidden Power\n\nGeneral's Regiment\nVengorian Lord (200)\nBlood Knights (210)\nMortis Engine (210)\nVampire Lord on Nightmare Steed (170)\nRegiment 1\nNecromancer (110)\nDeathrattle Skeletons (180)\n• Reinforced\nDeadwalker Zombies (120)\nCorpse Cart (70)\nRegiment 2\nWight King (80)\nBarrow Knights (190)\nDire Wolves (150)\nVargheists (120)\nFell Bats (90)"
+        },
+        {
+          "name": "Jorg",
+          "factionId": "ironjawz",
+          "listText": "Ironjawz | Ironfist\nManifestation Lore - Twilit Sorceries\n\nGeneral's Regiment\nMegaboss on Maw-krusha (310)\nGore-gruntas (160)\nGore-gruntas (160)\nMaw-grunta Gougers (200)\nRegiment 1\nWarchanter (110)\nArdboyz (320)\n• Reinforced\nBrutes (160)\nRegiment 2\nWeirdnob Shaman (110)\nBrutes (160)\nBrute Ragerz (100)\nWeirdbrute Wrekkaz (90)"
+        },
+        {
+          "name": "Kess",
+          "factionId": "maggotkin-of-nurgle",
+          "listText": "Maggotkin of Nurgle | Plague Cyst\nManifestation Lore - Krondspine Incarnate\n\nGeneral's Regiment\nGreat Unclean One (380)\nPutrid Blightkings (260)\n• Reinforced\nPlaguebearers (130)\nRegiment 1\nLord of Afflictions (170)\nPusgoyle Blightlords (190)\nPlague Drones (150)\nPlaguebearers (130)\nRegiment 2\nRotbringer Sorcerer (100)\nBeast of Nurgle (100)\nNurglings (100)\nPestigors (140)"
+        }
+      ]
+    }
+  ]
+}

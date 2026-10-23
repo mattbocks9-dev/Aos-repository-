@@ -25,7 +25,7 @@ export interface LogEntry {
 }
 
 /** Bump when parsed list data changes shape, so saved teams get re-parsed from the catalogue. */
-export const DATA_VERSION = 2;
+export const DATA_VERSION = 3;
 
 export interface AppState {
   dataVersion?: number;

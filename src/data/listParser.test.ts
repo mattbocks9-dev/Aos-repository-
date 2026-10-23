@@ -1,4 +1,4 @@
-import { detectFaction, listPoints, parseList, similarity } from './listParser';
+import { detectFaction, listPoints, parseList, pointsBreakdown, similarity } from './listParser';
 import type { FactionData, UnitData } from './types';
 
 const unit = (name: string, points: number, extra: Partial<UnitData> = {}): UnitData => ({
@@ -33,10 +33,20 @@ const sce: FactionData = {
     formations: [
       { name: 'Thunderhead Host', abilities: [] },
       { name: 'Vanguard Wing', abilities: [] },
+      { name: 'Priced Host', points: 20, abilities: [] },
     ],
-    heroicTraits: [],
-    artefacts: [],
-    spellLores: [{ name: 'Lore of the Storm', abilities: [spell] }],
+    heroicTraits: [
+      { name: 'Envoy of the Heavens', points: 20, abilities: [] },
+      { name: 'Staunch Defender', abilities: [] },
+    ],
+    artefacts: [{ name: 'Mirrorshield', abilities: [] }],
+    enhancementTables: [
+      { name: 'Scars of War', options: [{ name: 'Uncaged Lightning', points: 20, abilities: [] }] },
+    ],
+    spellLores: [
+      { name: 'Lore of the Storm', abilities: [spell] },
+      { name: 'Lore of Costs', points: 10, abilities: [] },
+    ],
     prayerLores: [{ name: 'Prayers of the Stormhosts', abilities: [] }],
     manifestationLores: [{ name: 'Manifestations of the Storm', abilities: [] }],
   },
@@ -96,8 +106,13 @@ describe('list parser', () => {
   it('resolves battletome rules for the list', () => {
     expect(list.rules?.battleTraits.map((a) => a.name)).toEqual(['Scions of the Storm']);
     expect(list.rules?.formation?.name).toBe('Thunderhead Host');
-    // Only one spell lore in the battletome, so it's assumed when not named.
-    expect(list.rules?.spellLore?.abilities).toEqual([spell]);
+    // With only one spell lore in the battletome, it's assumed when not named.
+    const oneLore: FactionData = {
+      ...sce,
+      rules: { ...sce.rules, spellLores: [sce.rules.spellLores[0]!] },
+    };
+    expect(parseList(GW_APP, oneLore).rules?.spellLore?.abilities).toEqual([spell]);
+    expect(list.rules?.spellLore).toBeUndefined();
     // Morbid Conjuration is a universal lore, not in this battletome.
     expect(list.rules?.manifestationLore).toBeUndefined();
     const named = parseList(
@@ -125,6 +140,77 @@ describe('list parser', () => {
     };
     const l = parseList('Manifestation Lore - Morbid Conjuration\nLiberators (90)', withLore);
     expect(listPoints(l)).toBe(110);
+  });
+
+  it('adds enhancement points to the unit they are on, from the catalogue', () => {
+    const l = parseList(
+      [
+        'Lord-Celestant (120)',
+        '• General',
+        '• Envoy of the Heavens',
+        '• Mirrorshield',
+        'Knight-Arcanum (110)',
+        '• Uncaged Lightning (20)',
+        '• Grandhammer',
+      ].join('\n'),
+      sce,
+    );
+    expect(l.units[0]).toMatchObject({
+      points: 120,
+      enhancements: [
+        { name: 'Envoy of the Heavens', table: 'Heroic Traits', points: 20 },
+        { name: 'Mirrorshield', table: 'Artefacts of Power', points: 0 },
+      ],
+    });
+    // The list wrote the unit's own cost and the enhancement's separately: both agree with the catalogue.
+    expect(l.units[1]).toMatchObject({
+      points: 130,
+      enhancements: [{ name: 'Uncaged Lightning', table: 'Scars of War', points: 20 }],
+    });
+    expect(l.pointsMismatches).toBeUndefined();
+    expect(listPoints(l)).toBe(250);
+  });
+
+  it('accepts enhancement prefixes and flags unit totals that match neither way', () => {
+    const l = parseList(
+      ['Lord-Celestant (150)', '• Heroic Trait: Envoy of the Heavens (20)'].join('\n'),
+      sce,
+    );
+    expect(l.units[0]!.enhancements?.map((e) => e.name)).toEqual(['Envoy of the Heavens']);
+    expect(l.pointsMismatches).toEqual([
+      'Lord-Celestant: list says 150, catalogue says 120 (100 + 20 enhancements)',
+    ]);
+  });
+
+  it('adds battle formation and lore points', () => {
+    const l = parseList(
+      ['Battle Formation - Priced Host', 'Spell Lore - Lore of Costs', 'Liberators (90)'].join(
+        '\n',
+      ),
+      sce,
+    );
+    expect(l.rules?.formation?.name).toBe('Priced Host');
+    expect(listPoints(l)).toBe(90 + 20 + 10);
+    expect(pointsBreakdown(l)).toEqual({
+      units: 90,
+      enhancements: 0,
+      formation: 20,
+      lores: 10,
+      total: 120,
+    });
+  });
+
+  it('recognises a formation written on its own line with points', () => {
+    const l = parseList(['Priced Host (20)', 'Liberators (90)'].join('\n'), sce);
+    expect(l.formation).toBe('Priced Host');
+    expect(l.unmatched).toEqual([]);
+    expect(listPoints(l)).toBe(110);
+  });
+
+  it('still detects reinforced units when an enhancement is included in the line', () => {
+    const l = parseList(['Liberators (200)', '• Uncaged Lightning'].join('\n'), sce);
+    expect(l.units[0]).toMatchObject({ reinforced: true, points: 200 });
+    expect(l.pointsMismatches).toBeUndefined();
   });
 
   it('detects the faction from the header', () => {

@@ -63,6 +63,19 @@ export function validateTeam(
   }
 
   for (const p of team.players) {
+    const seen = new Set<string>();
+    for (const e of p.list.units.flatMap((u) => u.enhancements ?? [])) {
+      if (seen.has(e.name)) {
+        issues.push({
+          rule: 'unique-enhancement',
+          message: `${p.name}'s list takes ${e.name} more than once.`,
+        });
+      }
+      seen.add(e.name);
+    }
+  }
+
+  for (const p of team.players) {
     const pts = listPoints(p.list);
     if (pts > pointsLimit)
       issues.push({
