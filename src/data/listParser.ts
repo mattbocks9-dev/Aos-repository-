@@ -122,12 +122,14 @@ export function detectFaction(text: string, factions: { id: string; name: string
     .find((f) => t.includes(normalise(f.name)))?.id;
 }
 
-/** Splits trailing points off a line: "X (20 Points)", "X [20pts]", "X - 20 pts", "X: 20pts", "X 20pts". */
+/** Splits trailing points off a line: "X (20 Points)", "X [20pts]", "X - 20 pts", "X: 20pts", "X 20pts", "X20". */
 export function splitPoints(text: string): { text: string; points?: number } {
   const patterns = [
     /^(.*?)\s*[([]\s*(\d+)\s*(?:pts?|points)?\s*[)\]]\s*(?:pts?|points)?$/i,
     /^(.*?)\s*(?:-|:|\u2013|\u2014)\s*(\d+)\s*(?:pts?|points)$/i,
     /^(.*?)\s+(\d+)\s*(?:pts?|points)$/i,
+    // Some app exports glue the points onto the name: "Alarielle the Everqueen620".
+    /^(.{3,}?[A-Za-z)'\u2019\]])(\d{2,4})$/,
   ];
   for (const re of patterns) {
     const m = re.exec(text.trim());
@@ -259,15 +261,23 @@ export function parseList(text: string, faction: FactionData | undefined): ArmyL
     const tactics = /^battle tactics?(?: cards?)?\s*(?:-|:|\u2013)\s*(.+)$/i.exec(line);
     if (tactics) {
       list.battleTactics = tactics[1]!
-        .split(',')
+        .split(/\s*,\s*|\s+and\s+|\s*&\s*/i)
         .map((t) => t.trim())
         .filter(Boolean);
       continue;
     }
-    // Older app exports: "Faction Name | Battle Formation".
-    const pipe = line.split('|').map((x) => x.trim());
-    if (faction && pipe.length === 2 && normalise(pipe[0]!) === normalise(faction.name)) {
-      list.formation ??= splitPoints(pipe[1]!).text;
+    // App headers: "Faction | Formation" or "Grand Alliance Order | Faction | Formation (10 Points)".
+    // No unit line contains a pipe, so any other pipe line (e.g. the app footer) is skipped.
+    if (line.includes('|')) {
+      const parts = line.split('|').map((x) => splitPoints(x).text);
+      if (faction && parts.some((x) => normalise(x) === normalise(faction.name))) {
+        const named = parts.find((x) =>
+          formations.some((f) => normalise(f.option.name) === normalise(x)),
+        );
+        const last = parts[parts.length - 1]!;
+        list.formation ??=
+          named ?? (normalise(last) === normalise(faction.name) ? undefined : last);
+      }
       continue;
     }
 

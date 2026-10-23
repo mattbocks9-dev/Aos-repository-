@@ -130,3 +130,88 @@ describe('other export formats', () => {
     expect(list.pointsMismatches).toEqual(['List total: list says 1990, catalogue says 220']);
   });
 });
+
+describe('GW app export with points written straight after the name', () => {
+  // e.g. "Alarielle the Everqueen620" and "• Glamourweave - (20) Points"
+  const text = readFileSync('e2e/fixtures/lists/gw-app-sylvaneth-aor.txt', 'utf8');
+  const id = detectFaction(text, index.factions);
+  const list = parseList(text, faction(id!));
+
+  it('reads every unit and enhancement', () => {
+    expect(id).toBe('sylvaneth');
+    expect(list.units.map((u) => [u.name, u.points])).toEqual([
+      ['Alarielle the Everqueen', 620],
+      ['Belthanos, First Thorn of Kurnoth', 290],
+      ['Drycha Hamadreth', 250],
+      ['Dryads', 100],
+      ['Dryads', 100],
+      ['Spite-Revenants', 110],
+      ['Spirit of Durthu', 340],
+      ['Warsong Revenant', 190],
+    ]);
+    expect(list.units.flatMap((u) => u.enhancements ?? []).map((e) => [e.name, e.points])).toEqual([
+      ['Aspect of Heartwood', 10],
+      ['Glamourweave', 20],
+      ['Realmroot Guide', 0],
+    ]);
+    expect(list.unmatched).toEqual([]);
+  });
+
+  it('reads the formation, lores, tactics and terrain, and totals 2000 from the catalogue', () => {
+    expect(list.rules?.formation?.name).toBe('Lords of the Clan');
+    expect(list.rules?.spellLore?.name).toBe('Lore of the Deepwood');
+    expect(list.rules?.prayerLore?.name).toBe('Lore of the Spirit-Song');
+    expect(list.rules?.manifestationLore?.name).toBe('Manifestations of the Deepwood');
+    expect(list.battleTactics).toEqual(['Siege of Ashes', 'Legend of the Parch']);
+    expect(list.factionTerrain).toBe('Awakened Wyldwood');
+    expect(listPoints(list)).toBe(2000);
+    expect(list.pointsMismatches).toBeUndefined();
+  });
+
+  it('does not mistake the roster number for points', () => {
+    expect(list.declaredPoints).toBe(2000);
+  });
+});
+
+describe('GW app header variants', () => {
+  const lumineth = faction('lumineth-realm-lords');
+
+  it('reads "Grand Alliance | Faction | Formation (points)" header lines', () => {
+    const list = parseList(
+      [
+        'Shane Lambert',
+        'Moo 290/2000 pts',
+        '-----',
+        'Grand Alliance Order | Lumineth Realm-lords | Aelementor Guardians (10 Points)',
+        "General's Handbook 2026-27",
+        'Drops: 3',
+        'Alarith Stonemage (110)',
+        'Vanari Auralan Wardens (170)',
+        '• Reinforced',
+      ].join('\n'),
+      lumineth,
+    );
+    expect(list.unmatched).toEqual([]);
+    expect(list.rules?.formation).toMatchObject({ name: 'Aelementor Guardians', points: 10 });
+    expect(list.units.map((u) => u.name)).toEqual(['Alarith Stonemage', 'Vanari Auralan Wardens']);
+  });
+
+  it('splits battle tactic cards joined with "and"', () => {
+    const list = parseList(
+      'Battle Tactics Cards: Burning for Vengeance and Siege of Ashes',
+      lumineth,
+    );
+    expect(list.battleTactics).toEqual(['Burning for Vengeance', 'Siege of Ashes']);
+    const comma = parseList('Battle Tactic Cards: Legend of the Parch, Siege of Ashes', lumineth);
+    expect(comma.battleTactics).toEqual(['Legend of the Parch', 'Siege of Ashes']);
+  });
+
+  it('never treats other pipe-separated lines (app footer) as units or formations', () => {
+    const list = parseList(
+      ['Alarith Stonemage (110)', 'App: 1.38.1 | Data: 483 | Build 12'].join('\n'),
+      lumineth,
+    );
+    expect(list.unmatched).toEqual([]);
+    expect(list.formation).toBeUndefined();
+  });
+});
