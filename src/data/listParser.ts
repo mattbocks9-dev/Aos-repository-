@@ -122,12 +122,14 @@ export function detectFaction(text: string, factions: { id: string; name: string
     .find((f) => t.includes(normalise(f.name)))?.id;
 }
 
-/** Splits trailing points off a line: "X (20 Points)", "X [20pts]", "X - 20 pts", "X: 20pts", "X 20pts". */
+/** Splits trailing points off a line: "X (20 Points)", "X [20pts]", "X - 20 pts", "X: 20pts", "X 20pts", "X20". */
 export function splitPoints(text: string): { text: string; points?: number } {
   const patterns = [
     /^(.*?)\s*[([]\s*(\d+)\s*(?:pts?|points)?\s*[)\]]\s*(?:pts?|points)?$/i,
     /^(.*?)\s*(?:-|:|\u2013|\u2014)\s*(\d+)\s*(?:pts?|points)$/i,
     /^(.*?)\s+(\d+)\s*(?:pts?|points)$/i,
+    // Some app exports glue the points onto the name: "Alarielle the Everqueen620".
+    /^(.{3,}?[A-Za-z)'\u2019\]])(\d{2,4})$/,
   ];
   for (const re of patterns) {
     const m = re.exec(text.trim());

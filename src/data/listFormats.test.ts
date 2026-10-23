@@ -130,3 +130,45 @@ describe('other export formats', () => {
     expect(list.pointsMismatches).toEqual(['List total: list says 1990, catalogue says 220']);
   });
 });
+
+describe('GW app export with points written straight after the name', () => {
+  // e.g. "Alarielle the Everqueen620" and "• Glamourweave - (20) Points"
+  const text = readFileSync('e2e/fixtures/lists/gw-app-sylvaneth-aor.txt', 'utf8');
+  const id = detectFaction(text, index.factions);
+  const list = parseList(text, faction(id!));
+
+  it('reads every unit and enhancement', () => {
+    expect(id).toBe('sylvaneth');
+    expect(list.units.map((u) => [u.name, u.points])).toEqual([
+      ['Alarielle the Everqueen', 620],
+      ['Belthanos, First Thorn of Kurnoth', 290],
+      ['Drycha Hamadreth', 250],
+      ['Dryads', 100],
+      ['Dryads', 100],
+      ['Spite-Revenants', 110],
+      ['Spirit of Durthu', 340],
+      ['Warsong Revenant', 190],
+    ]);
+    expect(list.units.flatMap((u) => u.enhancements ?? []).map((e) => [e.name, e.points])).toEqual([
+      ['Aspect of Heartwood', 10],
+      ['Glamourweave', 20],
+      ['Realmroot Guide', 0],
+    ]);
+    expect(list.unmatched).toEqual([]);
+  });
+
+  it('reads the formation, lores, tactics and terrain, and totals 2000 from the catalogue', () => {
+    expect(list.rules?.formation?.name).toBe('Lords of the Clan');
+    expect(list.rules?.spellLore?.name).toBe('Lore of the Deepwood');
+    expect(list.rules?.prayerLore?.name).toBe('Lore of the Spirit-Song');
+    expect(list.rules?.manifestationLore?.name).toBe('Manifestations of the Deepwood');
+    expect(list.battleTactics).toEqual(['Siege of Ashes', 'Legend of the Parch']);
+    expect(list.factionTerrain).toBe('Awakened Wyldwood');
+    expect(listPoints(list)).toBe(2000);
+    expect(list.pointsMismatches).toBeUndefined();
+  });
+
+  it('does not mistake the roster number for points', () => {
+    expect(list.declaredPoints).toBe(2000);
+  });
+});
