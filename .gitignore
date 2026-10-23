@@ -8,3 +8,6 @@ test-results
 rules-source/
 *.pdf
 scripts/ghb/__pycache__
+
+# Ad-hoc live-site checks run from the repo root
+live-check.mjs

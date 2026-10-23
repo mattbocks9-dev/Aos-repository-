@@ -265,6 +265,28 @@ describe('app metadata lines', () => {
     expect(list.pointsMismatches).toBeUndefined();
   });
 
+  it('ignores any data/app version line, however it is written', () => {
+    const variants = [
+      'Data version v44',
+      'DataVersion: 44',
+      'Data-Version 44',
+      'data ver. 44',
+      '(Data Version: v44)',
+      'BSData version 483',
+      'Data v483',
+      'Version: 1.38.0',
+      'v483',
+      'Build 12',
+      'Data Version v44 - App 1.38',
+      'App 1.38.1 / Data 484',
+      'BSData Version:v44',
+      'Catalogue version44',
+    ];
+    const list = parseList(['Alarith Stonemage (110)', ...variants].join('\n'), lumineth);
+    expect(list.unmatched).toEqual([]);
+    expect(list.units.map((u) => u.name)).toEqual(['Alarith Stonemage']);
+  });
+
   it('still reads units with points glued to the name', () => {
     const list = parseList('Alarith Stonemage110', lumineth);
     expect(list.units.map((u) => [u.name, u.points])).toEqual([['Alarith Stonemage', 110]]);

@@ -171,8 +171,9 @@ const BULLET = /^\s*[\u2022\u2013*-]\s*/;
 const HEADER =
   /\b(\d{3,4})\s*\/\s*(\d{3,4})\b|^(general'?s )?regiment|^auxiliary|^faction terrain|^\+.*\+$/i;
 // App metadata, never units: "Data Version: v44", "App: v1.38.0 (1) | Data: v483", "Drops: 3", "N°175135670"...
+// Any line mentioning a version is metadata; no unit, formation or enhancement name contains "version" or "v44".
 const METADATA =
-  /^(?:(?:app|data)(?:\s+version)?|version|created with|drops|general'?s handbook)\b|^n[°º]\s*\d/i;
+  /version|\bver\b|\bv\d+(?:\.\d+)*\b|^\(?(?:app|data|build|created with|drops|general'?s handbook)\b|^n[°º]\s*\d/i;
 const DECLARED = /\b(\d{3,4})\s*\/\s*\d{3,4}\s*(?:pts?|points)?\b|^\+\+.*\[(\d{3,4})\s*pts?\]/i;
 
 /** Every enhancement a unit can take in this faction, with the table it belongs to. */
