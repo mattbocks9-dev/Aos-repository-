@@ -1,0 +1,132 @@
+// Real-world export formats, parsed against the real BSData catalogue.
+import { readFileSync } from 'node:fs';
+import { detectFaction, listPoints, parseList, pointsBreakdown } from './listParser';
+import type { FactionData, FactionIndex } from './types';
+
+const index = JSON.parse(readFileSync('public/data/index.json', 'utf8')) as FactionIndex;
+const faction = (id: string) =>
+  JSON.parse(readFileSync(`public/data/factions/${id}.json`, 'utf8')) as FactionData;
+const parse = (text: string) => {
+  const id = detectFaction(text, index.factions);
+  expect(id).toBe('ogor-mawtribes');
+  return parseList(text, faction(id!));
+};
+
+const EXPECTED_UNITS = [
+  ['Redd the Maw, High Slaughtermaster', 420],
+  ['Cleavers', 220],
+  ['Gluttons', 420],
+  ['Gorger Mawpack', 240],
+  ['Gutseers', 200],
+  ['Bloodpelt Hunter', 130],
+  ['Hunters with Sabrefangs', 340],
+];
+
+describe('GW app export (the most common format)', () => {
+  const list = parse(readFileSync('e2e/fixtures/lists/gw-app-ogors.txt', 'utf8'));
+
+  it('reads every unit, reinforcement and enhancement', () => {
+    expect(list.units.map((u) => [u.name, u.points])).toEqual(EXPECTED_UNITS);
+    expect(list.units.filter((u) => u.reinforced).map((u) => u.name)).toEqual([
+      'Gluttons',
+      'Hunters with Sabrefangs',
+    ]);
+    expect(list.units[5]!.enhancements?.map((e) => e.name)).toEqual([
+      'A Choice Cut',
+      'Dreaded Far and Wide',
+    ]);
+    expect(list.unmatched).toEqual([]);
+  });
+
+  it('reads the formation, lores (with their points), battle tactics and faction terrain', () => {
+    expect(list.rules?.formation).toMatchObject({ name: 'Maw-Cult Fanatics', points: 10 });
+    expect(list.rules?.spellLore?.name).toBe('Lore of Gut Magic');
+    expect(list.rules?.manifestationLore).toMatchObject({ name: 'Morbid Conjuration', points: 20 });
+    expect(list.battleTactics).toEqual(['Siege of Ashes', 'Blazing Onslaught']);
+    expect(list.factionTerrain).toBe('Mawpit');
+  });
+
+  it('adds up to the 2000 points the app reports, from the catalogue alone', () => {
+    expect(list.declaredPoints).toBe(2000);
+    expect(pointsBreakdown(list)).toEqual({
+      units: 1970,
+      enhancements: 0,
+      formation: 10,
+      lores: 20,
+      total: 2000,
+    });
+    expect(list.pointsMismatches).toBeUndefined();
+  });
+
+  it("ignores the app's footer lines", () => {
+    expect(list.formation).toBe('Maw-Cult Fanatics');
+  });
+});
+
+describe('other export formats', () => {
+  it('New Recruit / BattleScribe text export', () => {
+    const list = parse(
+      [
+        '++ Army Roster (Ogor Mawtribes) [2000pts] ++',
+        '',
+        '+ Configuration +',
+        'Battle Formation: Maw-Cult Fanatics',
+        'Spell Lore: Lore of Gut Magic',
+        'Manifestation Lore: Morbid Conjuration',
+        '',
+        '+ Hero +',
+        'Redd the Maw, High Slaughtermaster [420pts]: General',
+        'Bloodpelt Hunter [130pts]: A Choice Cut, Dreaded Far and Wide',
+        '',
+        '+ Infantry +',
+        'Cleavers [220pts]',
+        'Gluttons [420pts]: Reinforced',
+        'Gorger Mawpack [240pts]',
+        'Gutseers [200pts]',
+        'Hunters with Sabrefangs [340pts]: Reinforced',
+        '',
+        '++ Total: [2000pts] ++',
+      ].join('\n'),
+    );
+    expect(list.units.map((u) => [u.name, u.points])).toEqual([
+      ...EXPECTED_UNITS.slice(0, 1),
+      EXPECTED_UNITS[5]!,
+      ...EXPECTED_UNITS.slice(1, 5),
+      EXPECTED_UNITS[6]!,
+    ]);
+    expect(
+      list.units.find((u) => u.name === 'Bloodpelt Hunter')!.enhancements?.map((e) => e.name),
+    ).toEqual(['A Choice Cut', 'Dreaded Far and Wide']);
+    expect(list.units.find((u) => u.name === 'Gluttons')!.reinforced).toBe(true);
+    expect(list.unmatched).toEqual([]);
+    expect(list.declaredPoints).toBe(2000);
+    expect(listPoints(list)).toBe(2000);
+  });
+
+  it('dash, colon and multiplier variants', () => {
+    const list = parse(
+      [
+        'Ogor Mawtribes',
+        'Bloodpelt Hunter - 130 pts',
+        '  - A Choice Cut',
+        '2 x Cleavers: 440 pts',
+        'Gutseers 200pts',
+        'Gorger Mawpack x1 (240)',
+      ].join('\n'),
+    );
+    expect(list.units.map((u) => [u.name, u.points])).toEqual([
+      ['Bloodpelt Hunter', 130],
+      ['Cleavers', 220],
+      ['Cleavers', 220],
+      ['Gutseers', 200],
+      ['Gorger Mawpack', 240],
+    ]);
+    expect(list.units[0]!.enhancements?.map((e) => e.name)).toEqual(['A Choice Cut']);
+    expect(list.unmatched).toEqual([]);
+  });
+
+  it("flags a list whose stated total doesn't match the catalogue", () => {
+    const list = parse(['Ogor Mawtribes 1990/2000 pts', 'Cleavers (220)'].join('\n'));
+    expect(list.pointsMismatches).toEqual(['List total: list says 1990, catalogue says 220']);
+  });
+});

@@ -99,6 +99,12 @@ export function ListViewer({
           {player.list.manifestationLore && (
             <span className="chip">{player.list.manifestationLore}</span>
           )}
+          {player.list.battleTactics?.map((t) => (
+            <span key={t} className="chip">
+              Tactics: {t}
+            </span>
+          ))}
+          {player.list.factionTerrain && <span className="chip">{player.list.factionTerrain}</span>}
           {profile.deepStrikers > 0 && (
             <span className="chip">{profile.deepStrikers} deep strike</span>
           )}

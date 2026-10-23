@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { fileToDataUrl, setFactionArt } from '../../data/art';
-import { detectFaction, listPoints, pointsBreakdown } from '../../data/listParser';
+import { detectFaction, listPoints, normalise, pointsBreakdown } from '../../data/listParser';
+import { GHB_BATTLE_TACTICS } from '../../packs/ghb2026';
 import { analyseList } from '../../data/listAnalysis';
 import { validateTeam, type Player, type Team } from '../../data/team';
 import type { FactionIndex } from '../../data/types';
@@ -12,6 +13,10 @@ import { FactionArt } from '../components/FactionArt';
 import { TeamLibraryBar } from '../components/TeamLibraryBar';
 
 const ALLIANCES = ['Order', 'Chaos', 'Death', 'Destruction'];
+
+const TACTIC_CARDS = new Set(GHB_BATTLE_TACTICS.map((c) => normalise(c.name)));
+const unknownTactics = (p: Player) =>
+  (p.list.battleTactics ?? []).filter((t) => !TACTIC_CARDS.has(normalise(t)));
 
 function FactionSelect({
   index,
@@ -195,6 +200,12 @@ function PlayerEditor({
                 })()}
                 {player.list.manifestationLore ? ` · ${player.list.manifestationLore}` : ''}
               </span>
+            </p>
+          )}
+          {unknownTactics(player).length > 0 && (
+            <p className="text-sm text-amber-300">
+              Not a General&apos;s Handbook battle tactics card: {unknownTactics(player).join(', ')}
+              .
             </p>
           )}
           {player.list.formation && player.list.rules && !player.list.rules.formation && (
