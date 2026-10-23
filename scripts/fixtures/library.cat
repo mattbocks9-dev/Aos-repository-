@@ -71,6 +71,20 @@
         </profile>
       </profiles>
     </selectionEntry>
+    <selectionEntry name="Old Hero" id="u3" type="unit">
+      <categoryLinks>
+        <categoryLink name="HERO" id="c5" targetId="x"/>
+        <categoryLink name="Legends" id="c6" targetId="acaf-8bb6-d6f-3e2a"/>
+      </categoryLinks>
+      <profiles>
+        <profile name="Old Hero" id="p3" typeName="Unit">
+          <characteristics>
+            <characteristic name="Move">5&quot;</characteristic><characteristic name="Health">5</characteristic>
+            <characteristic name="Save">4+</characteristic><characteristic name="Control">2</characteristic>
+          </characteristics>
+        </profile>
+      </profiles>
+    </selectionEntry>
     <selectionEntry name="Lore of Testing" id="lore1" type="upgrade">
       <profiles>
         <profile name="Test Bolt" id="s2" typeName="Ability (Spell)">

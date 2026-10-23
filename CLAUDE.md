@@ -31,7 +31,8 @@ Work in small slices: write or extend a failing test, implement, let the hooks v
   conditional wards from ability text), team rule checks, and sample teams.
 - Faction JSON holds units (stats, weapons, keywords, points, abilities/spells) and battletome `rules`
   (battle traits, formations, heroic traits, artefacts, spell/prayer/manifestation lores) from BSData
-  `BSData/age-of-sigmar-4th`. Generic/realm tables and hidden legacy groups are deliberately excluded.
+  `BSData/age-of-sigmar-4th`. Generic/realm tables, hidden legacy groups, `[LEGENDS]` catalogues and
+  units in BSData's `Legends` category are deliberately excluded.
 - `src/npc/`: matchup model (`matchup.ts`), zero-sum matrix solver, full-tree solver, captain
   (difficulty + reasoning), and the Web Worker client.
 - `src/ui/`: screens and components. `src/app/`: store (localStorage-persisted) and helpers.

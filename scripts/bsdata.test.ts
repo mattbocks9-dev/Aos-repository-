@@ -29,6 +29,10 @@ describe('BSData extraction', () => {
     expect(fac.links).toEqual([{ targetId: 'lib1', name: 'Test - Library' }]);
   });
 
+  it('leaves out Warhammer Legends units', () => {
+    expect(data.units.map((u) => u.name)).not.toContain('Old Hero');
+  });
+
   it('builds a deduplicated, points-costed roster', () => {
     expect(data.units.map((u) => u.name)).toEqual(['Arch Mage', 'Hammerguard']);
   });

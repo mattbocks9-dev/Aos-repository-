@@ -24,7 +24,10 @@ describe('data provenance', () => {
       ) as FactionData;
       expect(f.name).toBe(entry.name);
       expect(f.units.length).toBe(entry.unitCount);
-      for (const u of f.units) expect(u.points, `${f.name}: ${u.name}`).toBeGreaterThan(0);
+      for (const u of f.units) {
+        expect(u.points, `${f.name}: ${u.name}`).toBeGreaterThan(0);
+        expect(u.keywords, `${f.name}: ${u.name} is Legends`).not.toContain('Legends');
+      }
     }
   });
 

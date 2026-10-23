@@ -210,7 +210,8 @@ function PlayerEditor({
           {player.list.unmatched.length > 0 && (
             <div className="rounded-lg border border-amber-700/60 bg-amber-900/20 p-2 text-sm">
               <p className="font-semibold text-amber-300">
-                Not found in the {faction?.name ?? 'faction'} catalogue:
+                Not found in the {faction?.name ?? 'faction'} catalogue (Legends units aren't
+                included):
               </p>
               <ul className="list-disc pl-5">
                 {player.list.unmatched.map((u) => (

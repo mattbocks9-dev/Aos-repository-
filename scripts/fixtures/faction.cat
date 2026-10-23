@@ -5,6 +5,7 @@
     <entryLink name="Hammerguard" id="e1" targetId="u1" type="selectionEntry"><costs><cost name="pts" typeId="points" value="150"/></costs></entryLink>
     <entryLink name="Hammerguard" id="e1b" targetId="u1" type="selectionEntry"><costs><cost name="pts" typeId="points" value="150"/></costs></entryLink>
     <entryLink name="Arch Mage" id="e2" targetId="u2" type="selectionEntry"><costs><cost name="pts" typeId="points" value="120"/></costs></entryLink>
+    <entryLink name="Old Hero" id="e5" targetId="u3" type="selectionEntry"><costs><cost name="pts" typeId="points" value="100"/></costs></entryLink>
     <entryLink name="Free thing" id="e3" targetId="u2" type="selectionEntry"><costs><cost name="pts" typeId="points" value="0"/></costs></entryLink>
     <entryLink name="Battle Traits: Test Faction" id="e4" targetId="bt1" type="selectionEntry"/>
   </entryLinks>

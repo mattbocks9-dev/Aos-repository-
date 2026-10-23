@@ -417,6 +417,8 @@ export function buildFaction(
   const consider = (target: Node | undefined, points: number) => {
     if (!target || target.type !== 'unit' || points <= 0) return;
     const unit = extractUnit(target, points);
+    // Warhammer Legends units aren't used at matched-play events.
+    if (unit?.keywords.includes('Legends')) return;
     if (unit && !units.has(unit.name)) units.set(unit.name, unit);
   };
   for (const link of children(faction.root, 'entryLinks', 'entryLink')) {
