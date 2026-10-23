@@ -76,8 +76,19 @@ export function reducer(state: AppState, action: Action): AppState {
       return { ...state, teams: { ...state.teams, [action.side]: action.team } };
     case 'finish':
       return { ...state, result: action.result, screen: 'results' };
-    case 'reparsed':
-      return { ...state, teams: action.teams, dataVersion: DATA_VERSION };
+    case 'reparsed': {
+      // Only take a re-parsed list if the player hasn't been edited since the re-parse started.
+      const merge = (side: 'A' | 'B') => ({
+        ...state.teams[side],
+        players: state.teams[side].players.map((p, i) => {
+          const fresh = action.teams[side].players[i];
+          return fresh && fresh.listText === p.listText && fresh.factionId === p.factionId
+            ? { ...p, list: fresh.list }
+            : p;
+        }),
+      });
+      return { ...state, teams: { A: merge('A'), B: merge('B') }, dataVersion: DATA_VERSION };
+    }
   }
 }
 

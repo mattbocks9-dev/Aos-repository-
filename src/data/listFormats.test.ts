@@ -215,3 +215,28 @@ describe('GW app header variants', () => {
     expect(list.formation).toBeUndefined();
   });
 });
+
+describe('GW app export: Cities of Sigmar with three-part header', () => {
+  const text = readFileSync('e2e/fixtures/lists/gw-app-cities.txt', 'utf8');
+  const list = parseList(text, faction(detectFaction(text, index.factions)!));
+
+  it('parses to the 2000 pts the app reports', () => {
+    expect(list.factionId).toBe('cities-of-sigmar');
+    expect(list.units).toHaveLength(10);
+    expect(list.unmatched).toEqual([]);
+    expect(list.rules?.formation?.name).toBe('Zealous Hordes');
+    expect(list.battleTactics).toEqual(['Burning for Vengeance', 'Siege of Ashes']);
+    expect(list.units[1]!.enhancements?.map((e) => e.name)).toEqual([
+      'The Last Blade of Embergard',
+      'Beloved Leader',
+    ]);
+    expect(pointsBreakdown(list)).toEqual({
+      units: 1970,
+      enhancements: 10,
+      formation: 0,
+      lores: 20,
+      total: 2000,
+    });
+    expect(list.pointsMismatches).toBeUndefined();
+  });
+});
