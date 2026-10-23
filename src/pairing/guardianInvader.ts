@@ -131,6 +131,8 @@ export const guardianInvader: PairingProtocol<GIState> = {
 
   isTerminal: (s) => s.step === 'done',
 
+  guardian: (s, side) => s.guardian[side],
+
   pairings: (s) => s.pairings,
 
   key(s) {

@@ -31,6 +31,8 @@ export interface PairingProtocol<S> {
   pairings(s: S): Pairing[];
   /** Canonical key of everything that affects the rest of the game (not locked pairings). */
   key(s: S): string;
+  /** The side's current guardian, for protocols that have one. */
+  guardian?(s: S, side: Side): number | undefined;
 }
 
 export const other = (side: Side): Side => (side === 'A' ? 'B' : 'A');

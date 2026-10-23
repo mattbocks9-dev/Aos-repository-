@@ -16,5 +16,5 @@
     "noUnusedParameters": true,
     "types": ["node", "vitest/globals"]
   },
-  "include": ["vite.config.ts", "playwright.config.ts", "scripts", "e2e", "src/data/types.ts"]
+  "include": ["vite.config.ts", "playwright.config.ts", "scripts", "e2e", "src/data/types.ts", "src/data/dice.ts"]
 }

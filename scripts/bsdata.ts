@@ -3,6 +3,7 @@
 // be unit tested against small fixtures.
 import { XMLParser } from 'fast-xml-parser';
 import type { FactionData, UnitData, WeaponData } from '../src/data/types';
+export { diceAverage } from '../src/data/dice';
 
 type Node = Record<string, unknown>;
 
@@ -111,19 +112,6 @@ const num = (s: string | undefined): number => {
   const m = /-?\d+(\.\d+)?/.exec(s ?? '');
   return m ? Number(m[0]) : 0;
 };
-
-/** Average of a dice expression like "D6", "2D3+1", "3". */
-export function diceAverage(expr: string | undefined): number {
-  if (!expr) return 0;
-  const s = expr.replace(/\s/g, '').toUpperCase();
-  let total = 0;
-  for (const term of s.split('+')) {
-    const m = /^(\d*)D(\d+)$/.exec(term);
-    if (m) total += (Number(m[1] || 1) * (Number(m[2]) + 1)) / 2;
-    else total += num(term);
-  }
-  return total;
-}
 
 function modelCount(entry: Node): number {
   let total = 0;
