@@ -172,3 +172,46 @@ describe('GW app export with points written straight after the name', () => {
     expect(list.declaredPoints).toBe(2000);
   });
 });
+
+describe('GW app header variants', () => {
+  const lumineth = faction('lumineth-realm-lords');
+
+  it('reads "Grand Alliance | Faction | Formation (points)" header lines', () => {
+    const list = parseList(
+      [
+        'Shane Lambert',
+        'Moo 290/2000 pts',
+        '-----',
+        'Grand Alliance Order | Lumineth Realm-lords | Aelementor Guardians (10 Points)',
+        "General's Handbook 2026-27",
+        'Drops: 3',
+        'Alarith Stonemage (110)',
+        'Vanari Auralan Wardens (170)',
+        '• Reinforced',
+      ].join('\n'),
+      lumineth,
+    );
+    expect(list.unmatched).toEqual([]);
+    expect(list.rules?.formation).toMatchObject({ name: 'Aelementor Guardians', points: 10 });
+    expect(list.units.map((u) => u.name)).toEqual(['Alarith Stonemage', 'Vanari Auralan Wardens']);
+  });
+
+  it('splits battle tactic cards joined with "and"', () => {
+    const list = parseList(
+      'Battle Tactics Cards: Burning for Vengeance and Siege of Ashes',
+      lumineth,
+    );
+    expect(list.battleTactics).toEqual(['Burning for Vengeance', 'Siege of Ashes']);
+    const comma = parseList('Battle Tactic Cards: Legend of the Parch, Siege of Ashes', lumineth);
+    expect(comma.battleTactics).toEqual(['Legend of the Parch', 'Siege of Ashes']);
+  });
+
+  it('never treats other pipe-separated lines (app footer) as units or formations', () => {
+    const list = parseList(
+      ['Alarith Stonemage (110)', 'App: 1.38.1 | Data: 483 | Build 12'].join('\n'),
+      lumineth,
+    );
+    expect(list.unmatched).toEqual([]);
+    expect(list.formation).toBeUndefined();
+  });
+});

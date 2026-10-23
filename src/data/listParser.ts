@@ -261,15 +261,23 @@ export function parseList(text: string, faction: FactionData | undefined): ArmyL
     const tactics = /^battle tactics?(?: cards?)?\s*(?:-|:|\u2013)\s*(.+)$/i.exec(line);
     if (tactics) {
       list.battleTactics = tactics[1]!
-        .split(',')
+        .split(/\s*,\s*|\s+and\s+|\s*&\s*/i)
         .map((t) => t.trim())
         .filter(Boolean);
       continue;
     }
-    // Older app exports: "Faction Name | Battle Formation".
-    const pipe = line.split('|').map((x) => x.trim());
-    if (faction && pipe.length === 2 && normalise(pipe[0]!) === normalise(faction.name)) {
-      list.formation ??= splitPoints(pipe[1]!).text;
+    // App headers: "Faction | Formation" or "Grand Alliance Order | Faction | Formation (10 Points)".
+    // No unit line contains a pipe, so any other pipe line (e.g. the app footer) is skipped.
+    if (line.includes('|')) {
+      const parts = line.split('|').map((x) => splitPoints(x).text);
+      if (faction && parts.some((x) => normalise(x) === normalise(faction.name))) {
+        const named = parts.find((x) =>
+          formations.some((f) => normalise(f.option.name) === normalise(x)),
+        );
+        const last = parts[parts.length - 1]!;
+        list.formation ??=
+          named ?? (normalise(last) === normalise(faction.name) ? undefined : last);
+      }
       continue;
     }
 
