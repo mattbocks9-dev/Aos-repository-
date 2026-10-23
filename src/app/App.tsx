@@ -1,3 +1,4 @@
+import { LegalFooter } from '../ui/components/LegalFooter';
 import { Home } from '../ui/screens/Home';
 import { PairingBoard } from '../ui/screens/PairingBoard';
 import { Results } from '../ui/screens/Results';
@@ -56,6 +57,7 @@ export function App() {
         {state.screen === 'pairing' && <PairingBoard key={`${state.round}-${state.difficulty}`} />}
         {state.screen === 'results' && <Results />}
       </main>
+      {state.screen !== 'pairing' && <LegalFooter />}
     </div>
   );
 }

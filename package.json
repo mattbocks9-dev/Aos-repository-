@@ -2,6 +2,8 @@
   "name": "aos-pairing-trainer",
   "private": true,
   "version": "0.1.0",
+  "license": "MIT",
+  "description": "Unofficial fan-made Age of Sigmar team pairing trainer",
   "type": "module",
   "scripts": {
     "dev": "vite",
