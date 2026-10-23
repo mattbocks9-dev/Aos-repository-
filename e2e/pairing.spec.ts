@@ -28,6 +28,40 @@ test('parses a pasted GW app list', async ({ page }) => {
   ).toHaveCount(0);
 });
 
+test('re-reads lists saved by an older version of the app', async ({ page }) => {
+  const { readFileSync } = await import('node:fs');
+  const listText = readFileSync('e2e/fixtures/lists/gw-app-sylvaneth-aor.txt', 'utf8');
+  // What an older version saved: the pasted text, but a stale parse (no units, one tactics "card").
+  const stale = {
+    screen: 'teams',
+    dataVersion: 3,
+    teams: {
+      A: {
+        name: 'Saved team',
+        players: [
+          {
+            name: 'Forest',
+            factionId: 'sylvaneth',
+            listText,
+            list: {
+              units: [],
+              unmatched: [],
+              battleTactics: ['Siege of Ashes and Legend of the Parch'],
+            },
+          },
+        ],
+      },
+      B: { name: 'Opponents', players: [] },
+    },
+  };
+  await page.addInitScript((s) => localStorage.setItem('aos-pairing:v1', s), JSON.stringify(stale));
+  await page.goto('/');
+  await expect(page.getByText(/Sylvaneth · 2000 pts · 8 units/)).toBeVisible();
+  await expect(
+    page.getByText("Not a General's Handbook battle tactics card", { exact: false }),
+  ).toHaveCount(0);
+});
+
 test('loads a team from the shared library', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('button', { name: 'Set up teams & lists' }).click();

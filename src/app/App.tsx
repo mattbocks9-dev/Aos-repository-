@@ -6,7 +6,7 @@ import { RoundSetup } from '../ui/screens/RoundSetup';
 import { TeamSetup } from '../ui/screens/TeamSetup';
 import { useEffect } from 'react';
 import type { Team } from '../data/team';
-import { DATA_VERSION, useApp, type Screen } from './store';
+import { useApp, type Screen } from './store';
 import { parsePlayer } from './teams';
 
 const NAV: { screen: Screen; label: string }[] = [
@@ -18,9 +18,13 @@ const NAV: { screen: Screen; label: string }[] = [
 export function App() {
   const { state, dispatch } = useApp();
 
-  // Teams saved by older versions are re-parsed so units, points and rules come from the current catalogue.
+  // Saved teams keep the pasted list text; re-read it on every load so parser and catalogue
+  // fixes always apply to lists people saved earlier.
   useEffect(() => {
-    if (state.dataVersion === DATA_VERSION) return;
+    const hasLists = [state.teams.A, state.teams.B].some((t) =>
+      t.players.some((p) => p.factionId || p.listText.trim()),
+    );
+    if (!hasLists) return;
     const reparse = (team: Team) =>
       Promise.all(team.players.map(parsePlayer)).then((players) => ({ ...team, players }));
     void Promise.all([reparse(state.teams.A), reparse(state.teams.B)]).then(([A, B]) =>
