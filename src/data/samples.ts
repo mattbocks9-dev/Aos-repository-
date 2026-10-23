@@ -46,7 +46,7 @@ export const SAMPLE_USER_TEAM: SampleTeam = {
     {
       name: 'Bea',
       factionId: 'kharadron-overlords',
-      listText: list('Kharadron Overlords', 'Grand Armada', 'Primal Energy', [
+      listText: list('Kharadron Overlords', 'Veteran Ground Troops', 'Primal Energy', [
         "General's Regiment",
         'Arkanaut Admiral (130)',
         'Arkanaut Company (80)',
@@ -66,7 +66,7 @@ export const SAMPLE_USER_TEAM: SampleTeam = {
     {
       name: 'Cal',
       factionId: 'lumineth-realm-lords',
-      listText: list('Lumineth Realm-lords', 'Glittering Phalanx', 'Forbidden Power', [
+      listText: list('Lumineth Realm-lords', 'Warhost of Duality', 'Forbidden Power', [
         "General's Regiment",
         'Scinari Cathallar (130)',
         'Vanari Auralan Wardens (240)',
@@ -88,7 +88,7 @@ export const SAMPLE_USER_TEAM: SampleTeam = {
     {
       name: 'Dee',
       factionId: 'seraphon',
-      listText: list('Seraphon', 'Coalesced Thunderlizard', 'Twilit Sorceries', [
+      listText: list('Seraphon', 'Thunderquake Starhost', 'Twilit Sorceries', [
         "General's Regiment",
         'Saurus Oldblood on Carnosaur (210)',
         'Saurus Warriors (280)',
@@ -110,7 +110,7 @@ export const SAMPLE_USER_TEAM: SampleTeam = {
     {
       name: 'Eli',
       factionId: 'daughters-of-khaine',
-      listText: list('Daughters of Khaine', 'Khailebron Shadow-coven', 'Krondspine Incarnate', [
+      listText: list('Daughters of Khaine', 'Coven of Blood', 'Krondspine Incarnate', [
         "General's Regiment",
         'Slaughter Queen on Cauldron of Blood (300)',
         'Witch Aelves (240)',
@@ -161,7 +161,7 @@ export const SAMPLE_NPC_TEAM: SampleTeam = {
     {
       name: 'Hesk',
       factionId: 'slaves-to-darkness',
-      listText: list('Slaves to Darkness', 'Ravagers', 'Primal Energy', [
+      listText: list('Slaves to Darkness', 'Godswrath Warband', 'Primal Energy', [
         "General's Regiment",
         'Chaos Lord on Karkadrak (180)',
         'Chaos Warriors (360)',

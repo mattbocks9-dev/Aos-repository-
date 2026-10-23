@@ -185,8 +185,14 @@ function PlayerEditor({
               <span className="chip mr-1">{analyseList(player.list).archetype}</span>
               <span className="muted">
                 {player.list.units.length} units matched
+                {player.list.rules?.formation ? ` · ${player.list.rules.formation.name}` : ''}
                 {player.list.manifestationLore ? ` · ${player.list.manifestationLore}` : ''}
               </span>
+            </p>
+          )}
+          {player.list.formation && player.list.rules && !player.list.rules.formation && (
+            <p className="text-sm text-amber-300">
+              Battle formation “{player.list.formation}” isn't in the {faction?.name} battletome.
             </p>
           )}
           {player.list.unmatched.length > 0 && (

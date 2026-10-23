@@ -133,7 +133,11 @@ export class NpcCaptain<S> {
       const scores = row(b).map((m) => m.score);
       const good = scores.filter((x) => x > 1).length;
       const worst = scores.indexOf(Math.min(...scores));
-      return `Guarding with ${names[b]} on ${bp}: favourable into ${good} of your 5, and its worst matchup (${users[worst]}, ${fmt(scores[worst]!)}) is one I can refuse. ${outlook}`;
+      const tools = this.setup.npc[b]!.notable;
+      const toolText = tools.length
+        ? ` ${tools.slice(0, 2).join(' and ')} should do work here.`
+        : '';
+      return `Guarding with ${names[b]} on ${bp}: favourable into ${good} of your 5, and its worst matchup (${users[worst]}, ${fmt(scores[worst]!)}) is one I can refuse.${toolText} ${outlook}`;
     }
     if (step.kind === 'invaders') {
       const parts = move.map((b) => {
@@ -149,7 +153,9 @@ export class NpcCaptain<S> {
       if (guardian !== undefined) {
         const est = row(guardian)[a]!;
         const key = [...est.factors].sort((x, y) => Math.abs(y.value) - Math.abs(x.value))[0]!;
-        return `${names[guardian]} takes ${users[a]} on ${bp} (${fmt(est.score)}), mostly on ${key.label.toLowerCase()}. ${outlook}`;
+        const threat = this.setup.user[a]!.notable[0];
+        const threatText = threat ? ` I'll need to play around ${threat}.` : '';
+        return `${names[guardian]} takes ${users[a]} on ${bp} (${fmt(est.score)}), mostly on ${key.label.toLowerCase()}.${threatText} ${outlook}`;
       }
     }
     return outlook;

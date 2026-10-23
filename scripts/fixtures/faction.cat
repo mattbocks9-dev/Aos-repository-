@@ -6,5 +6,78 @@
     <entryLink name="Hammerguard" id="e1b" targetId="u1" type="selectionEntry"><costs><cost name="pts" typeId="points" value="150"/></costs></entryLink>
     <entryLink name="Arch Mage" id="e2" targetId="u2" type="selectionEntry"><costs><cost name="pts" typeId="points" value="120"/></costs></entryLink>
     <entryLink name="Free thing" id="e3" targetId="u2" type="selectionEntry"><costs><cost name="pts" typeId="points" value="0"/></costs></entryLink>
+    <entryLink name="Battle Traits: Test Faction" id="e4" targetId="bt1" type="selectionEntry"/>
   </entryLinks>
+  <sharedSelectionEntries>
+    <selectionEntry name="Battle Traits: Test Faction" id="bt1" type="upgrade">
+      <profiles>
+        <profile name="Steadfast" id="t1" typeName="Ability (Passive)">
+          <characteristics><characteristic name="Effect">Add 1 to save rolls.</characteristic></characteristics>
+        </profile>
+      </profiles>
+    </selectionEntry>
+  </sharedSelectionEntries>
+  <sharedSelectionEntryGroups>
+    <selectionEntryGroup name="Battle Formations: Test Faction" id="g1">
+      <selectionEntries>
+        <selectionEntry name="Hammer Host" id="f1" type="upgrade">
+          <profiles>
+            <profile name="Hammerfall" id="t2" typeName="Ability (Activated)">
+              <characteristics>
+                <characteristic name="Timing">Any Charge Phase</characteristic>
+                <characteristic name="Effect">Add 1 to charge rolls.</characteristic>
+              </characteristics>
+            </profile>
+          </profiles>
+        </selectionEntry>
+      </selectionEntries>
+    </selectionEntryGroup>
+    <selectionEntryGroup name="Spell Lores" id="g2">
+      <entryLinks>
+        <entryLink name="Lore of Testing" id="l2" targetId="lore1" type="selectionEntry"/>
+      </entryLinks>
+      <selectionEntries>
+        <selectionEntry name="Lore of Links" id="lore2" type="upgrade">
+          <entryLinks>
+            <entryLink name="Lore of Links" id="l3" targetId="spells1" type="selectionEntryGroup"/>
+          </entryLinks>
+        </selectionEntry>
+      </selectionEntries>
+    </selectionEntryGroup>
+    <selectionEntryGroup name="Lore of Links spells" id="spells1">
+      <selectionEntries>
+        <selectionEntry name="Linked Bolt" id="ls1" type="upgrade">
+          <profiles>
+            <profile name="Linked Bolt" id="s3" typeName="Ability (Spell)">
+              <characteristics><characteristic name="Casting Value">5</characteristic><characteristic name="Effect">Heal (3).</characteristic></characteristics>
+            </profile>
+          </profiles>
+        </selectionEntry>
+      </selectionEntries>
+    </selectionEntryGroup>
+    <selectionEntryGroup name="Generic Traits" id="generic1">
+      <selectionEntries>
+        <selectionEntry name="Realm Trait" id="rt1" type="upgrade"/>
+      </selectionEntries>
+    </selectionEntryGroup>
+    <selectionEntryGroup name="Heroic Traits" id="g3">
+      <entryLinks>
+        <entryLink name="Heroic Traits" id="l4" targetId="generic1" type="selectionEntryGroup"/>
+      </entryLinks>
+      <selectionEntryGroups>
+        <selectionEntryGroup name="Old Traits" id="g4" hidden="true">
+          <selectionEntries><selectionEntry name="Legacy" id="h0" type="upgrade"/></selectionEntries>
+        </selectionEntryGroup>
+      </selectionEntryGroups>
+      <selectionEntries>
+        <selectionEntry name="Brave" id="h1" type="upgrade">
+          <profiles>
+            <profile name="Brave" id="t3" typeName="Ability (Passive)">
+              <characteristics><characteristic name="Effect">Add 1 to control score.</characteristic></characteristics>
+            </profile>
+          </profiles>
+        </selectionEntry>
+      </selectionEntries>
+    </selectionEntryGroup>
+  </sharedSelectionEntryGroups>
 </catalogue>

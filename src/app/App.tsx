@@ -3,7 +3,9 @@ import { PairingBoard } from '../ui/screens/PairingBoard';
 import { Results } from '../ui/screens/Results';
 import { RoundSetup } from '../ui/screens/RoundSetup';
 import { TeamSetup } from '../ui/screens/TeamSetup';
+import { useEffect } from 'react';
 import { useApp, type Screen } from './store';
+import { parsePlayer } from './teams';
 
 const NAV: { screen: Screen; label: string }[] = [
   { screen: 'home', label: 'Home' },
@@ -13,6 +15,19 @@ const NAV: { screen: Screen; label: string }[] = [
 
 export function App() {
   const { state, dispatch } = useApp();
+
+  // Lists saved by older versions lack abilities/battletome rules: re-parse them once.
+  useEffect(() => {
+    for (const side of ['A', 'B'] as const) {
+      const team = state.teams[side];
+      if (team.players.some((p) => p.factionId && !p.list.rules)) {
+        void Promise.all(team.players.map(parsePlayer)).then((players) =>
+          dispatch({ type: 'setTeam', side, team: { ...team, players } }),
+        );
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <div className="mx-auto min-h-screen max-w-3xl px-4 pb-8 pt-[max(1rem,env(safe-area-inset-top))]">
       <header className="mb-4 flex items-center justify-between gap-3">

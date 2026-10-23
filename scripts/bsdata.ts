@@ -2,7 +2,15 @@
 // the compact faction JSON the app ships with. Kept free of fs/network so it can
 // be unit tested against small fixtures.
 import { XMLParser } from 'fast-xml-parser';
-import type { FactionData, UnitData, WeaponData } from '../src/data/types';
+import type {
+  AbilityData,
+  AbilityKind,
+  FactionData,
+  FactionRules,
+  RuleOption,
+  UnitData,
+  WeaponData,
+} from '../src/data/types';
 export { diceAverage } from '../src/data/dice';
 
 type Node = Record<string, unknown>;
@@ -17,6 +25,7 @@ const ARRAY_TAGS = new Set([
   'constraint',
   'catalogueLink',
   'selectionEntryGroup',
+  'attribute',
 ]);
 
 const parser = new XMLParser({
@@ -143,6 +152,52 @@ function weapon(profile: Node, kind: 'melee' | 'ranged'): WeaponData {
   };
 }
 
+const ABILITY_KINDS: Record<string, AbilityKind> = {
+  'Ability (Passive)': 'passive',
+  'Ability (Activated)': 'activated',
+  'Ability (Spell)': 'spell',
+  'Ability (Prayer)': 'prayer',
+  'Ability (Command)': 'command',
+};
+
+const clean = (s: string | undefined) => (s ? stripMarkup(s).replace(/\s+/g, ' ').trim() : '');
+
+function attributes(profile: Node): Record<string, string> {
+  const out: Record<string, string> = {};
+  for (const a of children(profile, 'attributes', 'attribute')) out[String(a.name)] = text(a);
+  return out;
+}
+
+export function extractAbility(profile: Node): AbilityData | null {
+  const kind = ABILITY_KINDS[String(profile.typeName)];
+  if (!kind) return null;
+  const c = characteristics(profile);
+  const a = attributes(profile);
+  const ability: AbilityData = { name: String(profile.name), kind, effect: clean(c.Effect) };
+  const category = a.Type || a['Parent Node'];
+  if (category) ability.category = category;
+  if (c.Timing) ability.timing = clean(c.Timing);
+  const value = c['Casting Value'] ?? c['Chanting Value'];
+  if (value) ability.castingValue = num(value);
+  if (c.Declare) ability.declare = clean(c.Declare);
+  // Keep key order stable for snapshotting: name, kind, category, timing, castingValue, declare, effect.
+  const { effect, ...rest } = ability;
+  return { ...rest, effect };
+}
+
+function abilitiesOf(node: unknown): AbilityData[] {
+  const seen = new Set<string>();
+  const out: AbilityData[] = [];
+  for (const p of collectProfiles(node)) {
+    const a = extractAbility(p);
+    if (a && !seen.has(a.name)) {
+      seen.add(a.name);
+      out.push(a);
+    }
+  }
+  return out;
+}
+
 export function extractUnit(entry: Node, points: number): UnitData | null {
   const profiles = collectProfiles(entry);
   const unitProfile = profiles.find((p) => p.typeName === 'Unit');
@@ -175,6 +230,118 @@ export function extractUnit(entry: Node, points: number): UnitData | null {
     priest: kw('PRIEST'),
     keywords: keywords.filter((k) => !/^(WARD|WIZARD|PRIEST) \(/.test(k)),
     weapons,
+    abilities: abilitiesOf(entry),
+  };
+}
+
+/** Index every selectionEntryGroup by id (for entryLinks of type selectionEntryGroup). */
+export function indexGroups(cats: ParsedCatalogue[]): Map<string, Node> {
+  const index = new Map<string, Node>();
+  const visit = (node: unknown): void => {
+    if (!node || typeof node !== 'object') return;
+    if (Array.isArray(node)) return node.forEach(visit);
+    for (const [key, value] of Object.entries(node as Node)) {
+      if (key === 'selectionEntryGroup' && Array.isArray(value)) {
+        for (const g of value as Node[]) if (g.id) index.set(String(g.id), g);
+      }
+      if (typeof value === 'object') visit(value);
+    }
+  };
+  cats.forEach((c) => visit(c.root));
+  return index;
+}
+
+function findAll(node: unknown, pred: (tag: string, n: Node) => boolean, out: Node[] = []): Node[] {
+  if (!node || typeof node !== 'object') return out;
+  if (Array.isArray(node)) {
+    node.forEach((n) => findAll(n, pred, out));
+    return out;
+  }
+  for (const [key, value] of Object.entries(node as Node)) {
+    if (Array.isArray(value)) {
+      for (const v of value)
+        if (v && typeof v === 'object' && pred(key, v as Node)) out.push(v as Node);
+    }
+    if (typeof value === 'object') findAll(value, pred, out);
+  }
+  return out;
+}
+
+const isHidden = (n: Node) => String(n.hidden) === 'true';
+
+type Resolver = { entries: Map<string, Node>; groups: Map<string, Node> };
+
+/** Abilities of an option, following its links into other entries/groups (e.g. a lore → its spells). */
+function resolvedAbilities(n: Node, r: Resolver, depth = 0): AbilityData[] {
+  const out = abilitiesOf(n);
+  if (depth > 3) return out;
+  for (const l of findAll(n, (tag) => tag === 'entryLink')) {
+    const target =
+      l.type === 'selectionEntryGroup'
+        ? r.groups.get(String(l.targetId))
+        : r.entries.get(String(l.targetId));
+    if (!target) continue;
+    for (const a of resolvedAbilities(target, r, depth + 1)) {
+      if (!out.some((x) => x.name === a.name)) out.push(a);
+    }
+  }
+  return out;
+}
+
+/**
+ * The options inside a battletome group. Only the faction's own, visible options count:
+ * links to shared groups (generic or realm-specific tables) and hidden legacy groups are skipped.
+ */
+function groupOptions(group: Node, r: Resolver): RuleOption[] {
+  const out: RuleOption[] = [];
+  const add = (n: Node | undefined, name?: string) => {
+    if (!n || isHidden(n)) return;
+    const optName = name ?? String(n.name);
+    if (!out.some((o) => o.name === optName))
+      out.push({ name: optName, abilities: resolvedAbilities(n, r) });
+  };
+  for (const e of children(group, 'selectionEntries', 'selectionEntry')) add(e);
+  for (const l of children(group, 'entryLinks', 'entryLink')) {
+    if (l.type !== 'selectionEntryGroup') add(r.entries.get(String(l.targetId)), String(l.name));
+  }
+  for (const g of children(group, 'selectionEntryGroups', 'selectionEntryGroup')) {
+    if (isHidden(g)) continue;
+    for (const o of groupOptions(g, r)) if (!out.some((x) => x.name === o.name)) out.push(o);
+  }
+  return out.sort((a, b) => a.name.localeCompare(b.name));
+}
+
+export function buildRules(
+  faction: ParsedCatalogue,
+  entries: Map<string, Node>,
+  groups: Map<string, Node>,
+): FactionRules {
+  const groupNamed = (pred: (name: string) => boolean): RuleOption[] => {
+    const found = findAll(
+      faction.root,
+      (tag, n) => tag === 'selectionEntryGroup' && pred(String(n.name)),
+    );
+    const opts: RuleOption[] = [];
+    for (const g of found) {
+      for (const o of groupOptions(g, { entries, groups }))
+        if (!opts.some((x) => x.name === o.name)) opts.push(o);
+    }
+    return opts;
+  };
+  const traitEntries = findAll(
+    faction.root,
+    (tag, n) =>
+      (tag === 'selectionEntry' || tag === 'entryLink') &&
+      String(n.name).startsWith('Battle Traits'),
+  ).map((n) => (n.targetId ? entries.get(String(n.targetId)) : n));
+  return {
+    battleTraits: abilitiesOf(traitEntries.filter(Boolean)),
+    formations: groupNamed((n) => n.startsWith('Battle Formations')),
+    heroicTraits: groupNamed((n) => n === 'Heroic Traits'),
+    artefacts: groupNamed((n) => n === 'Artefacts of Power'),
+    spellLores: groupNamed((n) => n === 'Spell Lores'),
+    prayerLores: groupNamed((n) => n === 'Prayer Lores'),
+    manifestationLores: groupNamed((n) => n === 'Manifestation Lores'),
   };
 }
 
@@ -188,6 +355,7 @@ export function buildFaction(
   faction: ParsedCatalogue,
   index: Map<string, Node>,
   meta: { id: string; grandAlliance: string },
+  groups: Map<string, Node> = new Map(),
 ): FactionData {
   const units = new Map<string, UnitData>();
   const consider = (target: Node | undefined, points: number) => {
@@ -207,6 +375,7 @@ export function buildFaction(
     name: faction.name,
     grandAlliance: meta.grandAlliance,
     units: [...units.values()].sort((a, b) => a.name.localeCompare(b.name)),
+    rules: buildRules(faction, index, groups),
   };
 }
 

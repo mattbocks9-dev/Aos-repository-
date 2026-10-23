@@ -10,6 +10,36 @@ export interface WeaponData {
   ability?: string;
 }
 
+export type AbilityKind = 'passive' | 'activated' | 'spell' | 'prayer' | 'command';
+
+export interface AbilityData {
+  name: string;
+  kind: AbilityKind;
+  /** Ability colour category: Offensive, Defensive, Movement, Shooting, Control, Special... */
+  category?: string;
+  timing?: string;
+  /** Casting value for spells, chanting value for prayers. */
+  castingValue?: number;
+  declare?: string;
+  effect: string;
+}
+
+/** A named option from a battletome: a formation, lore, heroic trait or artefact. */
+export interface RuleOption {
+  name: string;
+  abilities: AbilityData[];
+}
+
+export interface FactionRules {
+  battleTraits: AbilityData[];
+  formations: RuleOption[];
+  heroicTraits: RuleOption[];
+  artefacts: RuleOption[];
+  spellLores: RuleOption[];
+  prayerLores: RuleOption[];
+  manifestationLores: RuleOption[];
+}
+
 export interface UnitData {
   name: string;
   points: number;
@@ -23,6 +53,7 @@ export interface UnitData {
   priest: number;
   keywords: string[];
   weapons: WeaponData[];
+  abilities: AbilityData[];
 }
 
 export interface FactionData {
@@ -30,6 +61,7 @@ export interface FactionData {
   name: string;
   grandAlliance: string;
   units: UnitData[];
+  rules: FactionRules;
 }
 
 export interface FactionIndexEntry {

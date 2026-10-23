@@ -20,6 +20,7 @@ describe('sample teams', () => {
       for (const p of team.players) {
         expect(p.list.unmatched, p.name).toEqual([]);
         expect(listPoints(p.list), p.name).toBeGreaterThan(1700);
+        expect(p.list.rules?.formation, `${p.name} formation ${p.list.formation}`).toBeDefined();
       }
       expect(validateTeam(team, 2000, (id) => id)).toEqual([]);
     });

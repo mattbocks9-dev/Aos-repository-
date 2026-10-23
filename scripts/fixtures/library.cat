@@ -7,6 +7,13 @@
         <categoryLink name="WARD (6+)" id="c2" targetId="x"/>
       </categoryLinks>
       <profiles>
+        <profile name="Shield Wall" id="a1" typeName="Ability (Passive)">
+          <attributes><attribute name="Type">Defensive</attribute></attributes>
+          <characteristics>
+            <characteristic name="Keywords"/>
+            <characteristic name="Effect">This unit has **^^Ward (5+)^^** while it is   contesting an objective.</characteristic>
+          </characteristics>
+        </profile>
         <profile name="Hammerguard" id="p1" typeName="Unit">
           <characteristics>
             <characteristic name="Move">5&quot;</characteristic>
@@ -43,12 +50,31 @@
             <characteristic name="Save">5+</characteristic><characteristic name="Control">2</characteristic>
           </characteristics>
         </profile>
+        <profile name="Arcane Blast" id="s1" typeName="Ability (Spell)">
+          <attributes><attribute name="Parent Node">Offensive</attribute></attributes>
+          <characteristics>
+            <characteristic name="Timing">Your Hero Phase</characteristic>
+            <characteristic name="Casting Value">7</characteristic>
+            <characteristic name="Declare">Pick a visible enemy unit within 18&quot;.</characteristic>
+            <characteristic name="Effect">Inflict D3 mortal damage on the target.</characteristic>
+          </characteristics>
+        </profile>
         <profile name="Bolt" id="w2" typeName="Ranged Weapon">
           <characteristics>
             <characteristic name="Rng">18&quot;</characteristic><characteristic name="Atk">D6</characteristic>
             <characteristic name="Hit">4+</characteristic><characteristic name="Wnd">3+</characteristic>
             <characteristic name="Rnd">2</characteristic><characteristic name="Dmg">2</characteristic>
             <characteristic name="Ability">-</characteristic>
+          </characteristics>
+        </profile>
+      </profiles>
+    </selectionEntry>
+    <selectionEntry name="Lore of Testing" id="lore1" type="upgrade">
+      <profiles>
+        <profile name="Test Bolt" id="s2" typeName="Ability (Spell)">
+          <characteristics>
+            <characteristic name="Casting Value">6</characteristic>
+            <characteristic name="Effect">Inflict D6 mortal damage.</characteristic>
           </characteristics>
         </profile>
       </profiles>

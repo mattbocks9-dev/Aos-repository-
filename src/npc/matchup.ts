@@ -41,7 +41,10 @@ export function damageInto(me: ListProfile, them: ListProfile, t: BattleplanTrai
   const k = Math.min(1, Math.max(0, (them.avgSave - 3) / 2));
   const melee = me.meleeVsElite + k * (me.meleeVsHorde - me.meleeVsElite);
   const ranged = me.rangedVsElite + k * (me.rangedVsHorde - me.rangedVsElite);
-  return melee * (1 - 0.3 * t.shootingLanes) + ranged * (0.8 + 0.4 * t.shootingLanes);
+  // Mortal damage from abilities and spells ignores saves, so it isn't scaled by the target.
+  return (
+    melee * (1 - 0.3 * t.shootingLanes) + ranged * (0.8 + 0.4 * t.shootingLanes) + me.abilityDamage
+  );
 }
 
 export function estimateMatchup(

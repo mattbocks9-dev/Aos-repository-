@@ -1,6 +1,6 @@
 // Parses army lists pasted from the GW AoS app, New Recruit or BCP into units
 // matched against the BSData catalogue.
-import type { FactionData, UnitData } from './types';
+import type { AbilityData, FactionData, RuleOption, UnitData } from './types';
 
 export interface ListUnit {
   name: string;
@@ -16,7 +16,44 @@ export interface ArmyList {
   /** Lines that looked like units but matched nothing in the catalogue. */
   unmatched: string[];
   manifestationLore?: string;
+  spellLore?: string;
+  prayerLore?: string;
   formation?: string;
+  /** Battletome rules this list brings, resolved from the faction catalogue. */
+  rules?: ListRules;
+}
+
+export interface ListRules {
+  battleTraits: AbilityData[];
+  formation?: RuleOption;
+  spellLore?: RuleOption;
+  prayerLore?: RuleOption;
+  manifestationLore?: RuleOption;
+}
+
+/** Pick the named option, or the only option when the list doesn't name one. */
+function pickOption(options: RuleOption[], name: string | undefined): RuleOption | undefined {
+  if (name) {
+    const n = normalise(name);
+    return (
+      options.find((o) => normalise(o.name) === n) ??
+      options.find((o) => similarity(o.name, name) > 0.8)
+    );
+  }
+  return options.length === 1 ? options[0] : undefined;
+}
+
+export function resolveRules(list: ArmyList, faction: FactionData): ListRules {
+  const r = faction.rules;
+  return {
+    battleTraits: r.battleTraits,
+    formation: pickOption(r.formations, list.formation),
+    spellLore: pickOption(r.spellLores, list.spellLore),
+    prayerLore: pickOption(r.prayerLores, list.prayerLore),
+    manifestationLore: list.manifestationLore
+      ? pickOption(r.manifestationLores, list.manifestationLore)
+      : undefined,
+  };
 }
 
 export const normalise = (s: string) =>
@@ -79,9 +116,13 @@ export function parseList(text: string, faction: FactionData | undefined): ArmyL
     const line = raw.trim();
     if (!line) continue;
 
-    const lore = /^manifestation lore\s*(?:-|:|\u2013)\s*(.+)$/i.exec(line);
+    const lore = /^(manifestation|spell|prayer) lore\s*(?:-|:|\u2013)\s*(.+)$/i.exec(line);
     if (lore) {
-      list.manifestationLore = lore[1]!.trim();
+      const key = `${lore[1]!.toLowerCase()}Lore` as
+        | 'manifestationLore'
+        | 'spellLore'
+        | 'prayerLore';
+      list[key] = lore[2]!.trim();
       continue;
     }
     const formation = /^battle formation\s*(?:-|:|\u2013)\s*(.+)$/i.exec(line);
@@ -124,6 +165,7 @@ export function parseList(text: string, faction: FactionData | undefined): ArmyL
       list.units.push(last);
     }
   }
+  if (faction?.rules) list.rules = resolveRules(list, faction);
   return list;
 }
 

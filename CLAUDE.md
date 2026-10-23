@@ -18,6 +18,7 @@ Work in small slices: write or extend a failing test, implement, let the hooks v
 - `npm test`: unit tests. `npm run e2e`: Playwright. In the cloud sandbox, prefix with
   `PW_CHROMIUM=/opt/pw-browsers/chromium-1194/chrome-linux/chrome` and never run `playwright install`.
 - `npm run data`: regenerates `public/data` from the BSData commit pinned in `data/bsdata.lock.json`.
+  `npm run data -- --latest` moves the pin to BSData's current `main` first.
 
 ## Architecture
 
@@ -25,7 +26,12 @@ Work in small slices: write or extend a failing test, implement, let the hooks v
   `traits.ts`, which derives the NPC's map traits from that geometry. New pack = new folder + entry in `registry.ts`.
 - `src/pairing/`: pairing protocols (`PairingProtocol`, a simultaneous-move step machine).
   `guardianInvader.ts` implements OTTD 2026. UI and solver depend only on the interface.
-- `src/data/`: BSData-derived catalogue types, list parser, list feature analysis, team rule checks, and sample teams.
+- `src/data/`: BSData-derived catalogue types, list parser (resolves formation and lores against the
+  battletome), list feature analysis, `abilityAnalysis.ts` (reads mortal damage, deep strike, healing and
+  conditional wards from ability text), team rule checks, and sample teams.
+- Faction JSON holds units (stats, weapons, keywords, points, abilities/spells) and battletome `rules`
+  (battle traits, formations, heroic traits, artefacts, spell/prayer/manifestation lores) from BSData
+  `BSData/age-of-sigmar-4th`. Generic/realm tables and hidden legacy groups are deliberately excluded.
 - `src/npc/`: matchup model (`matchup.ts`), zero-sum matrix solver, full-tree solver, captain
   (difficulty + reasoning), and the Web Worker client.
 - `src/ui/`: screens and components. `src/app/`: store (localStorage-persisted) and helpers.

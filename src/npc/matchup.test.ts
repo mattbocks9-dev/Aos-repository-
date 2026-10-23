@@ -19,6 +19,9 @@ const profile = (p: Partial<ListProfile>): ListProfile => ({
   avgSave: 4,
   avgHealth: 2,
   archetype: 'Melee',
+  abilityDamage: 0,
+  deepStrikers: 0,
+  notable: [],
   ...p,
 });
 const traits: BattleplanTraits = {

@@ -20,6 +20,9 @@ const profile = (p: Partial<ListProfile>): ListProfile => ({
   avgSave: 4,
   avgHealth: 2,
   archetype: 'Melee',
+  abilityDamage: 0,
+  deepStrikers: 0,
+  notable: [],
   ...p,
 });
 const traits: BattleplanTraits = {
@@ -70,6 +73,13 @@ describe('NPC captain', () => {
       expect(P.pairings(s)).toHaveLength(5);
     });
   }
+
+  it('names key damage abilities in its reasoning', () => {
+    const s = setup('hard');
+    s.npc = s.npc.map((p) => ({ ...p, notable: ['Arcane Bolt'] }));
+    const captain = new NpcCaptain(P, s, rng);
+    expect(captain.decide(P.initial(5)).reasoning).toContain('Arcane Bolt');
+  });
 
   it('reports its expected edge from the start', () => {
     const captain = new NpcCaptain(P, setup('hard'), rng);

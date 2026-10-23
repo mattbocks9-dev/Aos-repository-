@@ -1,6 +1,7 @@
 // Summarises an army list into the features the NPC captain reasons with.
 // Damage figures are expected damage per full activation (all models swinging
 // their best weapon), which is a deliberately simple but consistent yardstick.
+import { abilityFeatures } from './abilityAnalysis';
 import { diceAverage } from './dice';
 import type { ArmyList } from './listParser';
 import type { UnitData, WeaponData } from './types';
@@ -26,7 +27,13 @@ export interface ListProfile {
   /** Points-weighted average save (lower is better) and health per model. */
   avgSave: number;
   avgHealth: number;
+  /** Mortal damage per battle round from abilities, spells and prayers (ignores saves). */
+  abilityDamage: number;
+  /** Units that can deep strike or redeploy. */
+  deepStrikers: number;
   archetype: string;
+  /** The list's standout damage abilities, for explanations. */
+  notable: string[];
 }
 
 const p6 = (target: number) => Math.min(5 / 6, Math.max(1 / 6, (7 - target) / 6));
@@ -50,7 +57,7 @@ export function effectiveWounds(u: UnitData, models: number): number {
   return (models * u.health) / ((1 - save) * (1 - ward));
 }
 
-function archetypeOf(p: Omit<ListProfile, 'archetype'>): string {
+function archetypeOf(p: Omit<ListProfile, 'archetype' | 'notable'>): string {
   const ranged = p.rangedVsElite / Math.max(1, p.meleeVsElite + p.rangedVsElite);
   const parts: string[] = [];
   if (p.models >= 70) parts.push('Horde');
@@ -60,7 +67,8 @@ function archetypeOf(p: Omit<ListProfile, 'archetype'>): string {
   else if (ranged >= 0.25) parts.push('Mixed arms');
   else parts.push('Melee');
   if (p.magic >= 4) parts.push('Caster');
-  if (p.mobility >= 9) parts.push('Fast');
+  if (p.mobility >= 9 || p.deepStrikers >= 3) parts.push('Fast');
+  if (p.abilityDamage >= 8) parts.push('Mortal wounds');
   return parts.join(' · ');
 }
 
@@ -81,7 +89,12 @@ export function analyseList(list: ArmyList): ListProfile {
     magic: 0,
     avgSave: 0,
     avgHealth: 0,
+    abilityDamage: 0,
+    deepStrikers: 0,
   };
+  const notable: { name: string; dmg: number }[] = [];
+  const spells = list.rules?.spellLore?.abilities ?? [];
+  const prayers = list.rules?.prayerLore?.abilities ?? [];
   let weighted = 0;
   for (const lu of list.units) {
     const u = lu.unit;
@@ -97,7 +110,22 @@ export function analyseList(list: ArmyList): ListProfile {
     acc.meleeVsHorde += models * best(u, 'melee', 5);
     acc.rangedVsElite += models * best(u, 'ranged', 3);
     acc.rangedVsHorde += models * best(u, 'ranged', 5);
-    acc.effectiveWounds += effectiveWounds(u, models);
+    // Casters also know the army's spell/prayer lore; one spell and one prayer a turn each.
+    const abilities = [
+      ...(u.abilities ?? []),
+      ...(u.wizard ? spells : []),
+      ...(u.priest ? prayers : []),
+    ];
+    const f = abilityFeatures(abilities, models);
+    const casts = Math.max(1, Math.min(2, u.wizard));
+    acc.abilityDamage += f.mortalDamage * (u.wizard ? casts : 1);
+    if (f.deepStrike) acc.deepStrikers += 1;
+    if (f.mortalDamage >= 1.5)
+      notable.push(...f.notable.map((name) => ({ name, dmg: f.mortalDamage })));
+    // Conditional wards count for half; healing is worth a few wounds over a game.
+    const wardBoost =
+      f.conditionalWard && !u.ward ? 1 / (1 - 0.5 * ((7 - f.conditionalWard) / 6)) : 1;
+    acc.effectiveWounds += effectiveWounds(u, models) * wardBoost + 3 * f.healing;
     acc.control += models * u.control;
     acc.mobility += w * (u.move + (u.keywords.includes('FLY') ? 2 : 0));
     acc.magic += u.wizard + u.priest * 0.75;
@@ -107,10 +135,13 @@ export function analyseList(list: ArmyList): ListProfile {
   }
   if (weighted) {
     acc.mobility /= weighted;
+    // Deep strike is worth a few inches of threat range across the army.
+    acc.mobility += Math.min(3, (acc.deepStrikers / Math.max(acc.units, 1)) * 6);
     acc.avgSave /= weighted;
     acc.avgHealth /= weighted;
   } else {
     acc.avgSave = 7;
   }
-  return { ...acc, archetype: archetypeOf(acc) };
+  const names = [...new Set(notable.sort((a, b) => b.dmg - a.dmg).map((n) => n.name))];
+  return { ...acc, archetype: archetypeOf(acc), notable: names.slice(0, 3) };
 }
