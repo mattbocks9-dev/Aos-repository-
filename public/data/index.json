@@ -1,0 +1,158 @@
+{
+  "source": {
+    "repo": "https://github.com/BSData/age-of-sigmar-4th",
+    "commit": "28ca9405c89880a6cea0480603247993275dfb6b"
+  },
+  "factions": [
+    {
+      "id": "blades-of-khorne",
+      "name": "Blades of Khorne",
+      "grandAlliance": "Chaos",
+      "unitCount": 30
+    },
+    {
+      "id": "cities-of-sigmar",
+      "name": "Cities of Sigmar",
+      "grandAlliance": "Order",
+      "unitCount": 64
+    },
+    {
+      "id": "daughters-of-khaine",
+      "name": "Daughters of Khaine",
+      "grandAlliance": "Order",
+      "unitCount": 24
+    },
+    {
+      "id": "disciples-of-tzeentch",
+      "name": "Disciples of Tzeentch",
+      "grandAlliance": "Chaos",
+      "unitCount": 30
+    },
+    {
+      "id": "flesh-eater-courts",
+      "name": "Flesh-eater Courts",
+      "grandAlliance": "Death",
+      "unitCount": 28
+    },
+    {
+      "id": "fyreslayers",
+      "name": "Fyreslayers",
+      "grandAlliance": "Order",
+      "unitCount": 21
+    },
+    {
+      "id": "gloomspite-gitz",
+      "name": "Gloomspite Gitz",
+      "grandAlliance": "Destruction",
+      "unitCount": 42
+    },
+    {
+      "id": "hedonites-of-slaanesh",
+      "name": "Hedonites of Slaanesh",
+      "grandAlliance": "Chaos",
+      "unitCount": 32
+    },
+    {
+      "id": "helsmiths-of-hashut",
+      "name": "Helsmiths of Hashut",
+      "grandAlliance": "Chaos",
+      "unitCount": 20
+    },
+    {
+      "id": "idoneth-deepkin",
+      "name": "Idoneth Deepkin",
+      "grandAlliance": "Order",
+      "unitCount": 22
+    },
+    {
+      "id": "ironjawz",
+      "name": "Ironjawz",
+      "grandAlliance": "Destruction",
+      "unitCount": 19
+    },
+    {
+      "id": "kharadron-overlords",
+      "name": "Kharadron Overlords",
+      "grandAlliance": "Order",
+      "unitCount": 23
+    },
+    {
+      "id": "kruleboyz",
+      "name": "Kruleboyz",
+      "grandAlliance": "Destruction",
+      "unitCount": 20
+    },
+    {
+      "id": "lumineth-realm-lords",
+      "name": "Lumineth Realm-lords",
+      "grandAlliance": "Order",
+      "unitCount": 29
+    },
+    {
+      "id": "maggotkin-of-nurgle",
+      "name": "Maggotkin of Nurgle",
+      "grandAlliance": "Chaos",
+      "unitCount": 35
+    },
+    {
+      "id": "nighthaunt",
+      "name": "Nighthaunt",
+      "grandAlliance": "Death",
+      "unitCount": 29
+    },
+    {
+      "id": "ogor-mawtribes",
+      "name": "Ogor Mawtribes",
+      "grandAlliance": "Destruction",
+      "unitCount": 39
+    },
+    {
+      "id": "ossiarch-bonereapers",
+      "name": "Ossiarch Bonereapers",
+      "grandAlliance": "Death",
+      "unitCount": 28
+    },
+    {
+      "id": "seraphon",
+      "name": "Seraphon",
+      "grandAlliance": "Order",
+      "unitCount": 35
+    },
+    {
+      "id": "skaven",
+      "name": "Skaven",
+      "grandAlliance": "Chaos",
+      "unitCount": 45
+    },
+    {
+      "id": "slaves-to-darkness",
+      "name": "Slaves to Darkness",
+      "grandAlliance": "Chaos",
+      "unitCount": 40
+    },
+    {
+      "id": "sons-of-behemat",
+      "name": "Sons of Behemat",
+      "grandAlliance": "Destruction",
+      "unitCount": 13
+    },
+    {
+      "id": "soulblight-gravelords",
+      "name": "Soulblight Gravelords",
+      "grandAlliance": "Death",
+      "unitCount": 37
+    },
+    {
+      "id": "stormcast-eternals",
+      "name": "Stormcast Eternals",
+      "grandAlliance": "Order",
+      "unitCount": 59
+    },
+    {
+      "id": "sylvaneth",
+      "name": "Sylvaneth",
+      "grandAlliance": "Order",
+      "unitCount": 25
+    }
+  ]
+}

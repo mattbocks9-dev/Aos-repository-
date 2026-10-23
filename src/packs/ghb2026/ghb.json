@@ -1,0 +1,2400 @@
+{
+  "source": {
+    "name": "Wahapedia: General's Handbook 2026-27",
+    "url": "https://wahapedia.ru/aos4/the-rules/general-s-handbook-2026-27/"
+  },
+  "battleplans": [
+    {
+      "id": "into-the-fire",
+      "name": "Into the Fire",
+      "number": 1,
+      "table": 1,
+      "imageUrl": "https://wahapedia.ru/aos4/img/battleplans/Into_the_Fire1.png",
+      "sourceUrl": "https://wahapedia.ru/aos4/the-rules/general-s-handbook-2026-27/#Into-the-Fire",
+      "twist": "Both players’ armies have the 'Secure the Gateway' ability. While you are the underdog, your army has the 'Determined Defenders' ability.",
+      "abilities": [
+        {
+          "name": "Secure the Gateway",
+          "kind": "passive",
+          "category": "Offensive",
+          "effect": "While you control the Place of Power wholly within friendly territory, friendly units’ melee weapons have Anti-charge (+1 Rend) while they are contesting an objective you control."
+        },
+        {
+          "name": "Determined Defenders",
+          "kind": "passive",
+          "category": "Control",
+          "effect": "Add 3 to the control scores of friendly units while they are wholly outside enemy territory."
+        }
+      ],
+      "scoring": [
+        "Score 3 victory points if you control at least 1 objective.",
+        "Score 3 victory points if you control 2 or more objectives.",
+        "Score 4 victory points if you control more objectives than your opponent."
+      ],
+      "notes": [],
+      "board": {
+        "width": 60,
+        "height": 44
+      },
+      "deployment": {
+        "attacker": [
+          [
+            {
+              "x": 0.0,
+              "y": 0.0
+            },
+            {
+              "x": 15.0,
+              "y": 0.0
+            },
+            {
+              "x": 15.0,
+              "y": 11.0
+            },
+            {
+              "x": 0.0,
+              "y": 11.0
+            }
+          ],
+          [
+            {
+              "x": 0.0,
+              "y": 11.0
+            },
+            {
+              "x": 30.0,
+              "y": 11.0
+            },
+            {
+              "x": 30.0,
+              "y": 33.0
+            },
+            {
+              "x": 0.0,
+              "y": 33.0
+            }
+          ]
+        ],
+        "defender": [
+          [
+            {
+              "x": 30.0,
+              "y": 11.0
+            },
+            {
+              "x": 60.0,
+              "y": 11.0
+            },
+            {
+              "x": 60.0,
+              "y": 33.0
+            },
+            {
+              "x": 30.0,
+              "y": 33.0
+            }
+          ],
+          [
+            {
+              "x": 45.0,
+              "y": 33.0
+            },
+            {
+              "x": 60.0,
+              "y": 33.0
+            },
+            {
+              "x": 60.0,
+              "y": 44.0
+            },
+            {
+              "x": 45.0,
+              "y": 44.0
+            }
+          ]
+        ]
+      },
+      "objectives": [
+        {
+          "id": "o5",
+          "kind": "Sun Seekers",
+          "x": 30.0,
+          "y": 5.5
+        },
+        {
+          "id": "o1",
+          "kind": "Golden Lions",
+          "x": 15.0,
+          "y": 22.0
+        },
+        {
+          "id": "o3",
+          "kind": "Scions of the Comet",
+          "x": 30.0,
+          "y": 22.0
+        },
+        {
+          "id": "o2",
+          "kind": "Golden Lions",
+          "x": 45.0,
+          "y": 22.0
+        },
+        {
+          "id": "o4",
+          "kind": "Heldenhain",
+          "x": 30.0,
+          "y": 38.5
+        }
+      ],
+      "terrain": [
+        {
+          "kind": "area",
+          "size": "medium",
+          "x": 15.0,
+          "y": 5.0
+        },
+        {
+          "kind": "area",
+          "size": "medium",
+          "x": 37.5,
+          "y": 11.0
+        },
+        {
+          "kind": "placeOfPower",
+          "size": "medium",
+          "x": 52.5,
+          "y": 15.0
+        },
+        {
+          "kind": "obscuring",
+          "size": "small",
+          "x": 22.5,
+          "y": 16.5
+        },
+        {
+          "kind": "obscuring",
+          "size": "small",
+          "x": 37.5,
+          "y": 27.5
+        },
+        {
+          "kind": "placeOfPower",
+          "size": "medium",
+          "x": 7.5,
+          "y": 29.0
+        },
+        {
+          "kind": "area",
+          "size": "medium",
+          "x": 22.5,
+          "y": 33.0
+        },
+        {
+          "kind": "area",
+          "size": "medium",
+          "x": 45.0,
+          "y": 38.5
+        }
+      ]
+    },
+    {
+      "id": "bloodstained-coasts",
+      "name": "Bloodstained Coasts",
+      "number": 2,
+      "table": 1,
+      "imageUrl": "https://wahapedia.ru/aos4/img/battleplans/Bloodstained_Coasts.png",
+      "sourceUrl": "https://wahapedia.ru/aos4/the-rules/general-s-handbook-2026-27/#Bloodstained-Coasts",
+      "twist": "From the second battle round onwards, both players can use the following abilities:",
+      "abilities": [
+        {
+          "name": "Emberstone-Augmented Weapons",
+          "kind": "activated",
+          "category": "Offensive",
+          "timing": "Any Combat Phase",
+          "declare": "Pick a friendly unit that charged this turn and has any emberstone slivers to be the target.",
+          "effect": "Pick 1 of the following effects to apply for the rest of the turn: Add 1 to hit rolls for the target’s combat attacks. Add 1 to wound rolls for the target’s combat attacks. Then, if you are the underdog, remove all of the target’s emberstone slivers. Otherwise, remove all emberstone slivers from each friendly unit."
+        },
+        {
+          "name": "Emberstone Cache",
+          "kind": "activated",
+          "category": "Special",
+          "timing": "Once Per Turn (Army), Your Hero Phase",
+          "declare": "Pick a friendly unit contesting an objective you control to be the target.",
+          "effect": "Give the target an emberstone sliver."
+        }
+      ],
+      "scoring": [
+        "Score 3 victory points if you control at least 1 objective.",
+        "Score 3 victory points if you control 2 or more objectives.",
+        "In the first battle round, score 4 victory points if you control more objectives than your opponent.",
+        "From the second battle round onwards, score 4 victory points if you control an objective that was controlled by your opponent at the start of the turn."
+      ],
+      "notes": [],
+      "board": {
+        "width": 60,
+        "height": 44
+      },
+      "deployment": {
+        "attacker": [
+          [
+            {
+              "x": 15.0,
+              "y": 0.0
+            },
+            {
+              "x": 60.0,
+              "y": 0.0
+            },
+            {
+              "x": 60.0,
+              "y": 22.0
+            },
+            {
+              "x": 15.0,
+              "y": 22.0
+            }
+          ]
+        ],
+        "defender": [
+          [
+            {
+              "x": 15.0,
+              "y": 22.0
+            },
+            {
+              "x": 60.0,
+              "y": 22.0
+            },
+            {
+              "x": 60.0,
+              "y": 44.0
+            },
+            {
+              "x": 15.0,
+              "y": 44.0
+            }
+          ]
+        ]
+      },
+      "objectives": [
+        {
+          "id": "o1",
+          "kind": "Golden Lions",
+          "x": 45.0,
+          "y": 11.0
+        },
+        {
+          "id": "o5",
+          "kind": "Sun Seekers",
+          "x": 30.0,
+          "y": 16.5
+        },
+        {
+          "id": "o3",
+          "kind": "Scions of the Comet",
+          "x": 15.0,
+          "y": 22.0
+        },
+        {
+          "id": "o4",
+          "kind": "Heldenhain",
+          "x": 45.0,
+          "y": 22.0
+        },
+        {
+          "id": "o6",
+          "kind": "Sun Seekers",
+          "x": 30.0,
+          "y": 27.5
+        },
+        {
+          "id": "o2",
+          "kind": "Golden Lions",
+          "x": 45.0,
+          "y": 33.0
+        }
+      ],
+      "terrain": [
+        {
+          "kind": "area",
+          "size": "medium",
+          "x": 30.0,
+          "y": 6.0
+        },
+        {
+          "kind": "obscuring",
+          "size": "medium",
+          "x": 15.0,
+          "y": 11.0
+        },
+        {
+          "kind": "placeOfPower",
+          "size": "medium",
+          "x": 6.0,
+          "y": 22.0
+        },
+        {
+          "kind": "placeOfPower",
+          "size": "small",
+          "x": 22.5,
+          "y": 22.0
+        },
+        {
+          "kind": "obscuring",
+          "size": "medium",
+          "x": 36.5,
+          "y": 22.0
+        },
+        {
+          "kind": "obscuring",
+          "size": "small",
+          "x": 52.5,
+          "y": 22.0
+        },
+        {
+          "kind": "obscuring",
+          "size": "medium",
+          "x": 15.0,
+          "y": 33.0
+        },
+        {
+          "kind": "area",
+          "size": "medium",
+          "x": 30.0,
+          "y": 38.5
+        }
+      ]
+    },
+    {
+      "id": "avalanche-of-ash",
+      "name": "Avalanche of Ash",
+      "number": 3,
+      "table": 1,
+      "imageUrl": "https://wahapedia.ru/aos4/img/battleplans/Avalanche_of_Ash.png",
+      "sourceUrl": "https://wahapedia.ru/aos4/the-rules/general-s-handbook-2026-27/#Avalanche-of-Ash",
+      "twist": "If you are the underdog, you must use the following ability.",
+      "abilities": [
+        {
+          "name": "Collapsing Pass",
+          "kind": "activated",
+          "category": "Special",
+          "timing": "Once Per Battle Round, Start of Battle Round",
+          "declare": "Pick each objective to be the targets. Then, pick 1 of the targets to be the focus.",
+          "effect": "Roll a dice for each target. Add 1 to the roll for each unit (friendly and enemy) that is contesting it. If the target is the focus, you can add 3 to or subtract 3 from the roll. On a 8+, remove the target from the battlefield."
+        }
+      ],
+      "scoring": [
+        "Score 3 victory points if you control at least 1 objective.",
+        "Score 3 victory points if you control 2 or more objectives.",
+        "Score 4 victory points if you control more objectives than your opponent.",
+        "Score 3 victory points if there is no more than 1 objective on the battlefield and you control a non- FACTION TERRAIN terrain feature within enemy territory.",
+        "Score 7 victory points if there are no objectives on the battlefield and you control more non- FACTION TERRAIN terrain features than your opponent."
+      ],
+      "notes": [],
+      "board": {
+        "width": 60,
+        "height": 44
+      },
+      "deployment": {
+        "attacker": [
+          [
+            {
+              "x": 0.0,
+              "y": 0.0
+            },
+            {
+              "x": 30.0,
+              "y": 0.0
+            },
+            {
+              "x": 30.0,
+              "y": 33.0
+            },
+            {
+              "x": 0.0,
+              "y": 33.0
+            }
+          ]
+        ],
+        "defender": [
+          [
+            {
+              "x": 30.0,
+              "y": 11.0
+            },
+            {
+              "x": 60.0,
+              "y": 11.0
+            },
+            {
+              "x": 60.0,
+              "y": 44.0
+            },
+            {
+              "x": 30.0,
+              "y": 44.0
+            }
+          ]
+        ]
+      },
+      "objectives": [
+        {
+          "id": "o1",
+          "kind": "Golden Lions",
+          "x": 15.0,
+          "y": 11.0
+        },
+        {
+          "id": "o4",
+          "kind": "Heldenhain",
+          "x": 30.0,
+          "y": 11.0
+        },
+        {
+          "id": "o5",
+          "kind": "Sun Seekers",
+          "x": 45.0,
+          "y": 11.0
+        },
+        {
+          "id": "o6",
+          "kind": "Sun Seekers",
+          "x": 15.0,
+          "y": 33.0
+        },
+        {
+          "id": "o3",
+          "kind": "Scions of the Comet",
+          "x": 30.0,
+          "y": 33.0
+        },
+        {
+          "id": "o2",
+          "kind": "Golden Lions",
+          "x": 45.0,
+          "y": 33.0
+        }
+      ],
+      "terrain": [
+        {
+          "kind": "area",
+          "size": "medium",
+          "x": 22.5,
+          "y": 5.0
+        },
+        {
+          "kind": "placeOfPower",
+          "size": "small",
+          "x": 37.5,
+          "y": 5.0
+        },
+        {
+          "kind": "obscuring",
+          "size": "small",
+          "x": 7.5,
+          "y": 22.0
+        },
+        {
+          "kind": "obscuring",
+          "size": "medium",
+          "x": 22.5,
+          "y": 22.0
+        },
+        {
+          "kind": "obscuring",
+          "size": "medium",
+          "x": 37.5,
+          "y": 22.0
+        },
+        {
+          "kind": "obscuring",
+          "size": "small",
+          "x": 52.5,
+          "y": 22.0
+        },
+        {
+          "kind": "placeOfPower",
+          "size": "small",
+          "x": 22.5,
+          "y": 38.5
+        },
+        {
+          "kind": "area",
+          "size": "medium",
+          "x": 37.5,
+          "y": 38.5
+        }
+      ]
+    },
+    {
+      "id": "caverns-of-slaughter",
+      "name": "Caverns of Slaughter",
+      "number": 4,
+      "table": 1,
+      "imageUrl": "https://wahapedia.ru/aos4/img/battleplans/Caverns_of_Slaughter.png",
+      "sourceUrl": "https://wahapedia.ru/aos4/the-rules/general-s-handbook-2026-27/#Caverns-of-Slaughter",
+      "twist": "If you are the underdog, you can use the ’Shifting Passages’ ability. Both players can use the \"Navigate the Tunnels\" ability",
+      "abilities": [
+        {
+          "name": "Shifting Passages",
+          "kind": "activated",
+          "category": "Special",
+          "timing": "Once Per Battle Round, Start of Battle Round",
+          "declare": "Pick 2 non- FACTION TERRAIN terrain features to be the targets.",
+          "effect": "Remove all hidden passage tokens from the battlefield (if any). Then, give each target a hidden passage token."
+        },
+        {
+          "name": "Navigate the Tunnels",
+          "kind": "activated",
+          "category": "Movement",
+          "timing": "Once Per Turn (Army), Your Movement Phase",
+          "declare": "Pick a friendly unit wholly within 6\" of a terrain feature that has a hidden passage token to be the target.",
+          "effect": "Remove the target from the battlefield and set it up again wholly within 6\" of a different terrain feature that has a hidden passage token and more than 9\" from all enemy units."
+        }
+      ],
+      "scoring": [
+        "Score 3 victory points if you control at least 1 objective.",
+        "Score 3 victory points if you control 2 or more objectives.",
+        "Score 4 victory points if you control any pair s of objectives."
+      ],
+      "notes": [],
+      "board": {
+        "width": 60,
+        "height": 44
+      },
+      "deployment": {
+        "attacker": [
+          [
+            {
+              "x": 0.0,
+              "y": 11.0
+            },
+            {
+              "x": 30.0,
+              "y": 11.0
+            },
+            {
+              "x": 30.0,
+              "y": 33.0
+            },
+            {
+              "x": 0.0,
+              "y": 33.0
+            }
+          ]
+        ],
+        "defender": [
+          [
+            {
+              "x": 30.0,
+              "y": 11.0
+            },
+            {
+              "x": 60.0,
+              "y": 11.0
+            },
+            {
+              "x": 60.0,
+              "y": 33.0
+            },
+            {
+              "x": 30.0,
+              "y": 33.0
+            }
+          ]
+        ]
+      },
+      "objectives": [
+        {
+          "id": "o1",
+          "kind": "Golden Lions",
+          "x": 15.0,
+          "y": 11.0
+        },
+        {
+          "id": "o4",
+          "kind": "Sun Seekers",
+          "x": 30.0,
+          "y": 11.0
+        },
+        {
+          "id": "o3",
+          "kind": "Scions of the Comet",
+          "x": 30.0,
+          "y": 22.0
+        },
+        {
+          "id": "o2",
+          "kind": "Golden Lions",
+          "x": 30.0,
+          "y": 33.0
+        },
+        {
+          "id": "o5",
+          "kind": "Sun Seekers",
+          "x": 45.0,
+          "y": 33.0
+        }
+      ],
+      "terrain": [
+        {
+          "kind": "obscuring",
+          "size": "small",
+          "x": 7.5,
+          "y": 5.0
+        },
+        {
+          "kind": "placeOfPower",
+          "size": "small",
+          "x": 37.5,
+          "y": 5.0
+        },
+        {
+          "kind": "area",
+          "size": "medium",
+          "x": 52.5,
+          "y": 11.0
+        },
+        {
+          "kind": "obscuring",
+          "size": "medium",
+          "x": 20.5,
+          "y": 22.0
+        },
+        {
+          "kind": "obscuring",
+          "size": "medium",
+          "x": 40.0,
+          "y": 22.0
+        },
+        {
+          "kind": "area",
+          "size": "medium",
+          "x": 7.5,
+          "y": 33.0
+        },
+        {
+          "kind": "placeOfPower",
+          "size": "small",
+          "x": 22.5,
+          "y": 38.5
+        },
+        {
+          "kind": "obscuring",
+          "size": "small",
+          "x": 52.5,
+          "y": 38.5
+        }
+      ]
+    },
+    {
+      "id": "whats-yours-is-ours",
+      "name": "What's Yours Is Ours",
+      "number": 5,
+      "table": 1,
+      "imageUrl": "https://wahapedia.ru/aos4/img/battleplans/Whats_Yours_Is_Ours.png",
+      "sourceUrl": "https://wahapedia.ru/aos4/the-rules/general-s-handbook-2026-27/#What-s-Yours-Is-Ours",
+      "twist": "While the battle round number is odd, the pair of Golden Lions objectives is the coveted pair of objectives. While the battle round number is even, the pair of Sun Seekers objectives is the coveted pair of objectives. If you are the underdog, you can use the following ability:",
+      "abilities": [
+        {
+          "name": "All the Rage",
+          "kind": "activated",
+          "category": "Special",
+          "timing": "Once Per Battle Round, Start of Battle Round",
+          "declare": "Pick a pair of objectives to be the target.",
+          "effect": "For the rest of the battle round, the target is the coveted pair of objectives instead of the other pair of objectives."
+        }
+      ],
+      "scoring": [
+        "Score 3 victory points if you control at least 1 objective.",
+        "Score 3 victory points if you control the coveted pair of objectives.",
+        "Score 4 victory points if you control more objectives than your opponent."
+      ],
+      "notes": [],
+      "board": {
+        "width": 60,
+        "height": 44
+      },
+      "deployment": {
+        "attacker": [
+          [
+            {
+              "x": 0.0,
+              "y": 0.0
+            },
+            {
+              "x": 30.0,
+              "y": 0.0
+            },
+            {
+              "x": 30.0,
+              "y": 22.0
+            },
+            {
+              "x": 0.0,
+              "y": 22.0
+            }
+          ],
+          [
+            {
+              "x": 45.0,
+              "y": 0.0
+            },
+            {
+              "x": 60.0,
+              "y": 0.0
+            },
+            {
+              "x": 60.0,
+              "y": 11.0
+            },
+            {
+              "x": 45.0,
+              "y": 11.0
+            }
+          ]
+        ],
+        "defender": [
+          [
+            {
+              "x": 0.0,
+              "y": 22.0
+            },
+            {
+              "x": 30.0,
+              "y": 22.0
+            },
+            {
+              "x": 30.0,
+              "y": 44.0
+            },
+            {
+              "x": 0.0,
+              "y": 44.0
+            }
+          ],
+          [
+            {
+              "x": 45.0,
+              "y": 33.0
+            },
+            {
+              "x": 60.0,
+              "y": 33.0
+            },
+            {
+              "x": 60.0,
+              "y": 44.0
+            },
+            {
+              "x": 45.0,
+              "y": 44.0
+            }
+          ]
+        ]
+      },
+      "objectives": [
+        {
+          "id": "o4",
+          "kind": "Sun Seekers",
+          "x": 45.0,
+          "y": 11.0
+        },
+        {
+          "id": "o1",
+          "kind": "Golden Lions",
+          "x": 15.0,
+          "y": 22.0
+        },
+        {
+          "id": "o3",
+          "kind": "Scions of the Comet",
+          "x": 30.0,
+          "y": 22.0
+        },
+        {
+          "id": "o2",
+          "kind": "Golden Lions",
+          "x": 45.0,
+          "y": 22.0
+        },
+        {
+          "id": "o5",
+          "kind": "Sun Seekers",
+          "x": 45.0,
+          "y": 33.0
+        }
+      ],
+      "terrain": [
+        {
+          "kind": "area",
+          "size": "medium",
+          "x": 37.5,
+          "y": 5.5
+        },
+        {
+          "kind": "obscuring",
+          "size": "medium",
+          "x": 15.0,
+          "y": 11.0
+        },
+        {
+          "kind": "obscuring",
+          "size": "medium",
+          "x": 7.0,
+          "y": 22.0
+        },
+        {
+          "kind": "placeOfPower",
+          "size": "small",
+          "x": 22.5,
+          "y": 22.0
+        },
+        {
+          "kind": "obscuring",
+          "size": "small",
+          "x": 37.5,
+          "y": 22.0
+        },
+        {
+          "kind": "placeOfPower",
+          "size": "medium",
+          "x": 53.0,
+          "y": 22.5
+        },
+        {
+          "kind": "obscuring",
+          "size": "medium",
+          "x": 15.0,
+          "y": 33.0
+        },
+        {
+          "kind": "area",
+          "size": "medium",
+          "x": 37.5,
+          "y": 38.5
+        }
+      ]
+    },
+    {
+      "id": "hidden-under-ash-clouds",
+      "name": "Hidden Under Ash-Clouds",
+      "number": 6,
+      "table": 1,
+      "imageUrl": "https://wahapedia.ru/aos4/img/battleplans/Hidden_Under_Ash_Clouds.png",
+      "sourceUrl": "https://wahapedia.ru/aos4/the-rules/general-s-handbook-2026-27/#Hidden-Under-Ash-Clouds",
+      "twist": "At the start of each battle round, the underdog must pick whether or not the ash-clouds are low-lying. If there is no underdog, the ash-clouds are low-lying. The following passive ability applies this battle:",
+      "abilities": [
+        {
+          "name": "Rolling Ash-Clouds",
+          "kind": "passive",
+          "category": "Special",
+          "effect": "While the ash-clouds are low-lying : Units and MANIFESTATIONS cannot be set up in neutral territory. Units and MANIFESTATIONS cannot end a move within neutral territory unless they started that move wholly within neutral territory. Models and MANIFESTATIONS are not visible to other models more than 3\" away unless a straight line can be drawn between any points on their bases that does not cross neutral territory."
+        }
+      ],
+      "scoring": [
+        "Score 3 victory points if you control at least 1 objective.",
+        "Score 3 victory points if you control 2 or more objectives.",
+        "Score 4 victory points if you control more objectives than your opponent."
+      ],
+      "notes": [
+        "FAQ Q: In the ‘ Hidden Under Ash-clouds ’ battleplan, are the ash-clouds low-lying during the deployment phase ? A: Yes, as there is no underdog during the deployment phase. Errata Hidden Under Ash-Clouds In the effect of ‘Rolling Ash-clouds’, in all bullet points change ‘ and MANIFESTATIONS ’ to ‘, terrain features and MANIFESTATIONS ’."
+      ],
+      "board": {
+        "width": 60,
+        "height": 44
+      },
+      "deployment": {
+        "attacker": [
+          [
+            {
+              "x": 0.0,
+              "y": 0.0
+            },
+            {
+              "x": 60.0,
+              "y": 0.0
+            },
+            {
+              "x": 60.0,
+              "y": 11.0
+            },
+            {
+              "x": 0.0,
+              "y": 11.0
+            }
+          ],
+          [
+            {
+              "x": 0.0,
+              "y": 11.0
+            },
+            {
+              "x": 15.0,
+              "y": 11.0
+            },
+            {
+              "x": 15.0,
+              "y": 22.0
+            },
+            {
+              "x": 0.0,
+              "y": 22.0
+            }
+          ],
+          [
+            {
+              "x": 45.0,
+              "y": 11.0
+            },
+            {
+              "x": 60.0,
+              "y": 11.0
+            },
+            {
+              "x": 60.0,
+              "y": 22.0
+            },
+            {
+              "x": 45.0,
+              "y": 22.0
+            }
+          ]
+        ],
+        "defender": [
+          [
+            {
+              "x": 0.0,
+              "y": 22.0
+            },
+            {
+              "x": 15.0,
+              "y": 22.0
+            },
+            {
+              "x": 15.0,
+              "y": 33.0
+            },
+            {
+              "x": 0.0,
+              "y": 33.0
+            }
+          ],
+          [
+            {
+              "x": 45.0,
+              "y": 22.0
+            },
+            {
+              "x": 60.0,
+              "y": 22.0
+            },
+            {
+              "x": 60.0,
+              "y": 33.0
+            },
+            {
+              "x": 45.0,
+              "y": 33.0
+            }
+          ],
+          [
+            {
+              "x": 0.0,
+              "y": 33.0
+            },
+            {
+              "x": 60.0,
+              "y": 33.0
+            },
+            {
+              "x": 60.0,
+              "y": 44.0
+            },
+            {
+              "x": 0.0,
+              "y": 44.0
+            }
+          ]
+        ]
+      },
+      "objectives": [
+        {
+          "id": "o1",
+          "kind": "Golden Lions",
+          "x": 37.5,
+          "y": 11.0
+        },
+        {
+          "id": "o4",
+          "kind": "Sun Seekers",
+          "x": 15.0,
+          "y": 22.0
+        },
+        {
+          "id": "o3",
+          "kind": "Scions of the Comet",
+          "x": 30.0,
+          "y": 22.0
+        },
+        {
+          "id": "o5",
+          "kind": "Sun Seekers",
+          "x": 45.0,
+          "y": 22.0
+        },
+        {
+          "id": "o2",
+          "kind": "Golden Lions",
+          "x": 22.5,
+          "y": 33.0
+        }
+      ],
+      "terrain": [
+        {
+          "kind": "area",
+          "size": "medium",
+          "x": 46.0,
+          "y": 11.0
+        },
+        {
+          "kind": "placeOfPower",
+          "size": "medium",
+          "x": 7.5,
+          "y": 11.5
+        },
+        {
+          "kind": "area",
+          "size": "medium",
+          "x": 22.5,
+          "y": 14.0
+        },
+        {
+          "kind": "obscuring",
+          "size": "small",
+          "x": 37.5,
+          "y": 17.0
+        },
+        {
+          "kind": "obscuring",
+          "size": "small",
+          "x": 22.5,
+          "y": 27.0
+        },
+        {
+          "kind": "area",
+          "size": "medium",
+          "x": 38.0,
+          "y": 30.0
+        },
+        {
+          "kind": "area",
+          "size": "medium",
+          "x": 13.0,
+          "y": 33.0
+        },
+        {
+          "kind": "placeOfPower",
+          "size": "medium",
+          "x": 52.5,
+          "y": 33.5
+        }
+      ]
+    },
+    {
+      "id": "warped-ruins",
+      "name": "Warped Ruins",
+      "number": 7,
+      "table": 2,
+      "imageUrl": "https://wahapedia.ru/aos4/img/battleplans/Warped_Ruins.png",
+      "sourceUrl": "https://wahapedia.ru/aos4/the-rules/general-s-handbook-2026-27/#Warped-Ruins",
+      "twist": "If you are the underdog, you must use the following ability.",
+      "abilities": [
+        {
+          "name": "Spreading Warpfire",
+          "kind": "activated",
+          "category": "Special",
+          "timing": "Once Per Battle Round, Start of Battle Round",
+          "declare": "If there are no flaming terrain features on the battlefield, pick a non- FACTION TERRAIN terrain feature to be the target. Otherwise, pick a non- FACTION TERRAIN terrain feature that is not flaming and that is within 12\" of a flaming terrain feature to be the target.",
+          "effect": "The target is flaming for the rest of the battle. Then, inflict D3 mortal damage on each unit (friendly and enemy) within 6\" of any flaming terrain features."
+        }
+      ],
+      "scoring": [
+        "Score 3 victory points if you control at least 1 objective.",
+        "Score 3 victory points if you control any pairs of objectives.",
+        "Score 4 victory points if you control more objectives than your opponent."
+      ],
+      "notes": [],
+      "board": {
+        "width": 60,
+        "height": 44
+      },
+      "deployment": {
+        "attacker": [
+          [
+            {
+              "x": 0.0,
+              "y": 0.0
+            },
+            {
+              "x": 60.0,
+              "y": 0.0
+            },
+            {
+              "x": 60.0,
+              "y": 22.0
+            },
+            {
+              "x": 0.0,
+              "y": 22.0
+            }
+          ]
+        ],
+        "defender": [
+          [
+            {
+              "x": 0.0,
+              "y": 22.0
+            },
+            {
+              "x": 60.0,
+              "y": 22.0
+            },
+            {
+              "x": 60.0,
+              "y": 44.0
+            },
+            {
+              "x": 0.0,
+              "y": 44.0
+            }
+          ]
+        ]
+      },
+      "objectives": [
+        {
+          "id": "o1",
+          "kind": "Golden Lions",
+          "x": 37.5,
+          "y": 11.0
+        },
+        {
+          "id": "o4",
+          "kind": "Heldenhain",
+          "x": 15.0,
+          "y": 22.0
+        },
+        {
+          "id": "o3",
+          "kind": "Scions of the Comet",
+          "x": 45.0,
+          "y": 22.0
+        },
+        {
+          "id": "o2",
+          "kind": "Golden Lions",
+          "x": 22.5,
+          "y": 33.0
+        },
+        {
+          "id": "o5",
+          "kind": "Sun Seekers",
+          "x": 37.5,
+          "y": 33.0
+        }
+      ],
+      "terrain": [
+        {
+          "kind": "area",
+          "size": "medium",
+          "x": 11.0,
+          "y": 11.0
+        },
+        {
+          "kind": "obscuring",
+          "size": "medium",
+          "x": 49.0,
+          "y": 11.0
+        },
+        {
+          "kind": "obscuring",
+          "size": "small",
+          "x": 7.5,
+          "y": 22.0
+        },
+        {
+          "kind": "obscuring",
+          "size": "medium",
+          "x": 23.0,
+          "y": 22.0
+        },
+        {
+          "kind": "placeOfPower",
+          "size": "small",
+          "x": 38.0,
+          "y": 22.0
+        },
+        {
+          "kind": "placeOfPower",
+          "size": "medium",
+          "x": 53.5,
+          "y": 22.0
+        },
+        {
+          "kind": "area",
+          "size": "medium",
+          "x": 11.0,
+          "y": 33.0
+        },
+        {
+          "kind": "obscuring",
+          "size": "medium",
+          "x": 49.0,
+          "y": 33.0
+        }
+      ]
+    },
+    {
+      "id": "curse-of-the-gnaw",
+      "name": "Curse of the Gnaw",
+      "number": 8,
+      "table": 2,
+      "imageUrl": "https://wahapedia.ru/aos4/img/battleplans/Curse_of_the_Gnaw.png",
+      "sourceUrl": "https://wahapedia.ru/aos4/the-rules/general-s-handbook-2026-27/#Curse-of-the-Gnaw",
+      "twist": "At the start of the battle, the instability level is 1. Each time either player uses the ' Activate Place of Power ' ability, add 1 to the instability level, to a maximum of 6. After deciding who will take the first turn, the underdog can use the following ability.",
+      "abilities": [
+        {
+          "name": "Echoes of Blight City",
+          "kind": "activated",
+          "category": "Offensive",
+          "timing": "Once Per Battle Round, Start of Battle Round",
+          "declare": "Pick an objective to be the target.",
+          "effect": "Inflict an amount of mortal damage on each unit (friendly and enemy) contesting the target equal to the Instability level. Then, reset the Instability level to 1."
+        }
+      ],
+      "scoring": [
+        "Score 3 victory points if you control the Golden Lions objective.",
+        "Score 3 victory points if you control the Sun Seekers objective.",
+        "Score 4 victory points if you control more objectives than your opponent."
+      ],
+      "notes": [],
+      "board": {
+        "width": 60,
+        "height": 44
+      },
+      "deployment": {
+        "attacker": [
+          [
+            {
+              "x": 0.0,
+              "y": 11.0
+            },
+            {
+              "x": 15.0,
+              "y": 11.0
+            },
+            {
+              "x": 15.0,
+              "y": 22.0
+            },
+            {
+              "x": 0.0,
+              "y": 22.0
+            }
+          ],
+          [
+            {
+              "x": 0.0,
+              "y": 22.0
+            },
+            {
+              "x": 30.0,
+              "y": 22.0
+            },
+            {
+              "x": 30.0,
+              "y": 33.0
+            },
+            {
+              "x": 0.0,
+              "y": 33.0
+            }
+          ],
+          [
+            {
+              "x": 0.0,
+              "y": 33.0
+            },
+            {
+              "x": 45.0,
+              "y": 33.0
+            },
+            {
+              "x": 45.0,
+              "y": 44.0
+            },
+            {
+              "x": 0.0,
+              "y": 44.0
+            }
+          ]
+        ],
+        "defender": [
+          [
+            {
+              "x": 15.0,
+              "y": 0.0
+            },
+            {
+              "x": 60.0,
+              "y": 0.0
+            },
+            {
+              "x": 60.0,
+              "y": 11.0
+            },
+            {
+              "x": 15.0,
+              "y": 11.0
+            }
+          ],
+          [
+            {
+              "x": 30.0,
+              "y": 11.0
+            },
+            {
+              "x": 60.0,
+              "y": 11.0
+            },
+            {
+              "x": 60.0,
+              "y": 22.0
+            },
+            {
+              "x": 30.0,
+              "y": 22.0
+            }
+          ],
+          [
+            {
+              "x": 45.0,
+              "y": 22.0
+            },
+            {
+              "x": 60.0,
+              "y": 22.0
+            },
+            {
+              "x": 60.0,
+              "y": 33.0
+            },
+            {
+              "x": 45.0,
+              "y": 33.0
+            }
+          ]
+        ]
+      },
+      "objectives": [
+        {
+          "id": "o1",
+          "kind": "Golden Lions",
+          "x": 15.0,
+          "y": 11.0
+        },
+        {
+          "id": "o3",
+          "kind": "Heldenhain",
+          "x": 22.5,
+          "y": 22.0
+        },
+        {
+          "id": "o2",
+          "kind": "Scions of the Comet",
+          "x": 37.5,
+          "y": 22.0
+        },
+        {
+          "id": "o4",
+          "kind": "Sun Seekers",
+          "x": 45.0,
+          "y": 33.0
+        }
+      ],
+      "terrain": [
+        {
+          "kind": "area",
+          "size": "medium",
+          "x": 31.5,
+          "y": 11.0
+        },
+        {
+          "kind": "area",
+          "size": "medium",
+          "x": 46.5,
+          "y": 11.0
+        },
+        {
+          "kind": "obscuring",
+          "size": "small",
+          "x": 22.5,
+          "y": 15.5
+        },
+        {
+          "kind": "placeOfPower",
+          "size": "medium",
+          "x": 7.5,
+          "y": 16.5
+        },
+        {
+          "kind": "placeOfPower",
+          "size": "medium",
+          "x": 52.0,
+          "y": 27.5
+        },
+        {
+          "kind": "obscuring",
+          "size": "small",
+          "x": 37.5,
+          "y": 29.0
+        },
+        {
+          "kind": "area",
+          "size": "medium",
+          "x": 13.5,
+          "y": 33.0
+        },
+        {
+          "kind": "area",
+          "size": "medium",
+          "x": 28.5,
+          "y": 33.0
+        }
+      ]
+    },
+    {
+      "id": "seize-the-embers",
+      "name": "Seize the Embers",
+      "number": 9,
+      "table": 2,
+      "imageUrl": "https://wahapedia.ru/aos4/img/battleplans/Seize_the_Embers1.png",
+      "sourceUrl": "https://wahapedia.ru/aos4/the-rules/general-s-handbook-2026-27/#Seize-the-Embers",
+      "twist": "Both players can use the following abilities:",
+      "abilities": [
+        {
+          "name": "Search the Ruin",
+          "kind": "activated",
+          "category": "Special",
+          "timing": "End of Your Turn",
+          "declare": "Pick a friendly unit that does not have an emberstone nugget and is contesting a Sun Seekers objective to be the target.",
+          "effect": "Give the target an emberstone nugget. If you are the underdog, the target can immediately move 6\" but cannot end that move in combat. The target cannot use the ‘Back to Base Camp’ or ‘ Power Through ’ ability for the rest of the turn."
+        },
+        {
+          "name": "Back to Base Camp",
+          "kind": "activated",
+          "category": "Special",
+          "timing": "Once Per Turn (Army), End of Your Turn",
+          "declare": "Pick a friendly unit that has an emberstone nugget, was not set up this turn and is contesting a Golden Lions objective to be the target.",
+          "effect": "Remove the target’s emberstone nugget."
+        }
+      ],
+      "scoring": [
+        "Score 3 victory points if you control at least 1 objective.",
+        "In the first battle round, score 3 victory points if you control 2 or more objectives.",
+        "From the second battle round onwards, score 3 victory points if you used the 'Back to Base Camp' ability this turn.",
+        "Score 4 victory points if you control more objectives than your opponent."
+      ],
+      "notes": [
+        "Q: In the Seize the Embers battleplan, can a unit bring an emberstone nugget into reserve ? A: Yes."
+      ],
+      "board": {
+        "width": 60,
+        "height": 44
+      },
+      "deployment": {
+        "attacker": [
+          [
+            {
+              "x": 0.0,
+              "y": 0.0
+            },
+            {
+              "x": 15.0,
+              "y": 0.0
+            },
+            {
+              "x": 15.0,
+              "y": 22.0
+            },
+            {
+              "x": 0.0,
+              "y": 22.0
+            }
+          ],
+          [
+            {
+              "x": 0.0,
+              "y": 22.0
+            },
+            {
+              "x": 45.0,
+              "y": 22.0
+            },
+            {
+              "x": 45.0,
+              "y": 44.0
+            },
+            {
+              "x": 0.0,
+              "y": 44.0
+            }
+          ]
+        ],
+        "defender": [
+          [
+            {
+              "x": 15.0,
+              "y": 0.0
+            },
+            {
+              "x": 60.0,
+              "y": 0.0
+            },
+            {
+              "x": 60.0,
+              "y": 22.0
+            },
+            {
+              "x": 15.0,
+              "y": 22.0
+            }
+          ],
+          [
+            {
+              "x": 45.0,
+              "y": 22.0
+            },
+            {
+              "x": 60.0,
+              "y": 22.0
+            },
+            {
+              "x": 60.0,
+              "y": 44.0
+            },
+            {
+              "x": 45.0,
+              "y": 44.0
+            }
+          ]
+        ]
+      },
+      "objectives": [
+        {
+          "id": "o4",
+          "kind": "Sun Seekers",
+          "x": 15.0,
+          "y": 11.0
+        },
+        {
+          "id": "o1",
+          "kind": "Golden Lions",
+          "x": 45.0,
+          "y": 11.0
+        },
+        {
+          "id": "o3",
+          "kind": "Heldenhain",
+          "x": 30.0,
+          "y": 22.0
+        },
+        {
+          "id": "o2",
+          "kind": "Golden Lions",
+          "x": 15.0,
+          "y": 33.0
+        },
+        {
+          "id": "o5",
+          "kind": "Sun Seekers",
+          "x": 45.0,
+          "y": 33.0
+        }
+      ],
+      "terrain": [
+        {
+          "kind": "obscuring",
+          "size": "small",
+          "x": 7.5,
+          "y": 5.5
+        },
+        {
+          "kind": "obscuring",
+          "size": "medium",
+          "x": 36.5,
+          "y": 11.0
+        },
+        {
+          "kind": "area",
+          "size": "medium",
+          "x": 22.5,
+          "y": 16.5
+        },
+        {
+          "kind": "placeOfPower",
+          "size": "small",
+          "x": 12.0,
+          "y": 22.0
+        },
+        {
+          "kind": "placeOfPower",
+          "size": "small",
+          "x": 48.0,
+          "y": 22.0
+        },
+        {
+          "kind": "area",
+          "size": "medium",
+          "x": 37.5,
+          "y": 27.5
+        },
+        {
+          "kind": "obscuring",
+          "size": "medium",
+          "x": 23.5,
+          "y": 33.0
+        },
+        {
+          "kind": "obscuring",
+          "size": "small",
+          "x": 52.5,
+          "y": 38.5
+        }
+      ]
+    },
+    {
+      "id": "treacherous-ground",
+      "name": "Treacherous Ground",
+      "number": 10,
+      "table": 2,
+      "imageUrl": "https://wahapedia.ru/aos4/img/battleplans/Treacherous_Ground.png",
+      "sourceUrl": "https://wahapedia.ru/aos4/the-rules/general-s-handbook-2026-27/#Treacherous-Ground",
+      "twist": "At the start of the battle, all objectives are stable. Both players must use the 'Tread Carefully' ability. Then, from the second battle round onwards, if you are the underdog, you can use the 'Violent Tremor' ability.",
+      "abilities": [
+        {
+          "name": "Tread Carefully",
+          "kind": "activated",
+          "category": "Special",
+          "timing": "Once Per Battle (Army), Start of First Battle Round",
+          "declare": "Pick an objective within friendly territory to be the target.",
+          "effect": "The target is no longer stable."
+        },
+        {
+          "name": "Violent Tremor",
+          "kind": "activated",
+          "category": "Special",
+          "timing": "Once Per Battle Round, Start of Battle Round",
+          "declare": "Pick a pair of objectives to be the targets.",
+          "effect": "The stable target objective is no longer stable. The other target objective is stable instead."
+        }
+      ],
+      "scoring": [
+        "Score 3 victory points if you control at least 1 stable objective.",
+        "Score 3 victory points if you control 2 or more stable objectives.",
+        "Score 4 victory points if you control more stable objectives than your opponent."
+      ],
+      "notes": [],
+      "board": {
+        "width": 60,
+        "height": 44
+      },
+      "deployment": {
+        "attacker": [
+          [
+            {
+              "x": 0.0,
+              "y": 0.0
+            },
+            {
+              "x": 60.0,
+              "y": 0.0
+            },
+            {
+              "x": 60.0,
+              "y": 11.0
+            },
+            {
+              "x": 0.0,
+              "y": 11.0
+            }
+          ],
+          [
+            {
+              "x": 15.0,
+              "y": 11.0
+            },
+            {
+              "x": 45.0,
+              "y": 11.0
+            },
+            {
+              "x": 45.0,
+              "y": 22.0
+            },
+            {
+              "x": 15.0,
+              "y": 22.0
+            }
+          ]
+        ],
+        "defender": [
+          [
+            {
+              "x": 15.0,
+              "y": 22.0
+            },
+            {
+              "x": 45.0,
+              "y": 22.0
+            },
+            {
+              "x": 45.0,
+              "y": 33.0
+            },
+            {
+              "x": 15.0,
+              "y": 33.0
+            }
+          ],
+          [
+            {
+              "x": 0.0,
+              "y": 33.0
+            },
+            {
+              "x": 60.0,
+              "y": 33.0
+            },
+            {
+              "x": 60.0,
+              "y": 44.0
+            },
+            {
+              "x": 0.0,
+              "y": 44.0
+            }
+          ]
+        ]
+      },
+      "objectives": [
+        {
+          "id": "o5",
+          "kind": "Sun Seekers",
+          "x": 15.0,
+          "y": 11.0
+        },
+        {
+          "id": "o6",
+          "kind": "Sun Seekers",
+          "x": 45.0,
+          "y": 11.0
+        },
+        {
+          "id": "o3",
+          "kind": "Scions of the Comet",
+          "x": 7.5,
+          "y": 22.0
+        },
+        {
+          "id": "o4",
+          "kind": "Heldenhain",
+          "x": 52.5,
+          "y": 22.0
+        },
+        {
+          "id": "o1",
+          "kind": "Golden Lions",
+          "x": 15.0,
+          "y": 33.0
+        },
+        {
+          "id": "o2",
+          "kind": "Golden Lions",
+          "x": 45.0,
+          "y": 33.0
+        }
+      ],
+      "terrain": [
+        {
+          "kind": "obscuring",
+          "size": "small",
+          "x": 52.5,
+          "y": 5.5
+        },
+        {
+          "kind": "area",
+          "size": "medium",
+          "x": 6.5,
+          "y": 11.0
+        },
+        {
+          "kind": "obscuring",
+          "size": "medium",
+          "x": 25.5,
+          "y": 11.0
+        },
+        {
+          "kind": "placeOfPower",
+          "size": "small",
+          "x": 22.5,
+          "y": 22.0
+        },
+        {
+          "kind": "placeOfPower",
+          "size": "small",
+          "x": 37.5,
+          "y": 22.0
+        },
+        {
+          "kind": "obscuring",
+          "size": "medium",
+          "x": 34.5,
+          "y": 33.0
+        },
+        {
+          "kind": "area",
+          "size": "medium",
+          "x": 53.5,
+          "y": 33.0
+        },
+        {
+          "kind": "obscuring",
+          "size": "small",
+          "x": 7.5,
+          "y": 38.5
+        }
+      ]
+    },
+    {
+      "id": "escape-from-the-coast",
+      "name": "Escape from the Coast",
+      "number": 11,
+      "table": 2,
+      "imageUrl": "https://wahapedia.ru/aos4/img/battleplans/Escape_From_the_Coast.png",
+      "sourceUrl": "https://wahapedia.ru/aos4/the-rules/general-s-handbook-2026-27/#Escape-from-the-Coast",
+      "twist": "If you are the underdog, you can use the following ability.",
+      "abilities": [
+        {
+          "name": "To the Ships!",
+          "kind": "activated",
+          "category": "Special",
+          "timing": "Once Per Battle Round, Start of Battle Round",
+          "declare": "Pick the Heldenhain or a Sun Seekers objective to be the target.",
+          "effect": "Remove the target from the battlefield."
+        }
+      ],
+      "scoring": [
+        "Score 3 victory points if you control at least 1 objective.",
+        "Score 3 victory points if you control 2 or more objectives.",
+        "Score 4 victory points if you control more objectives than your opponent."
+      ],
+      "notes": [],
+      "board": {
+        "width": 60,
+        "height": 44
+      },
+      "deployment": {
+        "attacker": [
+          [
+            {
+              "x": 0.0,
+              "y": 0.0
+            },
+            {
+              "x": 60.0,
+              "y": 0.0
+            },
+            {
+              "x": 60.0,
+              "y": 11.0
+            },
+            {
+              "x": 0.0,
+              "y": 11.0
+            }
+          ],
+          [
+            {
+              "x": 0.0,
+              "y": 11.0
+            },
+            {
+              "x": 30.0,
+              "y": 11.0
+            },
+            {
+              "x": 30.0,
+              "y": 22.0
+            },
+            {
+              "x": 0.0,
+              "y": 22.0
+            }
+          ]
+        ],
+        "defender": [
+          [
+            {
+              "x": 0.0,
+              "y": 22.0
+            },
+            {
+              "x": 30.0,
+              "y": 22.0
+            },
+            {
+              "x": 30.0,
+              "y": 33.0
+            },
+            {
+              "x": 0.0,
+              "y": 33.0
+            }
+          ],
+          [
+            {
+              "x": 0.0,
+              "y": 33.0
+            },
+            {
+              "x": 60.0,
+              "y": 33.0
+            },
+            {
+              "x": 60.0,
+              "y": 44.0
+            },
+            {
+              "x": 0.0,
+              "y": 44.0
+            }
+          ]
+        ]
+      },
+      "objectives": [
+        {
+          "id": "o1",
+          "kind": "Golden Lions",
+          "x": 7.5,
+          "y": 11.0
+        },
+        {
+          "id": "o5",
+          "kind": "Sun Seekers",
+          "x": 45.0,
+          "y": 11.0
+        },
+        {
+          "id": "o3",
+          "kind": "Scions of the Comet",
+          "x": 22.5,
+          "y": 22.0
+        },
+        {
+          "id": "o4",
+          "kind": "Heldenhain",
+          "x": 45.0,
+          "y": 22.0
+        },
+        {
+          "id": "o2",
+          "kind": "Golden Lions",
+          "x": 7.5,
+          "y": 33.0
+        },
+        {
+          "id": "o6",
+          "kind": "Sun Seekers",
+          "x": 45.0,
+          "y": 33.0
+        }
+      ],
+      "terrain": [
+        {
+          "kind": "area",
+          "size": "medium",
+          "x": 37.5,
+          "y": 5.5
+        },
+        {
+          "kind": "obscuring",
+          "size": "medium",
+          "x": 22.5,
+          "y": 11.0
+        },
+        {
+          "kind": "placeOfPower",
+          "size": "small",
+          "x": 5.0,
+          "y": 22.0
+        },
+        {
+          "kind": "obscuring",
+          "size": "small",
+          "x": 15.0,
+          "y": 22.0
+        },
+        {
+          "kind": "obscuring",
+          "size": "medium",
+          "x": 36.5,
+          "y": 22.0
+        },
+        {
+          "kind": "placeOfPower",
+          "size": "medium",
+          "x": 55.0,
+          "y": 22.5
+        },
+        {
+          "kind": "obscuring",
+          "size": "medium",
+          "x": 22.5,
+          "y": 33.0
+        },
+        {
+          "kind": "area",
+          "size": "medium",
+          "x": 37.5,
+          "y": 38.5
+        }
+      ]
+    },
+    {
+      "id": "power-of-the-realms",
+      "name": "Power of the Realms",
+      "number": 12,
+      "table": 2,
+      "imageUrl": "https://wahapedia.ru/aos4/img/battleplans/Power_of_the_Realms.png",
+      "sourceUrl": "https://wahapedia.ru/aos4/the-rules/general-s-handbook-2026-27/#Power-of-the-Realms",
+      "twist": "At the start of the battle, the Sun Seekers objective is the primary objective and the other objectives are secondary objectives. If you are the underdog, you can use the following ability.",
+      "abilities": [
+        {
+          "name": "Arcane Charge",
+          "kind": "activated",
+          "category": "Special",
+          "timing": "Once Per Battle Round, Start of Battle Round",
+          "declare": "Pick a Place of Power you control to be the target.",
+          "effect": "Draw a straight line from the centre of the primary objective to the target. If that line crosses any secondary objectives, the first secondary objective that the line crosses is now the primary objective and all other objectives are now secondary objectives."
+        }
+      ],
+      "scoring": [
+        "Score 3 victory points if you control the primary objective.",
+        "Score 3 victory points if you control 2 or more secondary objectives.",
+        "Score 4 victory points if you control more objectives than your opponent."
+      ],
+      "notes": [],
+      "board": {
+        "width": 60,
+        "height": 44
+      },
+      "deployment": {
+        "attacker": [
+          [
+            {
+              "x": 0.0,
+              "y": 0.0
+            },
+            {
+              "x": 60.0,
+              "y": 0.0
+            },
+            {
+              "x": 60.0,
+              "y": 22.0
+            },
+            {
+              "x": 0.0,
+              "y": 22.0
+            }
+          ]
+        ],
+        "defender": [
+          [
+            {
+              "x": 0.0,
+              "y": 22.0
+            },
+            {
+              "x": 60.0,
+              "y": 22.0
+            },
+            {
+              "x": 60.0,
+              "y": 44.0
+            },
+            {
+              "x": 0.0,
+              "y": 44.0
+            }
+          ]
+        ]
+      },
+      "objectives": [
+        {
+          "id": "o1",
+          "kind": "Golden Lions",
+          "x": 30.0,
+          "y": 11.0
+        },
+        {
+          "id": "o3",
+          "kind": "Scions of the Comet",
+          "x": 15.0,
+          "y": 22.0
+        },
+        {
+          "id": "o5",
+          "kind": "Sun Seekers",
+          "x": 30.0,
+          "y": 22.0
+        },
+        {
+          "id": "o4",
+          "kind": "Heldenhain",
+          "x": 45.0,
+          "y": 22.0
+        },
+        {
+          "id": "o2",
+          "kind": "Golden Lions",
+          "x": 30.0,
+          "y": 33.0
+        }
+      ],
+      "terrain": [
+        {
+          "kind": "obscuring",
+          "size": "small",
+          "x": 22.5,
+          "y": 5.5
+        },
+        {
+          "kind": "area",
+          "size": "medium",
+          "x": 15.0,
+          "y": 11.0
+        },
+        {
+          "kind": "area",
+          "size": "medium",
+          "x": 45.0,
+          "y": 11.0
+        },
+        {
+          "kind": "placeOfPower",
+          "size": "medium",
+          "x": 4.5,
+          "y": 22.5
+        },
+        {
+          "kind": "placeOfPower",
+          "size": "medium",
+          "x": 55.5,
+          "y": 22.5
+        },
+        {
+          "kind": "area",
+          "size": "medium",
+          "x": 15.0,
+          "y": 33.0
+        },
+        {
+          "kind": "area",
+          "size": "medium",
+          "x": 45.0,
+          "y": 33.0
+        },
+        {
+          "kind": "obscuring",
+          "size": "small",
+          "x": 37.5,
+          "y": 38.5
+        }
+      ]
+    }
+  ],
+  "battleTactics": [
+    {
+      "number": 1,
+      "name": "Blazing Onslaught",
+      "flavour": "Ushered in with smoke and fire, the battle for control of a vital holdout begins in earnest.",
+      "tactics": [
+        {
+          "type": "Affray",
+          "name": "Master of Arms",
+          "flavour": "A successful invasion requires skill in all aspects of war.",
+          "condition": "You complete this battle tactic at the end of your turn if the same enemy unit had at least 1 damage point allocated to it in 3 different phases this turn.",
+          "victoryPoints": 5
+        },
+        {
+          "type": "Strike",
+          "name": "Break Their Defences",
+          "flavour": "The enemy cannot hide away for long…",
+          "condition": "You complete this battle tactic at the end of your turn if you control the enemy hideout.",
+          "victoryPoints": 5
+        },
+        {
+          "type": "Domination",
+          "name": "No Survivors",
+          "flavour": "Ensure that the only tales told of this battle are tales of your victory.",
+          "condition": "You complete this battle tactic at the end of your turn if 2 or more enemy units were destroyed this turn and you control the enemy hideout.",
+          "victoryPoints": 5
+        }
+      ],
+      "setup": "At the start of the battle, after using all Deployment Phase abilities but before determining which player will take the first turn, your opponent must pick 1 non- FACTION TERRAIN terrain feature within their territory to be their hideout. The hideout cannot be removed from the battlefield at any point during the battle."
+    },
+    {
+      "number": 2,
+      "name": "Siege of Ashes",
+      "flavour": "You have manned a stronghold barring the enemy’s path and will defend it to the death.",
+      "tactics": [
+        {
+          "type": "Affray",
+          "name": "Form a Wall",
+          "flavour": "A good defence begins with solid foundations.",
+          "condition": "You complete this battle tactic at the end of your turn if 2 or more friendly units are wholly outside friendly territory, wholly within 6\" of friendly territory and within 3\" of each other.",
+          "victoryPoints": 5
+        },
+        {
+          "type": "Strike",
+          "name": "Outpost Resupply",
+          "flavour": "A general must be precise as to where and when they assign reinforcements.",
+          "condition": "You complete this battle tactic at the end of your turn if you control an objective within enemy territory and that objective is contested by: At least 1 friendly unit that did not use a MOVE ability this turn At least 1 other friendly unit that charged this turn.",
+          "victoryPoints": 5
+        },
+        {
+          "type": "Domination",
+          "name": "Repel the Attackers",
+          "flavour": "Unleash the fury within and scour the enemy from the field.",
+          "condition": "You complete this battle tactic at the end of your turn if there are 3 or more friendly units within 3\" of the centre of the battlefield that are not in combat.",
+          "victoryPoints": 5
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "name": "Flanking Firestorm",
+      "flavour": "The plan is simple: outflank and surround the enemy, and make sure not one of them escapes alive.",
+      "tactics": [
+        {
+          "type": "Affray",
+          "name": "Ambuscade",
+          "flavour": "Send forth skirmishers to lie in wait for the enemy.",
+          "condition": "You complete this battle tactic at the end of your turn if 2 or more objectives or non- FACTION TERRAIN terrain features that you control, in any combination, are each contested by a different friendly unit that is more than 6\" from friendly territory and was not set up this turn.",
+          "victoryPoints": 5
+        },
+        {
+          "type": "Strike",
+          "name": "Surround the Enemy",
+          "flavour": "Encircle the foe as the flames of a conflagration encircle the doomed.",
+          "condition": "You complete this battle tactic at the end of your turn if 2 or more friendly units that were not set up this turn are each within 9\" of a different corner of the battlefield and wholly outside friendly territory.",
+          "victoryPoints": 5
+        },
+        {
+          "type": "Domination",
+          "name": "Claim What’s Yours",
+          "flavour": "These lands are yours; force the enemy from them.",
+          "condition": "You complete this battle tactic at the end of your turn if there are more friendly units within enemy territory than enemy units and there is at least 1 friendly HERO wholly within enemy territory.",
+          "victoryPoints": 5
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "name": "Smokescreen",
+      "flavour": "Draw the foe in by feigning weakness, concealing your true strength amidst the smoke of battle until the right moment.",
+      "tactics": [
+        {
+          "type": "Affray",
+          "name": "Keep the Enemy Close",
+          "flavour": "Keep your motives concealed and the enemy unaware of their role in your plans.",
+          "condition": "You complete this battle tactic at the end of your turn if you control an objective that is contested by at least 1 enemy unit.",
+          "victoryPoints": 5
+        },
+        {
+          "type": "Strike",
+          "name": "Feign Weakness",
+          "flavour": "Allowing the foe to have small victories keeps them distracted from the task at hand.",
+          "condition": "You complete this battle tactic at the end of your turn if more friendly units were destroyed this turn than enemy units.",
+          "victoryPoints": 5
+        },
+        {
+          "type": "Domination",
+          "name": "Execute the Plan",
+          "flavour": "Bring your plan to fruition and watch as the enemy army goes down in flames.",
+          "condition": "You complete this battle tactic at the end of your turn if you control each objective within enemy territory.",
+          "victoryPoints": 5
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "name": "Burning for Vengeance",
+      "flavour": "The enemy’s outrages merit brutal punishment. Track them down and run them to ground.",
+      "tactics": [
+        {
+          "type": "Affray",
+          "name": "Search Every Inch",
+          "flavour": "Whether lava field, ash-plain or humid jungle, leave no corner unexplored.",
+          "condition": "You complete this battle tactic at the end of your turn if there is a different friendly unit wholly within each large quarter of the battlefield, those friendly units are more than 9\" from the centre of the battlefield, and no more than 1 of those friendly units was set up this turn.",
+          "victoryPoints": 5
+        },
+        {
+          "type": "Strike",
+          "name": "Quick Pursuit",
+          "flavour": "Having been spotted, time is running out for the fugitive.",
+          "condition": "You complete this battle tactic at the end of your turn if 1 of the following is true: There are 3 or more friendly units that are not in combat and are within 12\" of the enemy fugitive. There is no enemy fugitive on the battlefield.",
+          "victoryPoints": 5
+        },
+        {
+          "type": "Domination",
+          "name": "Bring Them In",
+          "flavour": "Dead or alive, the fugitive will pay for their actions.",
+          "condition": "You complete this battle tactic at the end of your turn if 1 of the following is true: There are 3 or more friendly units in combat with the enemy fugitive. There is no enemy fugitive on the battlefield and 3 or more friendly units are contesting the same objective that is wholly outside friendly territory.",
+          "victoryPoints": 5
+        }
+      ],
+      "setup": "At the start of the battle, after using all Deployment Phase abilities but before determining which player will take the first turn, pick an enemy HERO on the battlefield or in reserve to be the fugitive for the rest of the battle."
+    },
+    {
+      "number": 6,
+      "name": "Legend of The Parch",
+      "flavour": "As raging fire and death threatens to consume all, a hero will arise and a legend will be born.",
+      "tactics": [
+        {
+          "type": "Affray",
+          "name": "Daring Rescue",
+          "flavour": "The most respected warriors are those who willingly aid their allies.",
+          "condition": "You complete this battle tactic at the end of your turn if an enemy unit that was in combat at the start of the turn was destroyed by a combat attack made by a friendly unit that charged this turn.",
+          "victoryPoints": 5
+        },
+        {
+          "type": "Strike",
+          "name": "Command from the Front",
+          "flavour": "Commanders must work in tandem to fuel the machine of war.",
+          "condition": "You complete this battle tactic at the end of your turn if there are 2 or more friendly HEROES on the battlefield, all friendly HEROES are within 9\" of a visible enemy unit and no friendly HEROES were slain this turn.",
+          "victoryPoints": 5
+        },
+        {
+          "type": "Domination",
+          "name": "Hero of Legend",
+          "flavour": "To complete a grand quest is to see one’s name go down in the annals of history.",
+          "condition": "You complete this battle tactic at the end of your turn if you control an objective wholly outside your territory that you did not control at the start of the turn and a friendly HERO is contesting that objective.",
+          "victoryPoints": 5
+        }
+      ]
+    }
+  ]
+}

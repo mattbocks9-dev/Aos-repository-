@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalogue name="Test - Library" id="lib1" library="true" type="catalogue">
+  <sharedSelectionEntries>
+    <selectionEntry name="Hammerguard" id="u1" type="unit">
+      <categoryLinks>
+        <categoryLink name="INFANTRY" id="c1" targetId="x"/>
+        <categoryLink name="ORDER" id="c1o" targetId="x"/>
+        <categoryLink name="WARD (6+)" id="c2" targetId="x"/>
+      </categoryLinks>
+      <profiles>
+        <profile name="Shield Wall" id="a1" typeName="Ability (Passive)">
+          <attributes><attribute name="Type">Defensive</attribute></attributes>
+          <characteristics>
+            <characteristic name="Keywords"/>
+            <characteristic name="Effect">This unit has **^^Ward (5+)^^** while it is   contesting an objective.</characteristic>
+          </characteristics>
+        </profile>
+        <profile name="Hammerguard" id="p1" typeName="Unit">
+          <characteristics>
+            <characteristic name="Move">5&quot;</characteristic>
+            <characteristic name="Health">2</characteristic>
+            <characteristic name="Save">3+</characteristic>
+            <characteristic name="Control">1</characteristic>
+          </characteristics>
+        </profile>
+      </profiles>
+      <selectionEntries>
+        <selectionEntry name="Hammerguard" id="m1" type="model">
+          <constraints><constraint id="k1" field="selections" scope="parent" type="min" value="5"/></constraints>
+          <profiles>
+            <profile name="Hammer" id="w1" typeName="Melee Weapon">
+              <characteristics>
+                <characteristic name="Atk">2</characteristic><characteristic name="Hit">3+</characteristic>
+                <characteristic name="Wnd">3+</characteristic><characteristic name="Rnd">1</characteristic>
+                <characteristic name="Dmg">D3</characteristic><characteristic name="Ability">Anti-**^^Monster^^** (+1 Rend)</characteristic>
+              </characteristics>
+            </profile>
+          </profiles>
+        </selectionEntry>
+      </selectionEntries>
+    </selectionEntry>
+    <selectionEntry name="Arch Mage" id="u2" type="unit">
+      <categoryLinks>
+        <categoryLink name="HERO" id="c3" targetId="x"/>
+        <categoryLink name="ORDER" id="c3o" targetId="x"/>
+        <categoryLink name="WIZARD (2)" id="c4" targetId="x"/>
+      </categoryLinks>
+      <profiles>
+        <profile name="Arch Mage" id="p2" typeName="Unit">
+          <characteristics>
+            <characteristic name="Move">6&quot;</characteristic><characteristic name="Health">5</characteristic>
+            <characteristic name="Save">5+</characteristic><characteristic name="Control">2</characteristic>
+          </characteristics>
+        </profile>
+        <profile name="Arcane Blast" id="s1" typeName="Ability (Spell)">
+          <attributes><attribute name="Parent Node">Offensive</attribute></attributes>
+          <characteristics>
+            <characteristic name="Timing">Your Hero Phase</characteristic>
+            <characteristic name="Casting Value">7</characteristic>
+            <characteristic name="Declare">Pick a visible enemy unit within 18&quot;.</characteristic>
+            <characteristic name="Effect">Inflict D3 mortal damage on the target.</characteristic>
+          </characteristics>
+        </profile>
+        <profile name="Bolt" id="w2" typeName="Ranged Weapon">
+          <characteristics>
+            <characteristic name="Rng">18&quot;</characteristic><characteristic name="Atk">D6</characteristic>
+            <characteristic name="Hit">4+</characteristic><characteristic name="Wnd">3+</characteristic>
+            <characteristic name="Rnd">2</characteristic><characteristic name="Dmg">2</characteristic>
+            <characteristic name="Ability">-</characteristic>
+          </characteristics>
+        </profile>
+      </profiles>
+    </selectionEntry>
+    <selectionEntry name="Old Hero" id="u3" type="unit">
+      <categoryLinks>
+        <categoryLink name="HERO" id="c5" targetId="x"/>
+        <categoryLink name="Legends" id="c6" targetId="acaf-8bb6-d6f-3e2a"/>
+      </categoryLinks>
+      <profiles>
+        <profile name="Old Hero" id="p3" typeName="Unit">
+          <characteristics>
+            <characteristic name="Move">5&quot;</characteristic><characteristic name="Health">5</characteristic>
+            <characteristic name="Save">4+</characteristic><characteristic name="Control">2</characteristic>
+          </characteristics>
+        </profile>
+      </profiles>
+    </selectionEntry>
+    <selectionEntry name="Lore of Testing" id="lore1" type="upgrade">
+      <profiles>
+        <profile name="Test Bolt" id="s2" typeName="Ability (Spell)">
+          <characteristics>
+            <characteristic name="Casting Value">6</characteristic>
+            <characteristic name="Effect">Inflict D6 mortal damage.</characteristic>
+          </characteristics>
+        </profile>
+      </profiles>
+    </selectionEntry>
+  </sharedSelectionEntries>
+</catalogue>

@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #14110f;
+  --panel: #1f1a17;
+  --panel-2: #2a231f;
+  --line: #3d332c;
+  --text: #f1e9df;
+  --muted: #b3a597;
+  --gold: #d4ae3a;
+  --gold-ink: #1b1505;
+  --you: #5aa9e6;
+  --them: #e0645a;
+  --good: #6cc785;
+  --bad: #e0645a;
+  color-scheme: dark;
+}
+
+html,
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: Inter, system-ui, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@layer components {
+  .panel {
+    @apply rounded-xl border p-4;
+    background: var(--panel);
+    border-color: var(--line);
+  }
+  .btn {
+    @apply inline-flex min-h-[44px] items-center justify-center gap-2 rounded-lg border px-4 font-semibold transition disabled:cursor-not-allowed disabled:opacity-40;
+    border-color: var(--line);
+    background: var(--panel-2);
+    color: var(--text);
+  }
+  .btn-primary {
+    @apply btn;
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--gold-ink);
+  }
+  .input {
+    @apply w-full rounded-lg border px-3 py-2 text-base;
+    background: var(--bg);
+    border-color: var(--line);
+    color: var(--text);
+  }
+  .label {
+    @apply text-xs font-semibold uppercase tracking-wider;
+    color: var(--muted);
+  }
+  .muted {
+    color: var(--muted);
+  }
+  .heading {
+    font-family: Cinzel, Georgia, serif;
+    @apply font-bold tracking-wide;
+  }
+  .chip {
+    @apply inline-flex items-center rounded-full border px-2 py-0.5 text-xs;
+    border-color: var(--line);
+  }
+}
