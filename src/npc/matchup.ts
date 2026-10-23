@@ -9,6 +9,7 @@ export interface MatchupWeights {
   mobility: number;
   durabilityOnCentre: number;
   magic: number;
+  tactics: number;
   /** Divisor inside tanh: bigger = scores spread less. */
   softness: number;
 }
@@ -19,6 +20,7 @@ export const DEFAULT_WEIGHTS: MatchupWeights = {
   mobility: 2.5,
   durabilityOnCentre: 1.5,
   magic: 0.8,
+  tactics: 1.2,
   softness: 6,
 };
 
@@ -75,6 +77,15 @@ export function estimateMatchup(
         w.durabilityOnCentre * t.centreFocus * safeLog(me.effectiveWounds, them.effectiveWounds),
     },
     { key: 'magic', label: 'Magic & prayers', value: (w.magic * (me.magic - them.magic)) / 4 },
+    // GHB 2026-27 battle tactics mostly reward spreading units around the board and having
+    // heroes to complete hero-specific tactics (Legend of the Parch, Burning for Vengeance).
+    {
+      key: 'tactics',
+      label: 'Battle tactics',
+      value:
+        w.tactics *
+        (0.6 * safeLog(me.units, them.units) + 0.4 * safeLog(me.heroes + 1, them.heroes + 1)),
+    },
   ];
   const raw = factors.reduce((s, f) => s + f.value, 0);
   return { score: 10 * Math.tanh(raw / w.softness), factors };

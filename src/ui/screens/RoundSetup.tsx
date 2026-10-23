@@ -3,6 +3,7 @@ import type { Difficulty } from '../../npc/captain';
 import { getPack } from '../../packs/registry';
 import { battleplanTraits } from '../../packs/traits';
 import { BattleplanMap } from '../components/BattleplanMap';
+import { BattleplanRules, BattleTactics } from '../components/BattleplanRules';
 import { TraitBars } from '../components/TraitBars';
 
 const DIFFICULTIES: { id: Difficulty; label: string; hint: string }[] = [
@@ -44,14 +45,30 @@ export function RoundSetup() {
                 <p className="label">
                   Battleplan {slot} · {slot === 'C' ? '1 game (leftovers)' : '2 games'}
                 </p>
-                <h3 className="heading text-lg">{plan.name}</h3>
+                <h3 className="heading text-lg">
+                  {plan.name}
+                  {plan.number && (
+                    <span className="muted ml-2 text-xs font-normal">GHB #{plan.number}</span>
+                  )}
+                </h3>
               </header>
               <BattleplanMap plan={plan} />
               <TraitBars traits={battleplanTraits(plan)} />
+              <BattleplanRules plan={plan} />
             </article>
           );
         })}
       </section>
+
+      <BattleTactics cards={pack.battleTactics} />
+      {pack.rulesSource && (
+        <p className="muted text-xs">
+          Battleplans and battle tactics:{' '}
+          <a className="underline" href={pack.rulesSource.url} target="_blank" rel="noreferrer">
+            {pack.rulesSource.name}
+          </a>
+        </p>
+      )}
 
       <section>
         <p className="label mb-2">Opponent captain</p>

@@ -59,6 +59,15 @@ describe('matchup model', () => {
     expect(open).toBeGreaterThan(tight);
   });
 
+  it('values unit count and heroes for battle tactics', () => {
+    const wide = profile({ units: 16, heroes: 5, effectiveWounds: 200 });
+    const narrow = profile({ units: 7, heroes: 2, effectiveWounds: 200 });
+    const est = estimateMatchup(wide, narrow, traits);
+    const tactics = est.factors.find((f) => f.key === 'tactics')!;
+    expect(tactics.label).toBe('Battle tactics');
+    expect(tactics.value).toBeGreaterThan(0);
+  });
+
   it('values speed more on spread-out maps', () => {
     const fast = profile({ mobility: 10 });
     const slow = profile({ mobility: 4 });

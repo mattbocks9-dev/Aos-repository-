@@ -1,5 +1,5 @@
 import type { TournamentPack } from '../types';
-import { OTTD_BATTLEPLANS } from './battleplans';
+import { GHB_BATTLE_TACTICS, GHB_BATTLEPLANS, GHB_SOURCE } from '../ghb2026';
 
 export const ottd2026: TournamentPack = {
   id: 'ottd-2026',
@@ -8,7 +8,10 @@ export const ottd2026: TournamentPack = {
   pointsLimit: 2000,
   protocol: 'guardian-invader-v1',
   slots: ['A', 'B', 'C'],
-  battleplans: OTTD_BATTLEPLANS,
+  // OTTD uses the General's Handbook 2026-27 battleplans and battle tactics.
+  battleplans: GHB_BATTLEPLANS,
+  battleTactics: GHB_BATTLE_TACTICS,
+  rulesSource: GHB_SOURCE,
   rounds: [
     {
       round: 1,

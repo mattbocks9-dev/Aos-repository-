@@ -4,9 +4,9 @@ const LABELS: Record<keyof BattleplanTraits, string> = {
   mobility: 'Distance to objectives',
   objectiveSpread: 'Objective spread',
   controlPressure: 'Objective count',
-  shootingLanes: "No-man's land",
+  shootingLanes: 'Shooting lanes',
   centreFocus: 'Centre focus',
-  attackerEdge: 'Attacker edge',
+  attackerEdge: 'Territory imbalance',
 };
 
 export function TraitBars({ traits }: { traits: BattleplanTraits }) {
@@ -14,7 +14,7 @@ export function TraitBars({ traits }: { traits: BattleplanTraits }) {
     <dl className="grid grid-cols-2 gap-x-3 gap-y-1 text-xs">
       {(Object.keys(LABELS) as (keyof BattleplanTraits)[]).map((k) => {
         const v = traits[k];
-        const pct = k === 'attackerEdge' ? (v + 1) * 50 : v * 100;
+        const pct = v * 100;
         return (
           <div key={k}>
             <dt className="muted">{LABELS[k]}</dt>

@@ -7,3 +7,4 @@ test-results
 # Copyrighted source material stays local; only derived data is committed
 rules-source/
 *.pdf
+scripts/ghb/__pycache__

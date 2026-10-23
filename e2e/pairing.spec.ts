@@ -11,7 +11,20 @@ test('plays a full pairing against the NPC with sample teams', async ({ page }, 
   await page.getByRole('button', { name: 'Quick play with sample teams' }).click();
 
   await page.getByRole('radio', { name: 'R3' }).click();
+  // Original GHB map pictures load from their source.
+  await expect
+    .poll(() =>
+      page
+        .locator('img[alt="Warped Ruins battleplan map"]')
+        .evaluate((i) => (i as { naturalWidth: number }).naturalWidth),
+    )
+    .toBeGreaterThan(0);
   await expect(page.getByRole('heading', { name: 'Warped Ruins' })).toBeVisible();
+  // GHB 2026-27 battleplan rules and battle tactics for the selected round.
+  await page.getByText('Rules: twist & scoring').first().click();
+  await expect(page.getByText('Spreading Warpfire')).toBeVisible();
+  await page.getByText('Battle tactics cards').click();
+  await expect(page.getByText('Blazing Onslaught')).toBeVisible();
   await page.getByRole('radio', { name: 'Hard' }).click();
   await shot('round');
   await page.getByRole('button', { name: /Start pairing/ }).click();

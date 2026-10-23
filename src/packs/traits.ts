@@ -1,6 +1,6 @@
 // Turns a battleplan's map into the handful of numbers the NPC reasons with.
-// All traits are in 0..1, except attackerEdge which is -1..1 (positive = attacker-favoured).
-import type { Battleplan, Point, TraitName } from './types';
+// All traits are in 0..1.
+import type { Battleplan, Point, Territory, TraitName } from './types';
 
 export type BattleplanTraits = Record<TraitName, number>;
 
@@ -36,22 +36,35 @@ export function distanceToPolygon(p: Point, poly: Point[]): number {
   return best;
 }
 
+/** Distance to the nearest of a territory's polygons (0 inside). */
+export function distanceToTerritory(p: Point, t: Territory): number {
+  return Math.min(...t.map((poly) => distanceToPolygon(p, poly)));
+}
+
 const mean = (xs: number[]) => (xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : 0);
 
 export function battleplanTraits(bp: Battleplan): BattleplanTraits {
   const { width, height } = bp.board;
   const diagonal = Math.hypot(width, height);
   const centre = { x: width / 2, y: height / 2 };
-  const objs = bp.objectives.filter((o) => !o.special);
+  const objs = bp.objectives;
 
-  const fromAttacker = objs.map((o) => distanceToPolygon(o, bp.deployment.attacker));
-  const fromDefender = objs.map((o) => distanceToPolygon(o, bp.deployment.defender));
+  const fromAttacker = objs.map((o) => distanceToTerritory(o, bp.deployment.attacker));
+  const fromDefender = objs.map((o) => distanceToTerritory(o, bp.deployment.defender));
 
-  // Gap between zones: closest approach of any defender vertex to the attacker zone.
+  // Gap between territories: closest approach of any corner of one to the other.
+  const corners = (t: Territory) => t.flat();
   const gap = Math.min(
-    ...bp.deployment.defender.map((p) => distanceToPolygon(p, bp.deployment.attacker)),
-    ...bp.deployment.attacker.map((p) => distanceToPolygon(p, bp.deployment.defender)),
+    ...corners(bp.deployment.defender).map((p) => distanceToTerritory(p, bp.deployment.attacker)),
+    ...corners(bp.deployment.attacker).map((p) => distanceToTerritory(p, bp.deployment.defender)),
   );
+  // Obscuring terrain outside both territories blocks firing lanes across the middle.
+  const blockers = (bp.terrain ?? []).filter(
+    (t) =>
+      t.kind === 'obscuring' &&
+      distanceToTerritory(t, bp.deployment.attacker) > 0 &&
+      distanceToTerritory(t, bp.deployment.defender) > 0,
+  ).length;
 
   const pairwise: number[] = [];
   objs.forEach((a, i) => objs.slice(i + 1).forEach((b) => pairwise.push(dist(a, b))));
@@ -61,14 +74,18 @@ export function battleplanTraits(bp: Battleplan): BattleplanTraits {
     mobility: clamp(mean([...fromAttacker, ...fromDefender]) / 20),
     objectiveSpread: clamp(mean(pairwise) / (diagonal * 0.6)),
     controlPressure: clamp((objs.length - 1) / 5),
-    shootingLanes: clamp(gap / 30),
+    // Territories often touch, so lanes come mostly from distance to objectives and open ground.
+    shootingLanes: clamp(
+      (gap / 30 + mean([...fromAttacker, ...fromDefender]) / 30) * (1 - 0.15 * blockers),
+    ),
     centreFocus: objs.length ? objs.filter((o) => dist(o, centre) <= 10).length / objs.length : 0,
-    attackerEdge: clamp((mean(fromDefender) - mean(fromAttacker)) / 15, -1, 1),
+    // The attacker picks which territory is theirs, so any imbalance between them favours the attacker.
+    attackerEdge: clamp(Math.abs(mean(fromDefender) - mean(fromAttacker)) / 15),
   };
 
   for (const [k, v] of Object.entries(bp.traitOverrides ?? {})) {
     const name = k as TraitName;
-    traits[name] = clamp(traits[name] + v, name === 'attackerEdge' ? -1 : 0, 1);
+    traits[name] = clamp(traits[name] + v);
   }
   return traits;
 }

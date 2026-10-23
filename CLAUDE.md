@@ -18,10 +18,17 @@ Work in small slices: write or extend a failing test, implement, let the hooks v
 - `npm test`: unit tests. `npm run e2e`: Playwright. In the cloud sandbox, prefix with
   `PW_CHROMIUM=/opt/pw-browsers/chromium-1194/chrome-linux/chrome` and never run `playwright install`.
 - `npm run data`: regenerates `public/data` from the BSData commit pinned in `data/bsdata.lock.json`.
+- `python3 scripts/ghb/build_ghb.py [--refresh]` (deps in `scripts/ghb/requirements.txt`): rebuilds
+  `src/packs/ghb2026/ghb.json` (battleplans + battle tactics) from Wahapedia's General's Handbook 2026-27 page,
+  measuring map geometry from the battleplan pictures. Review the overlays it writes to `.data-cache/ghb/overlays/`
+  before committing.
   `npm run data -- --latest` moves the pin to BSData's current `main` first.
 
 ## Architecture
 
+- `src/packs/ghb2026/`: General's Handbook 2026-27 battlepack. Battleplans are filed by name slug
+  (`battleplanByName`), each with territories, typed objectives and terrain, twist, abilities, scoring and errata,
+  plus the six battle tactics cards. Tournament packs reference battleplans by these ids.
 - `src/packs/`: tournament packs as data (`TournamentPack`), battleplans as map geometry, and
   `traits.ts`, which derives the NPC's map traits from that geometry. New pack = new folder + entry in `registry.ts`.
 - `src/pairing/`: pairing protocols (`PairingProtocol`, a simultaneous-move step machine).
@@ -48,4 +55,6 @@ Work in small slices: write or extend a failing test, implement, let the hooks v
 - GW battletome art and the General's Handbook are copyrighted: never commit them. Users add art in-app
   (stored in IndexedDB). GHB-derived battleplan data must be summaries and geometry only; keep source PDFs in
   the git-ignored `rules-source/`.
-- Battleplans in `src/packs/ottd2026/battleplans.ts` are placeholders (`verified: false`) until filled from the GHB.
+- Battleplans and battle tactics come from Wahapedia's GHB 2026-27 page (`ghb.json`, with source links). Map
+  pictures are never committed: the app shows them from their source URL and falls back to a map drawn from the
+  extracted geometry.

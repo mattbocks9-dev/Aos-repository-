@@ -3,3 +3,4 @@ public/data
 node_modules
 package-lock.json
 .data-cache
+src/packs/ghb2026/ghb.json
