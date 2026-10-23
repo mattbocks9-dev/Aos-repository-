@@ -7,6 +7,7 @@ import {
   indexEntries,
   indexGroups,
   isPlayableFaction,
+  matchedPlayForceId,
   parseCatalogue,
   slugify,
   universalManifestationLores,
@@ -17,11 +18,13 @@ const fixture = (f: string) => readFileSync(join(__dirname, 'fixtures', f), 'utf
 describe('BSData extraction', () => {
   const lib = parseCatalogue(fixture('library.cat'));
   const fac = parseCatalogue(fixture('faction.cat'));
+  const forceId = matchedPlayForceId(fixture('system.gst'));
   const data = buildFaction(
     fac,
     indexEntries([fac, lib]),
     { id: 'test', grandAlliance: 'Order' },
     indexGroups([fac, lib]),
+    forceId,
   );
 
   it('reads catalogue metadata and links', () => {
@@ -84,19 +87,22 @@ describe('BSData extraction', () => {
 
   it('extracts battletome rules: traits, formations, lores and enhancements', () => {
     expect(data.rules.battleTraits.map((a) => a.name)).toEqual(['Steadfast']);
-    expect(data.rules.formations).toEqual([
-      {
-        name: 'Hammer Host',
-        abilities: [
-          {
-            name: 'Hammerfall',
-            kind: 'activated',
-            timing: 'Any Charge Phase',
-            effect: 'Add 1 to charge rolls.',
-          },
-        ],
-      },
+    expect(data.rules.formations.map((f) => [f.name, f.points])).toEqual([
+      ['Anvil Host', 20],
+      ['Hammer Host', undefined],
+      ['Season Host', 40],
     ]);
+    expect(data.rules.formations.find((f) => f.name === 'Hammer Host')).toEqual({
+      name: 'Hammer Host',
+      abilities: [
+        {
+          name: 'Hammerfall',
+          kind: 'activated',
+          timing: 'Any Charge Phase',
+          effect: 'Add 1 to charge rolls.',
+        },
+      ],
+    });
     expect(data.rules.spellLores.map((o) => o.name)).toEqual(['Lore of Links', 'Lore of Testing']);
     expect(data.rules.spellLores[0]!.abilities.map((a) => a.name)).toEqual(['Linked Bolt']);
     expect(data.rules.spellLores[1]!.name).toBe('Lore of Testing');
@@ -131,6 +137,31 @@ describe('BSData extraction', () => {
         points: 20,
         abilities: [
           { name: 'Summon Wisp', kind: 'spell', castingValue: 6, effect: 'Set up a Wisp.' },
+        ],
+      },
+    ]);
+  });
+
+  it("finds the latest General's Handbook force as the matched-play force", () => {
+    expect(forceId).toBe('ghb26'); // the newest season, named with a leading symbol
+  });
+
+  it('leaves out options hidden in matched play (legacy, Path to Glory only)', () => {
+    expect(data.rules.formations.map((f) => f.name)).not.toContain('Old Host');
+    expect(data.rules.formations.map((f) => f.name)).not.toContain('Last Season Host');
+    expect(data.rules.formations.map((f) => f.name)).not.toContain('Legendary Host');
+  });
+
+  it('extracts faction-specific enhancement tables with their points', () => {
+    expect(data.rules.enhancementTables).toEqual([
+      {
+        name: 'Monstrous Traits',
+        options: [
+          {
+            name: 'Thick Hide',
+            points: 10,
+            abilities: [{ name: 'Thick Hide', kind: 'passive', effect: 'Add 1 to save rolls.' }],
+          },
         ],
       },
     ]);

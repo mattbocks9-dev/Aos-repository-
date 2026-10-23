@@ -26,6 +26,10 @@ const ARRAY_TAGS = new Set([
   'catalogueLink',
   'selectionEntryGroup',
   'attribute',
+  'modifier',
+  'condition',
+  'conditionGroup',
+  'forceEntry',
 ]);
 
 const parser = new XMLParser({
@@ -269,7 +273,35 @@ function findAll(node: unknown, pred: (tag: string, n: Node) => boolean, out: No
 
 const isHidden = (n: Node) => String(n.hidden) === 'true';
 
-type Resolver = { entries: Map<string, Node>; groups: Map<string, Node> };
+/**
+ * The newest "General's Handbook" force in the game system: the matched-play roster type.
+ * Season options (e.g. extra battle formations) are hidden unless a roster uses it.
+ */
+export function matchedPlayForceId(gstXml: string): string | undefined {
+  const root = (parser.parse(gstXml) as Node).gameSystem as Node;
+  const year = (f: Node) => Number(/General.s Handbook (\d{4})/.exec(String(f.name))?.[1] ?? 0);
+  const forces = children(root, 'forceEntries', 'forceEntry')
+    .filter((f) => year(f) > 0)
+    .sort((a, b) => year(a) - year(b));
+  const latest = forces[forces.length - 1];
+  return latest ? String(latest.id) : undefined;
+}
+
+/** Whether an option is hidden for a matched-play roster (applying hide/unhide modifiers keyed on that force). */
+function hiddenInMatchedPlay(n: Node, force: string | undefined): boolean {
+  let hidden = isHidden(n);
+  if (!force) return hidden;
+  for (const m of children(n, 'modifiers', 'modifier')) {
+    if (m.field !== 'hidden') continue;
+    const onForce = findAll(m, (tag) => tag === 'condition').some(
+      (c) => c.childId === force && c.type === 'instanceOf',
+    );
+    if (onForce) hidden = String(m.value) === 'true';
+  }
+  return hidden;
+}
+
+type Resolver = { entries: Map<string, Node>; groups: Map<string, Node>; force?: string };
 
 /** Abilities of an option, following its links into other entries/groups (e.g. a lore → its spells). */
 function resolvedAbilities(n: Node, r: Resolver, depth = 0): AbilityData[] {
@@ -302,7 +334,8 @@ function option(name: string, n: Node, r: Resolver): RuleOption {
 function groupOptions(group: Node, r: Resolver): RuleOption[] {
   const out: RuleOption[] = [];
   const add = (n: Node | undefined, name?: string) => {
-    if (!n || isHidden(n)) return;
+    if (!n || hiddenInMatchedPlay(n, r.force)) return;
+    if (children(n, 'categoryLinks', 'categoryLink').some((c) => c.name === 'Legends')) return;
     const optName = name ?? String(n.name);
     if (!out.some((o) => o.name === optName)) out.push(option(optName, n, r));
   };
@@ -311,16 +344,20 @@ function groupOptions(group: Node, r: Resolver): RuleOption[] {
     if (l.type !== 'selectionEntryGroup') add(r.entries.get(String(l.targetId)), String(l.name));
   }
   for (const g of children(group, 'selectionEntryGroups', 'selectionEntryGroup')) {
-    if (isHidden(g)) continue;
+    if (hiddenInMatchedPlay(g, r.force)) continue;
     for (const o of groupOptions(g, r)) if (!out.some((x) => x.name === o.name)) out.push(o);
   }
   return out.sort((a, b) => a.name.localeCompare(b.name));
 }
 
+const STANDARD_TABLES =
+  /^(Battle Formations|Heroic Traits|Artefacts of Power|Spell Lores|Prayer Lores|Manifestation Lores|Battle Wounds|Paths)/;
+
 export function buildRules(
   faction: ParsedCatalogue,
   entries: Map<string, Node>,
   groups: Map<string, Node>,
+  force?: string,
 ): FactionRules {
   const groupNamed = (pred: (name: string) => boolean): RuleOption[] => {
     const found = findAll(
@@ -329,11 +366,21 @@ export function buildRules(
     );
     const opts: RuleOption[] = [];
     for (const g of found) {
-      for (const o of groupOptions(g, { entries, groups }))
+      for (const o of groupOptions(g, { entries, groups, force }))
         if (!opts.some((x) => x.name === o.name)) opts.push(o);
     }
     return opts;
   };
+  // Groups reached through a standard table (a lore's spells, a shared generic table) aren't
+  // enhancement tables of their own.
+  const linkedFromStandard = new Set(
+    findAll(
+      faction.root,
+      (tag, n) => tag === 'selectionEntryGroup' && STANDARD_TABLES.test(String(n.name)),
+    )
+      .flatMap((g) => findAll(g, (tag) => tag === 'entryLink'))
+      .map((l) => String(l.targetId)),
+  );
   const traitEntries = findAll(
     faction.root,
     (tag, n) =>
@@ -348,6 +395,15 @@ export function buildRules(
     spellLores: groupNamed((n) => n === 'Spell Lores'),
     prayerLores: groupNamed((n) => n === 'Prayer Lores'),
     manifestationLores: groupNamed((n) => n === 'Manifestation Lores'),
+    enhancementTables: children(faction.root, 'sharedSelectionEntryGroups', 'selectionEntryGroup')
+      .filter(
+        (g) =>
+          !STANDARD_TABLES.test(String(g.name)) &&
+          !linkedFromStandard.has(String(g.id)) &&
+          !hiddenInMatchedPlay(g, force),
+      )
+      .map((g) => ({ name: String(g.name), options: groupOptions(g, { entries, groups, force }) }))
+      .filter((t) => t.options.length > 0),
   };
 }
 
@@ -412,6 +468,7 @@ export function buildFaction(
   index: Map<string, Node>,
   meta: { id: string; grandAlliance?: string },
   groups: Map<string, Node> = new Map(),
+  force?: string,
 ): FactionData {
   const units = new Map<string, UnitData>();
   const consider = (target: Node | undefined, points: number) => {
@@ -434,7 +491,7 @@ export function buildFaction(
     name: faction.name,
     grandAlliance: meta.grandAlliance ?? grandAllianceOf(roster),
     units: roster,
-    rules: buildRules(faction, index, groups),
+    rules: buildRules(faction, index, groups, force),
   };
 }
 

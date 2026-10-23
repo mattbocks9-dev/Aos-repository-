@@ -44,6 +44,19 @@ describe('team validation', () => {
     ]);
   });
 
+  it('flags an enhancement taken more than once in one army', () => {
+    const l = list([
+      ['Hero A', 120],
+      ['Hero B', 120],
+    ]);
+    l.units[0]!.enhancements = [{ name: 'Mirrorshield', table: 'Artefacts of Power', points: 0 }];
+    l.units[1]!.enhancements = [{ name: 'Mirrorshield', table: 'Artefacts of Power', points: 0 }];
+    const issues = validateTeam({ name: 'T', players: [player('Ann', 'a', l)] }, 2000, (id) => id);
+    expect(issues).toEqual([
+      { rule: 'unique-enhancement', message: "Ann's list takes Mirrorshield more than once." },
+    ]);
+  });
+
   it('passes a legal team', () => {
     expect(
       validateTeam(

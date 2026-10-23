@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { fileToDataUrl, setFactionArt } from '../../data/art';
-import { detectFaction, listPoints } from '../../data/listParser';
+import { detectFaction, listPoints, pointsBreakdown } from '../../data/listParser';
 import { analyseList } from '../../data/listAnalysis';
 import { validateTeam, type Player, type Team } from '../../data/team';
 import type { FactionIndex } from '../../data/types';
@@ -185,7 +185,13 @@ function PlayerEditor({
               <span className="chip mr-1">{analyseList(player.list).archetype}</span>
               <span className="muted">
                 {player.list.units.length} units matched
-                {player.list.rules?.formation ? ` · ${player.list.rules.formation.name}` : ''}
+                {player.list.rules?.formation
+                  ? ` · ${player.list.rules.formation.name}${player.list.rules.formation.points ? ` (${player.list.rules.formation.points} pts)` : ''}`
+                  : ''}
+                {(() => {
+                  const b = pointsBreakdown(player.list);
+                  return b.enhancements ? ` · enhancements ${b.enhancements} pts` : '';
+                })()}
                 {player.list.manifestationLore ? ` · ${player.list.manifestationLore}` : ''}
               </span>
             </p>

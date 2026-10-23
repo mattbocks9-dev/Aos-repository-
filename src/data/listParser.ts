@@ -11,6 +11,15 @@ export interface ListUnit {
   reinforced: boolean;
   /** Catalogue entry, when the name was matched. */
   unit?: UnitData;
+  /** Enhancements on this unit (heroic traits, artefacts, monstrous traits...), costed from the catalogue. */
+  enhancements?: ListEnhancement[];
+}
+
+export interface ListEnhancement {
+  name: string;
+  /** The battletome table it comes from, e.g. "Heroic Traits". */
+  table: string;
+  points: number;
 }
 
 export interface ArmyList {
@@ -114,8 +123,35 @@ const BULLET = /^\s*[\u2022\u2013*-]\s*/;
 const HEADER =
   /\b(\d{3,4})\s*\/\s*(\d{3,4})\b|^(general'?s )?regiment|^auxiliary|^faction terrain/i;
 
+/** Every enhancement a unit can take in this faction, with the table it belongs to. */
+function enhancementOptions(faction: FactionData): { option: RuleOption; table: string }[] {
+  const r = faction.rules;
+  return [
+    ...r.heroicTraits.map((option) => ({ option, table: 'Heroic Traits' })),
+    ...r.artefacts.map((option) => ({ option, table: 'Artefacts of Power' })),
+    ...(r.enhancementTables ?? []).flatMap((t) =>
+      t.options.map((option) => ({ option, table: t.name })),
+    ),
+  ];
+}
+
+// "Heroic Trait: X", "Artefact - X", "Enhancement: X (20)" ...
+const ENHANCEMENT_PREFIX =
+  /^(?:heroic traits?|artefacts?(?: of power)?|enhancements?|monstrous traits?)\s*(?:-|:|\u2013)\s*/i;
+const TRAILING_POINTS = /\s*[([]\s*\d+\s*(?:pts?|points)?\s*[)\]]\s*$/i;
+
+function matchOption<T extends { option: RuleOption }>(name: string, options: T[]): T | undefined {
+  const n = normalise(name);
+  return (
+    options.find((o) => normalise(o.option.name) === n) ??
+    options.find((o) => similarity(o.option.name, name) > 0.85)
+  );
+}
+
 export function parseList(text: string, faction: FactionData | undefined): ArmyList {
   const list: ArmyList = { factionId: faction?.id, units: [], unmatched: [] };
+  const enhancements = faction?.rules ? enhancementOptions(faction) : [];
+  const formations = (faction?.rules?.formations ?? []).map((option) => ({ option }));
   let last: ListUnit | undefined;
   for (const raw of text.split(/\r?\n/)) {
     const line = raw.trim();
@@ -144,9 +180,31 @@ export function parseList(text: string, faction: FactionData | undefined): ArmyL
     const body = line.replace(BULLET, '');
     if (isBullet) {
       if (last && /^reinforced$/i.test(body)) last.reinforced = true;
-      continue; // enhancements, weapon options, General, etc.
+      const enhancement =
+        last &&
+        matchOption(
+          body.replace(ENHANCEMENT_PREFIX, '').replace(TRAILING_POINTS, ''),
+          enhancements,
+        );
+      if (last && enhancement) {
+        (last.enhancements ??= []).push({
+          name: enhancement.option.name,
+          table: enhancement.table,
+          points: enhancement.option.points ?? 0,
+        });
+      }
+      continue; // weapon options, General, etc.
     }
     if (HEADER.test(body)) continue;
+    // A battle formation on its own line, e.g. "Coven of Blood (20)".
+    const formationLine = matchOption(body.replace(TRAILING_POINTS, ''), formations);
+    if (
+      formationLine &&
+      normalise(formationLine.option.name) === normalise(body.replace(TRAILING_POINTS, ''))
+    ) {
+      list.formation = formationLine.option.name;
+      continue;
+    }
 
     const m = UNIT_LINE.exec(body);
     // A bare unit name (no points) also counts, if it matches the catalogue exactly.
@@ -166,20 +224,33 @@ export function parseList(text: string, faction: FactionData | undefined): ArmyL
         name: unit.name,
         points: unit.points,
         listedPoints: listed,
-        // Paying double the base cost means a reinforced unit.
-        reinforced: listed !== undefined && listed >= unit.points * 2,
+        // Paying double the base cost means a reinforced unit (re-checked once enhancements are known).
+        reinforced: false,
         unit,
       };
       list.units.push(last);
     }
   }
-  // Points always come from the catalogue.
+  // Points always come from the catalogue: the unit (doubled when reinforced) plus its enhancements.
+  // A pasted number is only checked, and may be written with or without the enhancements included.
   const mismatches: string[] = [];
   for (const u of list.units) {
     if (!u.unit) continue;
-    u.points = u.unit.points * (u.reinforced ? 2 : 1);
-    if (u.listedPoints !== undefined && u.listedPoints !== u.points) {
-      mismatches.push(`${u.name}: list says ${u.listedPoints}, catalogue says ${u.points}`);
+    const extra = (u.enhancements ?? []).reduce((s, e) => s + e.points, 0);
+    if (
+      !u.reinforced &&
+      u.listedPoints !== undefined &&
+      u.listedPoints - extra >= u.unit.points * 2
+    ) {
+      u.reinforced = true;
+    }
+    const base = u.unit.points * (u.reinforced ? 2 : 1);
+    u.points = base + extra;
+    if (u.listedPoints !== undefined && u.listedPoints !== u.points && u.listedPoints !== base) {
+      const detail = extra ? ` (${base} + ${extra} enhancements)` : '';
+      mismatches.push(
+        `${u.name}: list says ${u.listedPoints}, catalogue says ${u.points}${detail}`,
+      );
     }
   }
   if (mismatches.length) list.pointsMismatches = mismatches;
@@ -187,5 +258,28 @@ export function parseList(text: string, faction: FactionData | undefined): ArmyL
   return list;
 }
 
-export const listPoints = (list: ArmyList) =>
-  list.units.reduce((s, u) => s + u.points, 0) + (list.rules?.manifestationLore?.points ?? 0);
+export interface PointsBreakdown {
+  units: number;
+  enhancements: number;
+  formation: number;
+  lores: number;
+  total: number;
+}
+
+/** Army points from the catalogue: units, their enhancements, battle formation and lores. */
+export function pointsBreakdown(list: ArmyList): PointsBreakdown {
+  const enhancements = list.units.reduce(
+    (s, u) => s + (u.enhancements ?? []).reduce((t, e) => t + e.points, 0),
+    0,
+  );
+  const units = list.units.reduce((s, u) => s + u.points, 0) - enhancements;
+  const r = list.rules;
+  const formation = r?.formation?.points ?? 0;
+  const lores =
+    (r?.spellLore?.points ?? 0) +
+    (r?.prayerLore?.points ?? 0) +
+    (r?.manifestationLore?.points ?? 0);
+  return { units, enhancements, formation, lores, total: units + enhancements + formation + lores };
+}
+
+export const listPoints = (list: ArmyList) => pointsBreakdown(list).total;

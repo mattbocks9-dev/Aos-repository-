@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { analyseList } from '../../data/listAnalysis';
-import { listPoints } from '../../data/listParser';
+import { listPoints, pointsBreakdown } from '../../data/listParser';
 import type { Player } from '../../data/team';
 import type { AbilityData, RuleOption } from '../../data/types';
 import { Ability } from './Ability';
@@ -33,6 +33,21 @@ function RuleSection({ title, abilities }: { title: string; abilities: AbilityDa
 
 const option = (label: string, o: RuleOption | undefined) =>
   o ? { title: `${label}: ${o.name}`, abilities: o.abilities } : null;
+
+function PointsLine({ player }: { player: Player }) {
+  const b = pointsBreakdown(player.list);
+  const parts = [
+    `units ${b.units}`,
+    b.enhancements ? `enhancements ${b.enhancements}` : '',
+    b.formation ? `formation ${b.formation}` : '',
+    b.lores ? `lores ${b.lores}` : '',
+  ].filter(Boolean);
+  return (
+    <p className="muted mb-2 text-xs">
+      Points: {parts.join(' + ')} = {b.total}
+    </p>
+  );
+}
 
 export function ListViewer({
   player,
@@ -78,6 +93,7 @@ export function ListViewer({
             ✕
           </button>
         </div>
+        <PointsLine player={player} />
         <p className="mb-3 flex flex-wrap gap-1 text-sm">
           <span className="chip">{profile.archetype}</span>
           {player.list.manifestationLore && (
@@ -129,6 +145,16 @@ export function ListViewer({
                   <span>
                     {u.name}
                     {u.reinforced && <span className="muted"> · reinforced</span>}
+                    {(u.enhancements ?? []).map((e) => (
+                      <span key={e.name} className="block text-xs" style={{ color: 'var(--gold)' }}>
+                        + {e.name}
+                        <span className="muted">
+                          {' '}
+                          ({e.table}
+                          {e.points ? `, ${e.points} pts` : ''})
+                        </span>
+                      </span>
+                    ))}
                   </span>
                   <span className="muted">{u.points}</span>
                 </button>

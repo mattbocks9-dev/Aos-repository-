@@ -10,6 +10,7 @@ import {
   indexEntries,
   indexGroups,
   isPlayableFaction,
+  matchedPlayForceId,
   parseCatalogue,
   slugify,
   universalManifestationLores,
@@ -46,6 +47,9 @@ mkdirSync(outDir, { recursive: true });
 const index: FactionIndex = { source: { repo: lock.repo, commit: lock.commit }, factions: [] };
 // Everything below comes from the pinned BSData catalogues: no hand-maintained faction data.
 const all = [...cats.values()];
+const gst = readdirSync(cache).find((f) => f.endsWith('.gst'));
+const force = gst ? matchedPlayForceId(readFileSync(join(cache, gst), 'utf8')) : undefined;
+console.log(`matched-play force: ${force}`);
 const loresCat = all.find((c) => c.name.includes('Lores') && c.library);
 const universal = loresCat
   ? universalManifestationLores(loresCat, indexEntries(all), indexGroups(all))
@@ -57,7 +61,7 @@ for (const faction of all.filter(isPlayableFaction)) {
   const entries = indexEntries([faction, ...linked]);
   const groups = indexGroups([faction, ...linked]);
   const id = slugify(faction.name);
-  const data = buildFaction(faction, entries, { id }, groups);
+  const data = buildFaction(faction, entries, { id }, groups, force);
   for (const lore of universal) {
     if (!data.rules.manifestationLores.some((l) => l.name === lore.name)) {
       data.rules.manifestationLores.push(lore);
