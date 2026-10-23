@@ -9,6 +9,7 @@ import { useApp } from '../../app/store';
 import { parsePlayer, teamReady } from '../../app/teams';
 import { useCatalog } from '../../app/useCatalog';
 import { FactionArt } from '../components/FactionArt';
+import { TeamLibraryBar } from '../components/TeamLibraryBar';
 
 const ALLIANCES = ['Order', 'Chaos', 'Death', 'Destruction'];
 
@@ -269,6 +270,7 @@ export function TeamSetup() {
           </button>
         ))}
       </div>
+      <TeamLibraryBar key={side} team={team} onLoad={setTeam} />
       <div>
         <label className="label" htmlFor="team-name">
           Team name

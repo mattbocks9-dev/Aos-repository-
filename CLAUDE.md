@@ -40,6 +40,10 @@ Work in small slices: write or extend a failing test, implement, let the hooks v
   (battle traits, formations, heroic traits, artefacts, spell/prayer/manifestation lores) from BSData
   `BSData/age-of-sigmar-4th`. Generic/realm tables, hidden legacy groups, `[LEGENDS]` catalogues and
   units in BSData's `Legends` category are deliberately excluded.
+- `src/data/teamLibrary.ts` + `team-library.json`: the shared team library (also the source of the quick-play
+  sample teams). Submissions arrive as issues (`.github/ISSUE_TEMPLATE/team-submission.yml`) and are added by
+  `scripts/add-team.ts` via `.github/workflows/team-submission.yml` when a maintainer comments `/approve`.
+  Every library team must pass `validateLibraryTeam` (tested in CI).
 - `src/npc/`: matchup model (`matchup.ts`), zero-sum matrix solver, full-tree solver, captain
   (difficulty + reasoning), and the Web Worker client.
 - `src/ui/`: screens and components. `src/app/`: store (localStorage-persisted) and helpers.
@@ -49,7 +53,9 @@ Work in small slices: write or extend a failing test, implement, let the hooks v
 - **Single source of truth:** factions, grand alliances, units, stats, weapons, points, abilities, spells,
   battle traits, formations, enhancements and lores all come from `BSData/age-of-sigmar-4th` via
   `npm run data`. Never hand-edit `public/data` or add hand-written unit/points data; CI regenerates the data and
-  fails on any diff. Pasted list points are only compared against the catalogue, never used.
+  fails on any diff. Pasted list points are only compared against the catalogue, never used. Army points =
+  units (x2 reinforced) + enhancements + battle formation + lores, all costed from BSData for the newest
+  General's Handbook force in the game system (currently GHB 2026-27).
 
 - BSData catalogues are pinned and transformed at build time; only derived JSON is committed.
 - GW battletome art and the General's Handbook are copyrighted: never commit them. Users add art in-app

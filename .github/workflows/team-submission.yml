@@ -1,0 +1,71 @@
+name: Add approved team
+
+# A maintainer approves a "Submit a team" issue by commenting /approve (or adding the
+# "approved-team" label). The team is validated against the BSData catalogue, added to
+# src/data/team-library.json on main, and the site is redeployed.
+on:
+  issues:
+    types: [labeled]
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: write
+  issues: write
+  actions: write
+
+concurrency:
+  group: team-library
+  cancel-in-progress: false
+
+jobs:
+  add:
+    if: >-
+      !github.event.issue.pull_request && (
+        (github.event_name == 'issues' && github.event.label.name == 'approved-team') ||
+        (github.event_name == 'issue_comment' &&
+         startsWith(github.event.comment.body, '/approve') &&
+         contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association))
+      )
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - id: add
+        name: Validate and add the team
+        continue-on-error: true
+        # Issue content is untrusted: it is only passed as data through environment variables.
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE_AUTHOR: ${{ github.event.issue.user.login }}
+        run: npx tsx scripts/add-team.ts
+      - name: Commit, redeploy and close the issue
+        if: steps.add.outcome == 'success'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE: ${{ github.event.issue.number }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/data/team-library.json
+          git commit -m "Add shared team from #$ISSUE"
+          git push origin HEAD:main
+          gh workflow run deploy.yml --ref main
+          echo "It will appear in the app after the site redeploys (a few minutes)." >> add-team-result.md
+          gh issue comment "$ISSUE" --body-file add-team-result.md
+          gh issue close "$ISSUE" --reason completed
+      - name: Report problems
+        if: steps.add.outcome != 'success'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE: ${{ github.event.issue.number }}
+        run: |
+          [ -f add-team-result.md ] || echo "Something went wrong while adding this team; see the workflow run." > add-team-result.md
+          gh issue comment "$ISSUE" --body-file add-team-result.md
+          if [ "${{ github.event_name }}" = "issues" ]; then gh issue edit "$ISSUE" --remove-label approved-team || true; fi

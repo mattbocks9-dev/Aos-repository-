@@ -13,6 +13,17 @@ test('falls back to the drawn map when the original picture cannot load', async 
   await expect(page.locator('img[alt="Warped Ruins battleplan map"]')).toHaveCount(0);
 });
 
+test('loads a team from the shared library', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Set up teams & lists' }).click();
+  await page
+    .getByLabel('Load a saved team (shared library)')
+    .selectOption({ label: 'The Rot Pact' });
+  await expect(page.getByRole('status')).toHaveText('Loaded "The Rot Pact".');
+  await expect(page.getByLabel('Team name')).toHaveValue('The Rot Pact');
+  await expect(page.getByText('Grak', { exact: true })).toBeVisible();
+});
+
 test('plays a full pairing against the NPC with sample teams', async ({ page }, info) => {
   await page.route(WAHAPEDIA_IMAGES, (route) => route.fulfill({ path: MAP_FIXTURE }));
   const shot = (name: string) =>
