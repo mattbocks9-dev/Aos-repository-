@@ -240,3 +240,33 @@ describe('GW app export: Cities of Sigmar with three-part header', () => {
     expect(list.pointsMismatches).toBeUndefined();
   });
 });
+
+describe('app metadata lines', () => {
+  const lumineth = faction('lumineth-realm-lords');
+  const META = [
+    'Data Version: v44',
+    'Data version - v483',
+    'Data: v483',
+    'Data: 483',
+    'App Version: 1.38.0',
+    'App: v1.38.0 (1)',
+    'Version 44',
+    'Version: v44',
+    'Created with Warhammer Age of Sigmar: The App',
+    'Drops: 3',
+    "General's Handbook 2026-27",
+    'N°175135670',
+  ];
+
+  it('never reports metadata lines as unknown units', () => {
+    const list = parseList(['Alarith Stonemage (110)', ...META].join('\n'), lumineth);
+    expect(list.unmatched).toEqual([]);
+    expect(list.units.map((u) => u.name)).toEqual(['Alarith Stonemage']);
+    expect(list.pointsMismatches).toBeUndefined();
+  });
+
+  it('still reads units with points glued to the name', () => {
+    const list = parseList('Alarith Stonemage110', lumineth);
+    expect(list.units.map((u) => [u.name, u.points])).toEqual([['Alarith Stonemage', 110]]);
+  });
+});
