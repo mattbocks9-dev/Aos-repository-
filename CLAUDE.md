@@ -38,6 +38,11 @@ Work in small slices: write or extend a failing test, implement, let the hooks v
 
 ## Data and copyright
 
+- **Single source of truth:** factions, grand alliances, units, stats, weapons, points, abilities, spells,
+  battle traits, formations, enhancements and lores all come from `BSData/age-of-sigmar-4th` via
+  `npm run data`. Never hand-edit `public/data` or add hand-written unit/points data; CI regenerates the data and
+  fails on any diff. Pasted list points are only compared against the catalogue, never used.
+
 - BSData catalogues are pinned and transformed at build time; only derived JSON is committed.
 - GW battletome art and the General's Handbook are copyrighted: never commit them. Users add art in-app
   (stored in IndexedDB). GHB-derived battleplan data must be summaries and geometry only; keep source PDFs in

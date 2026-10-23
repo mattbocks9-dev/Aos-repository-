@@ -27,6 +27,8 @@ export interface AbilityData {
 /** A named option from a battletome: a formation, lore, heroic trait or artefact. */
 export interface RuleOption {
   name: string;
+  /** Points cost from the catalogue, when the option has one (e.g. manifestation lores). */
+  points?: number;
   abilities: AbilityData[];
 }
 

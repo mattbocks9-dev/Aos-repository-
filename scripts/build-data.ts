@@ -5,8 +5,15 @@ import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import type { FactionIndex } from '../src/data/types';
-import { buildFaction, indexEntries, indexGroups, parseCatalogue, slugify } from './bsdata';
-import { FACTIONS } from './factions';
+import {
+  buildFaction,
+  indexEntries,
+  indexGroups,
+  isPlayableFaction,
+  parseCatalogue,
+  slugify,
+  universalManifestationLores,
+} from './bsdata';
 
 const lock = JSON.parse(readFileSync('data/bsdata.lock.json', 'utf8')) as {
   repo: string;
@@ -37,20 +44,33 @@ rmSync(outDir, { recursive: true, force: true });
 mkdirSync(outDir, { recursive: true });
 
 const index: FactionIndex = { source: { repo: lock.repo, commit: lock.commit }, factions: [] };
-for (const [name, grandAlliance] of Object.entries(FACTIONS)) {
-  const faction = cats.get(`${name}.cat`);
-  if (!faction) {
-    console.warn(`missing catalogue for ${name}`);
-    continue;
-  }
+// Everything below comes from the pinned BSData catalogues: no hand-maintained faction data.
+const all = [...cats.values()];
+const loresCat = all.find((c) => c.name.includes('Lores') && c.library);
+const universal = loresCat
+  ? universalManifestationLores(loresCat, indexEntries(all), indexGroups(all))
+  : [];
+console.log(`universal manifestation lores: ${universal.map((l) => l.name).join(', ')}`);
+
+for (const faction of all.filter(isPlayableFaction)) {
   const linked = faction.links.map((l) => byId.get(l.targetId)).filter((c) => c !== undefined);
   const entries = indexEntries([faction, ...linked]);
   const groups = indexGroups([faction, ...linked]);
-  const id = slugify(name);
-  const data = buildFaction(faction, entries, { id, grandAlliance }, groups);
+  const id = slugify(faction.name);
+  const data = buildFaction(faction, entries, { id }, groups);
+  for (const lore of universal) {
+    if (!data.rules.manifestationLores.some((l) => l.name === lore.name)) {
+      data.rules.manifestationLores.push(lore);
+    }
+  }
   writeFileSync(join(outDir, `${id}.json`), JSON.stringify(data));
-  index.factions.push({ id, name, grandAlliance, unitCount: data.units.length });
-  console.log(`${name}: ${data.units.length} units`);
+  index.factions.push({
+    id,
+    name: faction.name,
+    grandAlliance: data.grandAlliance,
+    unitCount: data.units.length,
+  });
+  console.log(`${faction.name} (${data.grandAlliance}): ${data.units.length} units`);
 }
 index.factions.sort((a, b) => a.name.localeCompare(b.name));
 writeFileSync('public/data/index.json', JSON.stringify(index, null, 2));

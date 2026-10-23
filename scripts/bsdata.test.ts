@@ -3,10 +3,13 @@ import { join } from 'node:path';
 import {
   buildFaction,
   diceAverage,
+  grandAllianceOf,
   indexEntries,
   indexGroups,
+  isPlayableFaction,
   parseCatalogue,
   slugify,
+  universalManifestationLores,
 } from './bsdata';
 
 const fixture = (f: string) => readFileSync(join(__dirname, 'fixtures', f), 'utf8');
@@ -41,7 +44,7 @@ describe('BSData extraction', () => {
       models: 5,
       ward: 6,
     });
-    expect(hg.keywords).toEqual(['INFANTRY']);
+    expect(hg.keywords).toEqual(['INFANTRY', 'ORDER']);
     expect(hg.weapons[0]).toMatchObject({
       kind: 'melee',
       attacks: '2',
@@ -100,6 +103,33 @@ describe('BSData extraction', () => {
     });
     expect(data.rules.heroicTraits.map((o) => o.name)).toEqual(['Brave']);
     expect(data.rules.artefacts).toEqual([]);
+  });
+
+  it("takes the grand alliance from the units' keywords in the catalogue", () => {
+    expect(grandAllianceOf(data.units)).toBe('Order');
+    expect(data.units.find((u) => u.name === 'Hammerguard')!.keywords).toContain('ORDER');
+  });
+
+  it('picks playable factions from catalogue metadata, not a hand-written list', () => {
+    expect(isPlayableFaction(fac)).toBe(true);
+    expect(isPlayableFaction(lib)).toBe(false); // library
+    expect(isPlayableFaction({ ...fac, name: 'Legions of Nagash [LEGENDS]' })).toBe(false);
+    expect(isPlayableFaction({ ...fac, name: 'Stormcast Eternals - Astral Templars' })).toBe(false); // Army of Renown
+    expect(isPlayableFaction({ ...fac, name: 'Regiments of Renown' })).toBe(false);
+  });
+
+  it('extracts universal manifestation lores with their points', () => {
+    const lores = parseCatalogue(fixture('lores.cat'));
+    const all = [fac, lib, lores];
+    expect(universalManifestationLores(lores, indexEntries(all), indexGroups(all))).toEqual([
+      {
+        name: 'Universal Conjuration',
+        points: 20,
+        abilities: [
+          { name: 'Summon Wisp', kind: 'spell', castingValue: 6, effect: 'Set up a Wisp.' },
+        ],
+      },
+    ]);
   });
 
   it('averages dice expressions', () => {

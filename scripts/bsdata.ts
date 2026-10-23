@@ -288,6 +288,13 @@ function resolvedAbilities(n: Node, r: Resolver, depth = 0): AbilityData[] {
   return out;
 }
 
+function option(name: string, n: Node, r: Resolver): RuleOption {
+  const points = pointsOf(n);
+  return points > 0
+    ? { name, points, abilities: resolvedAbilities(n, r) }
+    : { name, abilities: resolvedAbilities(n, r) };
+}
+
 /**
  * The options inside a battletome group. Only the faction's own, visible options count:
  * links to shared groups (generic or realm-specific tables) and hidden legacy groups are skipped.
@@ -297,8 +304,7 @@ function groupOptions(group: Node, r: Resolver): RuleOption[] {
   const add = (n: Node | undefined, name?: string) => {
     if (!n || isHidden(n)) return;
     const optName = name ?? String(n.name);
-    if (!out.some((o) => o.name === optName))
-      out.push({ name: optName, abilities: resolvedAbilities(n, r) });
+    if (!out.some((o) => o.name === optName)) out.push(option(optName, n, r));
   };
   for (const e of children(group, 'selectionEntries', 'selectionEntry')) add(e);
   for (const l of children(group, 'entryLinks', 'entryLink')) {
@@ -345,6 +351,56 @@ export function buildRules(
   };
 }
 
+const ALLIANCES = ['ORDER', 'CHAOS', 'DEATH', 'DESTRUCTION'] as const;
+
+/** The Grand Alliance keyword most of a faction's units carry. */
+export function grandAllianceOf(units: UnitData[]): string {
+  const counts = ALLIANCES.map((a) => units.filter((u) => u.keywords.includes(a)).length);
+  const best = ALLIANCES[counts.indexOf(Math.max(...counts))]!;
+  return best[0] + best.slice(1).toLowerCase();
+}
+
+/**
+ * Playable factions are the catalogue's own top-level, non-library catalogues.
+ * Armies of Renown ("Faction - Army") count as their base faction under team rules,
+ * and Legends, Regiments of Renown and Path to Glory aren't used at matched-play events.
+ */
+export function isPlayableFaction(cat: ParsedCatalogue): boolean {
+  return (
+    !cat.library &&
+    !cat.name.includes(' - ') &&
+    !/\[LEGENDS|Regiments of Renown|Path to Glory|Lores/i.test(cat.name)
+  );
+}
+
+/** Manifestation lores any army may take, from the "❖ Lores" catalogue. */
+export function universalManifestationLores(
+  lores: ParsedCatalogue,
+  entries: Map<string, Node>,
+  groups: Map<string, Node>,
+): RuleOption[] {
+  const r: Resolver = { entries, groups };
+  // Visible links in a "Manifestation Lore" group; faction-only lores are hidden until unlocked.
+  const names = new Set(
+    findAll(
+      lores.root,
+      (tag, n) => tag === 'selectionEntryGroup' && n.name === 'Manifestation Lore',
+    )
+      .flatMap((g) => children(g, 'entryLinks', 'entryLink'))
+      .filter((l) => !isHidden(l))
+      .map((l) => String(l.name)),
+  );
+  const out: RuleOption[] = [];
+  for (const e of findAll(
+    lores.root,
+    (tag, n) => tag === 'selectionEntry' && n.type === 'upgrade',
+  )) {
+    const name = String(e.name);
+    if (names.has(name) && !out.some((o) => o.name === name)) out.push(option(name, e, r));
+  }
+  return out.sort((a, b) => a.name.localeCompare(b.name));
+}
+
 function pointsOf(node: Node): number {
   const cost = children(node, 'costs', 'cost').find((c) => c.typeId === 'points');
   return cost ? Number(cost.value) : 0;
@@ -354,7 +410,7 @@ function pointsOf(node: Node): number {
 export function buildFaction(
   faction: ParsedCatalogue,
   index: Map<string, Node>,
-  meta: { id: string; grandAlliance: string },
+  meta: { id: string; grandAlliance?: string },
   groups: Map<string, Node> = new Map(),
 ): FactionData {
   const units = new Map<string, UnitData>();
@@ -370,11 +426,12 @@ export function buildFaction(
   for (const entry of children(faction.root, 'sharedSelectionEntries', 'selectionEntry')) {
     consider(entry, pointsOf(entry));
   }
+  const roster = [...units.values()].sort((a, b) => a.name.localeCompare(b.name));
   return {
     id: meta.id,
     name: faction.name,
-    grandAlliance: meta.grandAlliance,
-    units: [...units.values()].sort((a, b) => a.name.localeCompare(b.name)),
+    grandAlliance: meta.grandAlliance ?? grandAllianceOf(roster),
+    units: roster,
     rules: buildRules(faction, index, groups),
   };
 }

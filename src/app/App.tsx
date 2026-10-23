@@ -4,7 +4,8 @@ import { Results } from '../ui/screens/Results';
 import { RoundSetup } from '../ui/screens/RoundSetup';
 import { TeamSetup } from '../ui/screens/TeamSetup';
 import { useEffect } from 'react';
-import { useApp, type Screen } from './store';
+import type { Team } from '../data/team';
+import { DATA_VERSION, useApp, type Screen } from './store';
 import { parsePlayer } from './teams';
 
 const NAV: { screen: Screen; label: string }[] = [
@@ -16,16 +17,14 @@ const NAV: { screen: Screen; label: string }[] = [
 export function App() {
   const { state, dispatch } = useApp();
 
-  // Lists saved by older versions lack abilities/battletome rules: re-parse them once.
+  // Teams saved by older versions are re-parsed so units, points and rules come from the current catalogue.
   useEffect(() => {
-    for (const side of ['A', 'B'] as const) {
-      const team = state.teams[side];
-      if (team.players.some((p) => p.factionId && !p.list.rules)) {
-        void Promise.all(team.players.map(parsePlayer)).then((players) =>
-          dispatch({ type: 'setTeam', side, team: { ...team, players } }),
-        );
-      }
-    }
+    if (state.dataVersion === DATA_VERSION) return;
+    const reparse = (team: Team) =>
+      Promise.all(team.players.map(parsePlayer)).then((players) => ({ ...team, players }));
+    void Promise.all([reparse(state.teams.A), reparse(state.teams.B)]).then(([A, B]) =>
+      dispatch({ type: 'reparsed', teams: { A, B } }),
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (

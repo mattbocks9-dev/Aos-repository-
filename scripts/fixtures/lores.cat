@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalogue name="❖ Lores" id="lores" library="true" type="catalogue">
+  <sharedSelectionEntryGroups>
+    <selectionEntryGroup name="Manifestation Lore" id="ml">
+      <entryLinks>
+        <entryLink name="Universal Conjuration" id="ul1" targetId="ug1" type="selectionEntryGroup"/>
+        <entryLink name="Secret Faction Lore" id="ul2" hidden="true" targetId="ug2" type="selectionEntryGroup"/>
+      </entryLinks>
+    </selectionEntryGroup>
+    <selectionEntryGroup name="Universal Conjuration" id="ug1">
+      <selectionEntries>
+        <selectionEntry name="Summon Wisp" id="sw" type="upgrade">
+          <profiles>
+            <profile name="Summon Wisp" id="swp" typeName="Ability (Spell)">
+              <characteristics><characteristic name="Casting Value">6</characteristic><characteristic name="Effect">Set up a Wisp.</characteristic></characteristics>
+            </profile>
+          </profiles>
+        </selectionEntry>
+      </selectionEntries>
+    </selectionEntryGroup>
+    <selectionEntryGroup name="Secret Faction Lore" id="ug2"/>
+  </sharedSelectionEntryGroups>
+  <sharedSelectionEntries>
+    <selectionEntry name="Universal Conjuration" id="ue1" type="upgrade">
+      <costs><cost name="pts" typeId="points" value="20"/></costs>
+      <entryLinks><entryLink name="Universal Conjuration" id="uel" targetId="ug1" type="selectionEntryGroup"/></entryLinks>
+    </selectionEntry>
+    <selectionEntry name="Secret Faction Lore" id="ue2" type="upgrade">
+      <entryLinks><entryLink name="Secret Faction Lore" id="uel2" targetId="ug2" type="selectionEntryGroup"/></entryLinks>
+    </selectionEntry>
+  </sharedSelectionEntries>
+</catalogue>

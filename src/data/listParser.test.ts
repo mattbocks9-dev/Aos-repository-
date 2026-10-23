@@ -108,6 +108,25 @@ describe('list parser', () => {
     expect(named.rules?.manifestationLore?.name).toBe('Manifestations of the Storm');
   });
 
+  it('takes points only from the catalogue, flagging typed numbers that disagree', () => {
+    const l = parseList('Liberators (95)\nLiberators\n• Reinforced\nKnight-Arcanum (110)', sce);
+    expect(l.units.map((u) => u.points)).toEqual([90, 180, 110]);
+    expect(l.pointsMismatches).toEqual(['Liberators: list says 95, catalogue says 90']);
+    expect(listPoints(l)).toBe(380);
+  });
+
+  it('adds manifestation lore points from the catalogue', () => {
+    const withLore: FactionData = {
+      ...sce,
+      rules: {
+        ...sce.rules,
+        manifestationLores: [{ name: 'Morbid Conjuration', points: 20, abilities: [] }],
+      },
+    };
+    const l = parseList('Manifestation Lore - Morbid Conjuration\nLiberators (90)', withLore);
+    expect(listPoints(l)).toBe(110);
+  });
+
   it('detects the faction from the header', () => {
     expect(
       detectFaction(GW_APP, [

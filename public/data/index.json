@@ -5,22 +5,10 @@
   },
   "factions": [
     {
-      "id": "beasts-of-chaos",
-      "name": "Beasts of Chaos",
-      "grandAlliance": "Chaos",
-      "unitCount": 22
-    },
-    {
       "id": "blades-of-khorne",
       "name": "Blades of Khorne",
       "grandAlliance": "Chaos",
       "unitCount": 41
-    },
-    {
-      "id": "bonesplitterz",
-      "name": "Bonesplitterz",
-      "grandAlliance": "Destruction",
-      "unitCount": 12
     },
     {
       "id": "cities-of-sigmar",

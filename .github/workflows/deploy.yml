@@ -25,6 +25,8 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - name: Data matches BSData exactly
+        run: npm run data && git diff --exit-code public/data
       - run: npm run typecheck
       - run: npm run lint
       - run: npm test

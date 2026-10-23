@@ -4,7 +4,10 @@ import type { AbilityData, FactionData, RuleOption, UnitData } from './types';
 
 export interface ListUnit {
   name: string;
+  /** Always the catalogue cost (doubled when reinforced), never the pasted number. */
   points: number;
+  /** The number typed in the pasted list, if any; only used to flag disagreements. */
+  listedPoints?: number;
   reinforced: boolean;
   /** Catalogue entry, when the name was matched. */
   unit?: UnitData;
@@ -15,6 +18,8 @@ export interface ArmyList {
   units: ListUnit[];
   /** Lines that looked like units but matched nothing in the catalogue. */
   unmatched: string[];
+  /** Units whose pasted points disagree with the catalogue. */
+  pointsMismatches?: string[];
   manifestationLore?: string;
   spellLore?: string;
   prayerLore?: string;
@@ -144,11 +149,13 @@ export function parseList(text: string, faction: FactionData | undefined): ArmyL
     if (HEADER.test(body)) continue;
 
     const m = UNIT_LINE.exec(body);
-    if (!m) continue;
-    const count = Number(m[1] ?? 1);
-    const name = m[2]!.trim();
-    const points = Number(m[3]);
-    const unit = faction ? matchUnit(name, faction) : undefined;
+    // A bare unit name (no points) also counts, if it matches the catalogue exactly.
+    const bare = !m && faction?.units.find((u) => normalise(u.name) === normalise(body));
+    if (!m && !bare) continue;
+    const count = m ? Number(m[1] ?? 1) : 1;
+    const name = m ? m[2]!.trim() : body;
+    const listed = m ? Number(m[3]) / count : undefined;
+    const unit = bare || (faction ? matchUnit(name, faction) : undefined);
     if (!unit) {
       list.unmatched.push(body);
       last = undefined;
@@ -157,16 +164,28 @@ export function parseList(text: string, faction: FactionData | undefined): ArmyL
     for (let i = 0; i < count; i++) {
       last = {
         name: unit.name,
-        points: count > 1 ? Math.round(points / count) : points,
+        points: unit.points,
+        listedPoints: listed,
         // Paying double the base cost means a reinforced unit.
-        reinforced: points / count >= unit.points * 2,
+        reinforced: listed !== undefined && listed >= unit.points * 2,
         unit,
       };
       list.units.push(last);
     }
   }
+  // Points always come from the catalogue.
+  const mismatches: string[] = [];
+  for (const u of list.units) {
+    if (!u.unit) continue;
+    u.points = u.unit.points * (u.reinforced ? 2 : 1);
+    if (u.listedPoints !== undefined && u.listedPoints !== u.points) {
+      mismatches.push(`${u.name}: list says ${u.listedPoints}, catalogue says ${u.points}`);
+    }
+  }
+  if (mismatches.length) list.pointsMismatches = mismatches;
   if (faction?.rules) list.rules = resolveRules(list, faction);
   return list;
 }
 
-export const listPoints = (list: ArmyList) => list.units.reduce((s, u) => s + u.points, 0);
+export const listPoints = (list: ArmyList) =>
+  list.units.reduce((s, u) => s + u.points, 0) + (list.rules?.manifestationLore?.points ?? 0);

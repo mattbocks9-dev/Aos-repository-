@@ -4,6 +4,7 @@
     <selectionEntry name="Hammerguard" id="u1" type="unit">
       <categoryLinks>
         <categoryLink name="INFANTRY" id="c1" targetId="x"/>
+        <categoryLink name="ORDER" id="c1o" targetId="x"/>
         <categoryLink name="WARD (6+)" id="c2" targetId="x"/>
       </categoryLinks>
       <profiles>
@@ -41,6 +42,7 @@
     <selectionEntry name="Arch Mage" id="u2" type="unit">
       <categoryLinks>
         <categoryLink name="HERO" id="c3" targetId="x"/>
+        <categoryLink name="ORDER" id="c3o" targetId="x"/>
         <categoryLink name="WIZARD (2)" id="c4" targetId="x"/>
       </categoryLinks>
       <profiles>

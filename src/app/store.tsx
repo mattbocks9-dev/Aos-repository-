@@ -24,7 +24,11 @@ export interface LogEntry {
   reasoning: string;
 }
 
+/** Bump when parsed list data changes shape, so saved teams get re-parsed from the catalogue. */
+export const DATA_VERSION = 2;
+
 export interface AppState {
+  dataVersion?: number;
   packId: string;
   round: number;
   difficulty: Difficulty;
@@ -44,6 +48,7 @@ const emptyTeam = (name: string): Team => ({
 });
 
 export const initialState: AppState = {
+  dataVersion: DATA_VERSION,
   packId: 'ottd-2026',
   round: 1,
   difficulty: 'normal',
@@ -56,7 +61,8 @@ export type Action =
   | { type: 'setRound'; round: number }
   | { type: 'setDifficulty'; difficulty: Difficulty }
   | { type: 'setTeam'; side: 'A' | 'B'; team: Team }
-  | { type: 'finish'; result: GameResult };
+  | { type: 'finish'; result: GameResult }
+  | { type: 'reparsed'; teams: AppState['teams'] };
 
 export function reducer(state: AppState, action: Action): AppState {
   switch (action.type) {
@@ -70,6 +76,8 @@ export function reducer(state: AppState, action: Action): AppState {
       return { ...state, teams: { ...state.teams, [action.side]: action.team } };
     case 'finish':
       return { ...state, result: action.result, screen: 'results' };
+    case 'reparsed':
+      return { ...state, teams: action.teams, dataVersion: DATA_VERSION };
   }
 }
 

@@ -195,6 +195,18 @@ function PlayerEditor({
               Battle formation “{player.list.formation}” isn't in the {faction?.name} battletome.
             </p>
           )}
+          {player.list.pointsMismatches && (
+            <div className="rounded-lg border border-amber-700/60 bg-amber-900/20 p-2 text-sm">
+              <p className="font-semibold text-amber-300">
+                Points differ from the BSData catalogue (catalogue values are used):
+              </p>
+              <ul className="list-disc pl-5">
+                {player.list.pointsMismatches.map((m) => (
+                  <li key={m}>{m}</li>
+                ))}
+              </ul>
+            </div>
+          )}
           {player.list.unmatched.length > 0 && (
             <div className="rounded-lg border border-amber-700/60 bg-amber-900/20 p-2 text-sm">
               <p className="font-semibold text-amber-300">

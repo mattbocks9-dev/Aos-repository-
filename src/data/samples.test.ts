@@ -19,6 +19,9 @@ describe('sample teams', () => {
       };
       for (const p of team.players) {
         expect(p.list.unmatched, p.name).toEqual([]);
+        expect(p.list.pointsMismatches, p.name).toBeUndefined();
+        expect(p.list.rules?.manifestationLore, `${p.name} lore`).toBeDefined();
+        expect(listPoints(p.list), p.name).toBeLessThanOrEqual(2000);
         expect(listPoints(p.list), p.name).toBeGreaterThan(1700);
         expect(p.list.rules?.formation, `${p.name} formation ${p.list.formation}`).toBeDefined();
       }
