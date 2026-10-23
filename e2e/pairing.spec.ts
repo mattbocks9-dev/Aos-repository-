@@ -1,6 +1,20 @@
 import { expect, test } from '@playwright/test';
 
+// Battleplan pictures come from Wahapedia; serve a local stand-in so tests never depend on it.
+const MAP_FIXTURE = 'e2e/fixtures/map.png';
+const WAHAPEDIA_IMAGES = 'https://wahapedia.ru/**/*.png';
+
+test('falls back to the drawn map when the original picture cannot load', async ({ page }) => {
+  await page.route(WAHAPEDIA_IMAGES, (route) => route.abort());
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Quick play with sample teams' }).click();
+  await page.getByRole('radio', { name: 'R3' }).click();
+  await expect(page.getByRole('img', { name: 'Warped Ruins map' })).toBeVisible();
+  await expect(page.locator('img[alt="Warped Ruins battleplan map"]')).toHaveCount(0);
+});
+
 test('plays a full pairing against the NPC with sample teams', async ({ page }, info) => {
+  await page.route(WAHAPEDIA_IMAGES, (route) => route.fulfill({ path: MAP_FIXTURE }));
   const shot = (name: string) =>
     page.screenshot({
       path: `test-results/shots/${info.project.name}-${name}.png`,
@@ -11,7 +25,7 @@ test('plays a full pairing against the NPC with sample teams', async ({ page }, 
   await page.getByRole('button', { name: 'Quick play with sample teams' }).click();
 
   await page.getByRole('radio', { name: 'R3' }).click();
-  // Original GHB map pictures load from their source.
+  // The original GHB map picture is shown (served from the fixture above).
   await expect
     .poll(() =>
       page
