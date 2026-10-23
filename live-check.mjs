@@ -1,0 +1,11 @@
+import { chromium } from '@playwright/test';
+const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
+const page = await browser.newPage();
+await page.goto('https://mattbocks9-dev.github.io/Aos-repository-/');
+await page.getByRole('button', { name: 'Set up teams & lists' }).click();
+await page.locator('#list-0').fill(['Lumineth Realm-lords', 'Alarith Stonemage (110)', 'Data Version: v44', 'App: v1.38.0 (1) | Data: v483'].join('\n'));
+await page.locator('#list-0').blur();
+await page.getByText(/Lumineth Realm-lords · \d+ pts/).waitFor();
+console.log('live:', await page.getByText(/Lumineth Realm-lords · \d+ pts/).first().textContent());
+console.log('unknown-unit warnings:', await page.getByText('Not found in the', { exact: false }).count());
+await browser.close();
