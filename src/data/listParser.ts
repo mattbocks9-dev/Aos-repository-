@@ -68,7 +68,7 @@ export function detectFaction(text: string, factions: { id: string; name: string
 
 const UNIT_LINE =
   /^(?:(\d+)\s*x\s+)?(.+?)\s*[([]\s*(\d+)\s*(?:pts?|points)?\s*[)\]]\s*(?:pts?|points)?\s*$/i;
-const BULLET = /^\s*[•\-*–]\s*/;
+const BULLET = /^\s*[\u2022\u2013*-]\s*/;
 const HEADER =
   /\b(\d{3,4})\s*\/\s*(\d{3,4})\b|^(general'?s )?regiment|^auxiliary|^faction terrain/i;
 
@@ -79,12 +79,12 @@ export function parseList(text: string, faction: FactionData | undefined): ArmyL
     const line = raw.trim();
     if (!line) continue;
 
-    const lore = /^manifestation lore\s*[-:–]\s*(.+)$/i.exec(line);
+    const lore = /^manifestation lore\s*(?:-|:|\u2013)\s*(.+)$/i.exec(line);
     if (lore) {
       list.manifestationLore = lore[1]!.trim();
       continue;
     }
-    const formation = /^battle formation\s*[-:–]\s*(.+)$/i.exec(line);
+    const formation = /^battle formation\s*(?:-|:|\u2013)\s*(.+)$/i.exec(line);
     if (formation) {
       list.formation = formation[1]!.trim();
       continue;
